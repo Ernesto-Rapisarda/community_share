@@ -1,0 +1,10 @@
+{
+  "language": "English",
+  "@language": {"description":  "the current Language"},
+  "signup":"Sign up",
+  "@signup": {"description":  "A label for registration button"},
+  "signin": "Sign in",
+  "@signin": {"description":  "A label for login button"},
+  "welcomeApp": "Welcome\nto",
+  "@welcomeApp":{"description": "A welcome message for the login screen"}
+}
