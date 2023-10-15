@@ -1,10 +1,18 @@
 {
   "language": "English",
   "@language": {"description":  "the current Language"},
+
   "signup":"Sign up",
   "@signup": {"description":  "A label for registration button"},
   "signin": "Sign in",
   "@signin": {"description":  "A label for login button"},
   "welcomeApp": "Welcome\nto",
-  "@welcomeApp":{"description": "A welcome message for the login screen"}
+  "@welcomeApp":{"description": "A welcome message for the login screen"},
+  "notHaveAnAccount": "Do not have an account?SIGN UP\nor\nSIGN IN with: ",
+  "@notHaveAnAccount": {"description":  "An invite message for create an account"},
+  "haveAnAccount": "Do you have an account? SIGN IN",
+  "@haveAnAccount": {"description":  "An invite message for sign in"},
+  "signInFacebook": "Sign in with Facebook",
+  "signInGmail": "Sign in with Gmail"
+
 }

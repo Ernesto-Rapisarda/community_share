@@ -42,10 +42,6 @@ class _AuthPageState extends State<AuthPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-/*      appBar: AppBar(
-        title: Image.asset('assets/images/logo.jpg', fit: BoxFit.cover,),
-
-      ),*/
         body: Center(
       child: SingleChildScrollView(
         child: Column(
@@ -54,7 +50,7 @@ class _AuthPageState extends State<AuthPage> {
           children: [
             Container(child: WelcomeWidget()),
             SizedBox(
-              height: 25.0,
+              height: 30.0,
             ),
             ConstrainedBox(
               constraints: BoxConstraints(
@@ -127,17 +123,17 @@ class _AuthPageState extends State<AuthPage> {
               },
               child: Text(
                 isLogin
-                    ? ' Non hai un account? Registrati \n o \n accedi con:'
-                    : 'Hai un account? Accedi',
+                    ? AppLocalizations.of(context)!.notHaveAnAccount
+                    : AppLocalizations.of(context)!.haveAnAccount,
                 textAlign: TextAlign.center,
               ),
             ),
-            SocialButtonWidgets.socialButtonRect('Login with Facebook',
+            SocialButtonWidgets.socialButtonRect(AppLocalizations.of(context)!.signInFacebook,
                 facebookColor, FontAwesomeIcons.facebookF, onTap: () {
               Fluttertoast.showToast(msg: 'I am Facebook');
             }),
             SocialButtonWidgets.socialButtonRect(
-                'Login with Gmail', googleColor, FontAwesomeIcons.googlePlusG,
+                AppLocalizations.of(context)!.signInGmail, googleColor, FontAwesomeIcons.googlePlusG,
                 onTap: () {
               Fluttertoast.showToast(msg: 'I am Google');
             }),

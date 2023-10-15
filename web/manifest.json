@@ -1,0 +1,35 @@
+{
+    "name": "community_share",
+    "short_name": "community_share",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#0175C2",
+    "theme_color": "#0175C2",
+    "description": "CommunityShare è una piattaforma dedicata alla condivisione di oggetti usati all'interno delle comunità locali. Questa app offre uno spazio sicuro dove gli utenti possono donare oggetti che non servono più e cercare ciò di cui hanno bisogno. Creando una rete sociale solidale e sostenibile, CommunityShare unisce persone con scopi comuni, promuovendo la generosità e l'aiuto reciproco all'interno delle comunità.",
+    "orientation": "portrait-primary",
+    "prefer_related_applications": false,
+    "icons": [
+        {
+            "src": "icons/Icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/Icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/Icon-maskable-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "icons/Icon-maskable-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ]
+}
