@@ -1,5 +1,6 @@
 import 'package:community_share/l10n/l10n.dart';
 import 'package:community_share/model/auth.dart';
+import 'package:community_share/navigation/community_route_generator.dart';
 import 'package:community_share/view/login/login.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -7,6 +8,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'firebase_options.dart';
 import 'view/home.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -50,7 +54,8 @@ class MyApp extends StatelessWidget {
             return const AuthPage();
           }
         },
-      )
+      ),
+
     );
   }
 }

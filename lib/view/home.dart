@@ -1,5 +1,6 @@
 
 
+import 'package:community_share/main.dart';
 import 'package:community_share/model/auth.dart';
 import 'package:community_share/view/add_product.dart';
 import 'package:community_share/view/community/community_main_page.dart';
@@ -37,7 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       if(_children.length==1){
         _children.add(AddProduct());
-        _children.add(CommunitiesMainPage());
+        _children.add(CommunitiesMainPage(navigatorKey: navigatorKey,));
         _children.add(MailBox());
         _children.add(Profile());
       }
