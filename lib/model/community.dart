@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'event.dart';
 
 class Community{
+
   late List<Product> productsOffered;
   late List<Product> productsSearched;
 //  late List<User> members;

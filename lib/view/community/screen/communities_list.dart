@@ -1,6 +1,6 @@
 import 'package:community_share/model/enum/community_type.dart';
 import 'package:community_share/view/community/components/community_app_bar.dart';
-import 'package:community_share/view/generic_components/community_card.dart';
+import 'package:community_share/view/community/components/community_card.dart';
 import 'package:flutter/material.dart';
 
 import '../../../model/community.dart';
@@ -47,7 +47,7 @@ class _CommunitiesListState extends State<CommunitiesList> {
         ),
         Container(
           height: 200,
-          color: Colors.amber,
+          color: Theme.of(context).colorScheme.secondary,
           child: ListView(
             scrollDirection: Axis.horizontal,
             children: [
@@ -62,7 +62,7 @@ class _CommunitiesListState extends State<CommunitiesList> {
         ),
         Container(
           height: 200,
-          color: Colors.amber,
+          color: Theme.of(context).colorScheme.secondary,
           child: ListView(
             scrollDirection: Axis.horizontal,
             children: [

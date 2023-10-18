@@ -1,7 +1,9 @@
 import 'package:community_share/main.dart';
 import 'package:community_share/model/community.dart';
+import 'package:community_share/view/community/screen/community_home.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 
 class CommunityCard extends StatelessWidget{
   late Community community;
@@ -13,7 +15,7 @@ class CommunityCard extends StatelessWidget{
   Widget build(BuildContext context) {
     return InkWell(
       onTap: (){
-        Navigator.pushNamed(context, '/community_home', arguments: community);
+        context.go('/communities/home/${community.name}',extra: community);
       },
       child: Card(
           elevation: 3,

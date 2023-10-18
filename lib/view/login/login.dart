@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage({super.key});
@@ -25,6 +26,7 @@ class _AuthPageState extends State<AuthPage> {
     try {
       await Auth().signInWithEmailAndPassword(
           email: _email.text, password: _password.text);
+      context.go('/');
     } on FirebaseAuthException catch (error) {
       //settare errore
     }
@@ -34,6 +36,7 @@ class _AuthPageState extends State<AuthPage> {
     try {
       await Auth().createUserInWithEmailAndPassword(
           email: _email.text, password: _password.text);
+      context.go('/');
     } on FirebaseAuthException catch (error) {
       //settare errore
     }
