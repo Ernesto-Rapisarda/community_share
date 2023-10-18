@@ -3,6 +3,15 @@ import 'package:community_share/view/product/full_product.dart';
 import 'package:community_share/view/main_page.dart';
 import 'package:community_share/view/login/login.dart';
 import 'package:community_share/view/profile/screen/paletta_colori.dart';
+import 'package:community_share/view/temp/addresses.dart';
+import 'package:community_share/view/temp/donated_products.dart';
+import 'package:community_share/view/temp/donations_done.dart';
+import 'package:community_share/view/temp/email_change.dart';
+import 'package:community_share/view/temp/needed_products.dart';
+import 'package:community_share/view/temp/notifications.dart';
+import 'package:community_share/view/temp/password_change.dart';
+import 'package:community_share/view/temp/profile_settings.dart';
+import 'package:community_share/view/temp/received_products.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -49,6 +58,60 @@ class AppRouter {
               pageBuilder: (context,state){
                   return MaterialPage(child: PalettaColori());
               }
+            ),
+            GoRoute(
+                path: 'profile/donated_products',
+                pageBuilder: (context,state){
+                  return MaterialPage(child: DonatedProducts());
+                }
+            ),
+            GoRoute(
+                path: 'profile/received_products',
+                pageBuilder: (context,state){
+                  return MaterialPage(child: ReceivedProducts());
+                }
+            ),
+            GoRoute(
+                path: 'profile/needed_products',
+                pageBuilder: (context,state){
+                  return MaterialPage(child: NeededProducts());
+                }
+            ),
+            GoRoute(
+                path: 'profile/donations_done',
+                pageBuilder: (context,state){
+                  return MaterialPage(child: DonationsDone());
+                }
+            ),
+            GoRoute(
+                path: 'profile/notifications',
+                pageBuilder: (context,state){
+                  return MaterialPage(child: Notifications());
+                }
+            ),
+            GoRoute(
+                path: 'profile/settings',
+                pageBuilder: (context,state){
+                  return MaterialPage(child: ProfileSettings());
+                }
+            ),
+            GoRoute(
+                path: 'profile/email_change',
+                pageBuilder: (context,state){
+                  return MaterialPage(child: EmailChange());
+                }
+            ),
+            GoRoute(
+                path: 'profile/password_change',
+                pageBuilder: (context,state){
+                  return MaterialPage(child: PasswordChange());
+                }
+            ),
+            GoRoute(
+                path: 'profile/addresses',
+                pageBuilder: (context,state){
+                  return MaterialPage(child: Addresses());
+                }
             ),
 
           ]

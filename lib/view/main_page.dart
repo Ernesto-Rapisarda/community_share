@@ -29,11 +29,11 @@ class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
   List<Widget> _children = [Home()];
 
-  Future<void> signOut() async{
+/*  Future<void> signOut() async{
     await Auth().signOut();
     context.go('/login');
 
-  }
+  }*/
 
   //For changing the screen
   void _onItemTapped(int index) {
@@ -53,13 +53,13 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(child: Scaffold(
-      appBar: AppBar(
+/*      appBar: AppBar(
         title: Text('todo'),
         actions: [
           IconButton(onPressed: (){signOut();}, icon: Icon(Icons.logout))
         ],
         automaticallyImplyLeading: true,
-      ),
+      ),*/
         body: Container(child: _children.elementAt(_selectedIndex)),
         bottomNavigationBar: CurvedNavigationBar(
           height: 60,
