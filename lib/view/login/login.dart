@@ -27,11 +27,12 @@ class _AuthPageState extends State<AuthPage> {
     try {
       await Auth().signInWithEmailAndPassword(
           email: _email.text, password: _password.text, context: context);
-      if(Auth().currentUser!.emailVerified) {
+      context.go('/');
+/*      if(Auth().currentUser!.emailVerified) {
         context.go('/');
       } else{
         showSnackBar(context, 'Check your email and confirm your email adress!');
-      }
+      }*/
     } on FirebaseAuthException catch (error) {
       showSnackBar(context, error.message!);
     }
