@@ -7,20 +7,12 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:980105791718:android:c44b3e217bf7742840d327",
+        "mobilesdk_app_id": "1:980105791718:android:31e1d51b1df916b940d327",
         "android_client_info": {
-          "package_name": "it.rapisarda.ernesto.community_share"
+          "package_name": "com.example.community_share"
         }
       },
       "oauth_client": [
-        {
-          "client_id": "980105791718-3mmfd230lhik8grbolchftditu3ql2cl.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "it.rapisarda.ernesto.community_share",
-            "certificate_hash": "f54d99949f2302e882af8638d092e60640155193"
-          }
-        },
         {
           "client_id": "980105791718-9j6b2onaehjfechn1l9bke3r5a0rkfi8.apps.googleusercontent.com",
           "client_type": 3

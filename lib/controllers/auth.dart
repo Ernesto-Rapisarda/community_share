@@ -53,8 +53,8 @@ class Auth {
       final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
       print('ciao');
 
-      if(googleAuth?.accessToken != null && googleAuth?.idToken != null){
-        final credential = GoogleAuthProvider.credential(
+      if(googleUser != null ){
+        final AuthCredential credential = GoogleAuthProvider.credential(
           accessToken: googleAuth?.accessToken,
           idToken: googleAuth?.idToken,
         );
@@ -62,12 +62,14 @@ class Auth {
         if(userCredential.user != null){
           if(userCredential.additionalUserInfo!.isNewUser){
             //posto dove storare roba in database
-            print(userCredential.user);
+            print(userCredential.user?.displayName);
           }
           context.go('/');
+          print('entro nellif');
 
         }
       }
+      print('lo passo');
 
     } on FirebaseAuthException catch (e){
       showSnackBar(context, e.message!);
