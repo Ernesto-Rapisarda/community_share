@@ -69,6 +69,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '623319709136',
     projectId: 'community-share-26814',
     storageBucket: 'community-share-26814.appspot.com',
+    androidClientId: '623319709136-vha5opc6nill58i0t8bde5cra5fjncri.apps.googleusercontent.com',
+    iosClientId: '623319709136-29nmc7kmqdkdm716daolekr3qdeocp91.apps.googleusercontent.com',
     iosBundleId: 'com.example.communityShare',
   );
 }

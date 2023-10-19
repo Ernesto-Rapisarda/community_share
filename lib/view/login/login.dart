@@ -1,4 +1,5 @@
 import 'package:community_share/controllers/auth.dart';
+import 'package:community_share/controllers/show_snack_bar.dart';
 import 'package:community_share/view/generic_components/SocialColors.dart';
 import 'package:community_share/view/generic_components/social_widget_button.dart';
 import 'package:community_share/view/login/components/welcome.dart';
@@ -25,20 +26,23 @@ class _AuthPageState extends State<AuthPage> {
   Future<void> signIn() async {
     try {
       await Auth().signInWithEmailAndPassword(
-          email: _email.text, password: _password.text);
-      context.go('/');
+          email: _email.text, password: _password.text, context: context);
+      if(Auth().currentUser!.emailVerified) {
+        context.go('/');
+      } else{
+        showSnackBar(context, 'Check your email and confirm your email adress!');
+      }
     } on FirebaseAuthException catch (error) {
-      //settare errore
+      showSnackBar(context, error.message!);
     }
   }
 
   Future<void> createUser() async {
     try {
       await Auth().createUserInWithEmailAndPassword(
-          email: _email.text, password: _password.text);
-      context.go('/');
+          email: _email.text, password: _password.text, context: context);
     } on FirebaseAuthException catch (error) {
-      //settare errore
+      showSnackBar(context, error.message!);
     }
   }
 
