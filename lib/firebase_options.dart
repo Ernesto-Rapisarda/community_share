@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -46,31 +49,20 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyC-FYEZn0QtjeScsptew2MvDFBs63KpCrQ',
-    appId: '1:623319709136:web:11359d64c5ca2a587cf5d5',
-    messagingSenderId: '623319709136',
-    projectId: 'community-share-26814',
-    authDomain: 'community-share-26814.firebaseapp.com',
-    storageBucket: 'community-share-26814.appspot.com',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDCxFqMXUllf2FCUl4dC-ljTyyB81UFzb8',
-    appId: '1:623319709136:android:fcd86c39cb8eef887cf5d5',
-    messagingSenderId: '623319709136',
-    projectId: 'community-share-26814',
-    storageBucket: 'community-share-26814.appspot.com',
+    apiKey: 'AIzaSyDKry7AgGWz7Pcnto5oJD1aOVAmz6-VUx8',
+    appId: '1:980105791718:android:f2e71f395ce611e240d327',
+    messagingSenderId: '980105791718',
+    projectId: 'community-share-v2',
+    storageBucket: 'community-share-v2.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyA9istqUbRe8eBKQfJVkVzlneioTMfjKQE',
-    appId: '1:623319709136:ios:d08fcec9f55ec7e27cf5d5',
-    messagingSenderId: '623319709136',
-    projectId: 'community-share-26814',
-    storageBucket: 'community-share-26814.appspot.com',
-    androidClientId: '623319709136-vha5opc6nill58i0t8bde5cra5fjncri.apps.googleusercontent.com',
-    iosClientId: '623319709136-29nmc7kmqdkdm716daolekr3qdeocp91.apps.googleusercontent.com',
+    apiKey: 'AIzaSyCY10QdzpVulNzR0q7c0_UdvrzZQzTOu0w',
+    appId: '1:980105791718:ios:c1709c4b7d9e799c40d327',
+    messagingSenderId: '980105791718',
+    projectId: 'community-share-v2',
+    storageBucket: 'community-share-v2.appspot.com',
     iosBundleId: 'com.example.communityShare',
   );
 }

@@ -1,6 +1,6 @@
 # community_share
 
-CommunityShare è una piattaforma dedicata alla condivisione di oggetti usati all'interno delle comunità locali. Questa app offre uno spazio sicuro dove gli utenti possono donare oggetti che non servono più e cercare ciò di cui hanno bisogno. Creando una rete sociale solidale e sostenibile, CommunityShare unisce persone con scopi comuni, promuovendo la generosità e l'aiuto reciproco all'interno delle comunità.
+A new Flutter project.
 
 ## Getting Started
 

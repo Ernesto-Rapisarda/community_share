@@ -45,7 +45,16 @@ class _AuthPageState extends State<AuthPage> {
       showSnackBar(context, error.message!);
     }
   }
+  
+  Future<void> signInWithGmail()async{
+    try{
+      await Auth().signInWithGoogle(context);
 
+    }on FirebaseAuthException catch (e){
+      print(e.message!);
+    }
+  }
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -142,7 +151,7 @@ class _AuthPageState extends State<AuthPage> {
             SocialButtonWidgets.socialButtonRect(
                 AppLocalizations.of(context)!.signInGmail, googleColor, FontAwesomeIcons.googlePlusG,
                 onTap: () {
-              Fluttertoast.showToast(msg: 'I am Google');
+              signInWithGmail();
             }),
           ],
         ),

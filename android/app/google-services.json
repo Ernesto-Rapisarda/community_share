@@ -1,48 +1,48 @@
 {
   "project_info": {
-    "project_number": "623319709136",
-    "project_id": "community-share-26814",
-    "storage_bucket": "community-share-26814.appspot.com"
+    "project_number": "980105791718",
+    "project_id": "community-share-v2",
+    "storage_bucket": "community-share-v2.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:623319709136:android:fcd86c39cb8eef887cf5d5",
+        "mobilesdk_app_id": "1:980105791718:android:c44b3e217bf7742840d327",
         "android_client_info": {
-          "package_name": "com.example.community_share"
+          "package_name": "it.rapisarda.ernesto.community_share"
         }
       },
       "oauth_client": [
         {
-          "client_id": "623319709136-vha5opc6nill58i0t8bde5cra5fjncri.apps.googleusercontent.com",
+          "client_id": "980105791718-3mmfd230lhik8grbolchftditu3ql2cl.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.community_share",
-            "certificate_hash": "9574b385d49ec26f5c377187e026508b7e1c7800"
+            "package_name": "it.rapisarda.ernesto.community_share",
+            "certificate_hash": "f54d99949f2302e882af8638d092e60640155193"
           }
         },
         {
-          "client_id": "623319709136-m7v2fc1hcodoqggkij42fcgpb96h5lu9.apps.googleusercontent.com",
+          "client_id": "980105791718-9j6b2onaehjfechn1l9bke3r5a0rkfi8.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDCxFqMXUllf2FCUl4dC-ljTyyB81UFzb8"
+          "current_key": "AIzaSyDKry7AgGWz7Pcnto5oJD1aOVAmz6-VUx8"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "623319709136-m7v2fc1hcodoqggkij42fcgpb96h5lu9.apps.googleusercontent.com",
+              "client_id": "980105791718-9j6b2onaehjfechn1l9bke3r5a0rkfi8.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "623319709136-29nmc7kmqdkdm716daolekr3qdeocp91.apps.googleusercontent.com",
+              "client_id": "980105791718-4q88tnb8e0l303u6d6i1p9p4saelakd3.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.communityShare"
+                "bundle_id": "it.rapisarda.ernesto.communityShare"
               }
             }
           ]

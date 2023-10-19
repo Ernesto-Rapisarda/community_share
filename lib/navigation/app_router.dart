@@ -29,7 +29,7 @@ class AppRouter {
 
   static GoRouter _createRouter() {
     return GoRouter(
-      initialLocation: Auth().currentUser != null && Auth().currentUser!.emailVerified ? '/' : '/login',
+      initialLocation: Auth().currentUser != null /*&& Auth().currentUser!.emailVerified*/ ? '/' : '/login',
       routes: [
         GoRoute(
           path: '/',
