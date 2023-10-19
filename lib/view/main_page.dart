@@ -1,7 +1,7 @@
 
 
 import 'package:community_share/main.dart';
-import 'package:community_share/model/auth.dart';
+import 'package:community_share/controllers/auth.dart';
 import 'package:community_share/view/add_product.dart';
 import 'package:community_share/view/community/community_main_page.dart';
 import 'package:community_share/view/community/screen/communities_list.dart';
@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 
 
 class MainPage extends StatefulWidget {
@@ -61,7 +62,41 @@ class _MainPageState extends State<MainPage> {
         automaticallyImplyLeading: true,
       ),*/
         body: Container(child: _children.elementAt(_selectedIndex)),
-        bottomNavigationBar: CurvedNavigationBar(
+        bottomNavigationBar: Container(
+          color: Theme.of(context).colorScheme.primary,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 8.0),
+
+            child: GNav(
+              gap: 8,
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              color: Colors.white,
+              activeColor: Theme.of(context).colorScheme.onPrimaryContainer,
+              tabBackgroundColor: Theme.of(context).colorScheme.primaryContainer,
+              padding: EdgeInsets.all(16),
+              onTabChange: _onItemTapped,
+              tabs: [
+                GButton(
+                  text: "Home",
+                  icon: FontAwesomeIcons.house,),
+                GButton(
+                  text: "Inserisci",
+                  icon: FontAwesomeIcons.circlePlus,),
+                GButton(
+                  text: "Communità",
+                  icon: FontAwesomeIcons.peopleGroup,),
+                GButton(
+                  text: "Messaggi",
+                  icon: FontAwesomeIcons.envelope,),
+                GButton(
+                  text: "Profilo",
+                  icon: FontAwesomeIcons.user,),
+              ],
+            ),
+          ),
+        ),
+
+      /* navigazione curva CurvedNavigationBar(
           height: 60,
           color: Theme.of(context).colorScheme.primary,
           buttonBackgroundColor: Theme.of(context).colorScheme.primary,
@@ -75,9 +110,9 @@ class _MainPageState extends State<MainPage> {
             FaIcon(FontAwesomeIcons.user, color: Theme.of(context).colorScheme.onPrimary,)
           ],
           onTap: _onItemTapped,
-        )
+        )*/
 
-      /*BottomNavigationBar(
+      /*my version BottomNavigationBar(
         iconSize: 32.0,
         showSelectedLabels: true,
         showUnselectedLabels: true,

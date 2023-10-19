@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../model/auth.dart';
+import '../../controllers/auth.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -27,7 +27,7 @@ class _ProfileState extends State<Profile> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-              padding: EdgeInsets.only(bottom: 10), child: IntroProfile()),
+              /*padding: EdgeInsets.only(bottom: 10), */child: IntroProfile()),
           //Text('CONTRIBUTO SOCIALE', style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
           RowMenusProfile(
             label: 'Oggetti donati',

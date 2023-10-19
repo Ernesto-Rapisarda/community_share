@@ -1,4 +1,4 @@
-import 'package:community_share/model/auth.dart';
+import 'package:community_share/controllers/auth.dart';
 import 'package:community_share/view/generic_components/SocialColors.dart';
 import 'package:community_share/view/generic_components/social_widget_button.dart';
 import 'package:community_share/view/login/components/welcome.dart';

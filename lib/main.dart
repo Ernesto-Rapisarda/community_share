@@ -1,5 +1,5 @@
 import 'package:community_share/l10n/l10n.dart';
-import 'package:community_share/model/auth.dart';
+import 'package:community_share/controllers/auth.dart';
 import 'package:community_share/navigation/app_router.dart';
 import 'package:community_share/navigation/community_route_generator.dart';
 import 'package:community_share/view/login/login.dart';

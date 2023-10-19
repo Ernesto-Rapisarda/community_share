@@ -15,7 +15,7 @@ import 'package:community_share/view/temp/received_products.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../model/auth.dart';
+import '../controllers/auth.dart';
 import '../model/community.dart';
 import '../model/product.dart';
 import '../view/profile/profile.dart';

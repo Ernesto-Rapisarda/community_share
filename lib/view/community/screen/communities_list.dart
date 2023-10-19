@@ -47,7 +47,7 @@ class _CommunitiesListState extends State<CommunitiesList> {
         ),
         Container(
           height: 200,
-          color: Theme.of(context).colorScheme.secondary,
+          //color: Theme.of(context).colorScheme.secondary,
           child: ListView(
             scrollDirection: Axis.horizontal,
             children: [
@@ -62,7 +62,7 @@ class _CommunitiesListState extends State<CommunitiesList> {
         ),
         Container(
           height: 200,
-          color: Theme.of(context).colorScheme.secondary,
+          //color: Theme.of(context).colorScheme.secondary,
           child: ListView(
             scrollDirection: Axis.horizontal,
             children: [
