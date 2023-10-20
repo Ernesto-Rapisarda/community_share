@@ -34,7 +34,7 @@ class IntroProfile extends StatelessWidget{
             crossAxisAlignment: CrossAxisAlignment.start,
 
             children: [
-              Text('Nome non presente',style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+              Text(Auth().currentUser?.displayName ?? 'Nome non presente',style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
               Text('Visualizza profilo pubblico',style: TextStyle(fontSize: 16)),
             ],
           )
