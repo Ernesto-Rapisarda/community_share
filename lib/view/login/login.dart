@@ -1,11 +1,10 @@
-import 'package:community_share/controllers/auth.dart';
+import 'package:community_share/service/auth.dart';
 import 'package:community_share/controllers/show_snack_bar.dart';
 import 'package:community_share/view/generic_components/SocialColors.dart';
 import 'package:community_share/view/generic_components/social_widget_button.dart';
 import 'package:community_share/view/login/components/welcome.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
@@ -54,6 +53,10 @@ class _AuthPageState extends State<AuthPage> {
     }on FirebaseAuthException catch (e){
       print(e.message!);
     }
+  }
+
+  Future<void> signInWithFacebook() async{
+    await Auth().signInWithFacebook(context);
   }
  
   @override
@@ -147,7 +150,7 @@ class _AuthPageState extends State<AuthPage> {
             ),
             SocialButtonWidgets.socialButtonRect(AppLocalizations.of(context)!.signInFacebook,
                 facebookColor, FontAwesomeIcons.facebookF, onTap: () {
-              Fluttertoast.showToast(msg: 'I am Facebook');
+              signInWithFacebook();
             }),
             SocialButtonWidgets.socialButtonRect(
                 AppLocalizations.of(context)!.signInGmail, googleColor, FontAwesomeIcons.googlePlusG,

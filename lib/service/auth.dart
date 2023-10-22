@@ -1,8 +1,13 @@
 import 'package:community_share/controllers/show_snack_bar.dart';
+import 'package:community_share/model/enum/provider.dart';
+import 'package:community_share/model/user_details.dart';
+import 'package:community_share/providers/UserProvider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:provider/provider.dart';
 
 class Auth {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -29,6 +34,12 @@ class Auth {
       await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
       await sendEmailVerification(context);
+      context.read<UserProvider>().setFirstSignIn();
+      context.read<UserProvider>().setUser(
+          provider: ProviderName.email,
+        email: email,
+      );
+      context.go('/complete_registration');
     } on FirebaseAuthException catch (e) {
       showSnackBar(context, e.message!);
     }
@@ -76,6 +87,23 @@ class Auth {
       print('lo passo');
 
     } on FirebaseAuthException catch (e){
+      showSnackBar(context, e.message!);
+
+    }
+  }
+
+  Future<void> signInWithFacebook(BuildContext context) async{
+    try{
+      final LoginResult loginResult = await FacebookAuth.instance.login();
+      final OAuthCredential  facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken!.token);
+
+      await _firebaseAuth.signInWithCredential(facebookAuthCredential);
+
+      if(_firebaseAuth.currentUser != null){
+        context.go('/');
+      }
+
+    }on FirebaseAuthException catch (e){
       showSnackBar(context, e.message!);
 
     }

@@ -1,4 +1,4 @@
-import 'package:community_share/controllers/auth.dart';
+import 'package:community_share/service/auth.dart';
 import 'package:flutter/material.dart';
 
 class IntroProfile extends StatelessWidget{

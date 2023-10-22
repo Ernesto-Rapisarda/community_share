@@ -1,7 +1,7 @@
 
 
 import 'package:community_share/main.dart';
-import 'package:community_share/controllers/auth.dart';
+import 'package:community_share/service/auth.dart';
 import 'package:community_share/view/add_product.dart';
 import 'package:community_share/view/community/community_main_page.dart';
 import 'package:community_share/view/community/screen/communities_list.dart';

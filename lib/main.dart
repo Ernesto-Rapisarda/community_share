@@ -1,11 +1,13 @@
 import 'package:community_share/l10n/l10n.dart';
-import 'package:community_share/controllers/auth.dart';
+import 'package:community_share/providers/UserProvider.dart';
+import 'package:community_share/service/auth.dart';
 import 'package:community_share/navigation/app_router.dart';
 import 'package:community_share/navigation/community_route_generator.dart';
 import 'package:community_share/view/login/login.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'view/main_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -16,11 +18,17 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+        create: (_) => UserProvider(),
+      )
+    ],
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
-
   final GoRouter _router = AppRouter().router;
 
   MyApp({super.key});
@@ -30,15 +38,17 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       title: 'Community Share',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightBlue.shade100/*, primary: Color(int.parse("ff77536c", radix: 16))*/),
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.lightBlue
+                .shade100 /*, primary: Color(int.parse("ff77536c", radix: 16))*/),
         useMaterial3: true,
         /*iconTheme: IconThemeData(color: Color(int.parse("ff77536c", radix: 16))),
         tabBarTheme: TabBarTheme(
           labelColor: Color(int.parse("ff77536c", radix: 16)), // Imposta il colore del testo della tab selezionata a bianco
           unselectedLabelColor: Color(int.parse("ff77536c", radix: 16)).withOpacity(0.5),
           dividerColor: Color(int.parse("ff77536c", radix: 16)),*/
-          // Imposta il colore del testo delle tab non selezionate a bianco con opacità 0.5
-          /*indicator: BoxDecoration(
+        // Imposta il colore del testo delle tab non selezionate a bianco con opacità 0.5
+        /*indicator: BoxDecoration(
             color: Colors.white, // Imposta il colore del riquadro di indicazione delle tab a bianco
           ),
         ),*/

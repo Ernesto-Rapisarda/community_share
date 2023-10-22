@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Community Share</string>
+    <string name="fb_login_protocol_scheme">fb1057562805420471</string>
+
+    <string name="facebook_app_id">1057562805420471</string>
+    <string name="facebook_client_token">64bd774667fd8316b5c474217d010e4e</string>
+</resources>

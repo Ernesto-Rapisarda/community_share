@@ -6,5 +6,12 @@
   "notHaveAnAccount": "Non hai un account? REGISTRATI\no\nACCEDI con: ",
   "haveAnAccount": "Hai un account?ACCEDI",
   "signInFacebook": "Accedi con Facebook",
-  "signInGmail": "Accedi con Gmail"
+  "signInGmail": "Accedi con Gmail",
+  "choiceDisplayedName": "Scegli il nome da mostrare",
+  "choiceLocation": "Scegli la tua località",
+      "addYourPhoneNumber": "Aggiungi il tuo numero di telefono",
+
+  "completeRegistration": "Completa registrazione"
+
+
 }

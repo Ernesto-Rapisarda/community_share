@@ -13,6 +13,10 @@
   "haveAnAccount": "Do you have an account? SIGN IN",
   "@haveAnAccount": {"description":  "An invite message for sign in"},
   "signInFacebook": "Sign in with Facebook",
-  "signInGmail": "Sign in with Gmail"
+  "signInGmail": "Sign in with Gmail",
+  "choiceDisplayedName": "Choice your displayed name",
+  "choiceLocation": "Choice your location",
+    "addYourPhoneNumber": "Add your phone number",
 
+  "completeRegistration": "Complete Registration"
 }
