@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'enum/provider.dart';
 
 class UserDetails {
@@ -50,12 +52,9 @@ class UserDetails {
           ? ProviderName.values.firstWhere((element) => element.toString() == 'ProviderName.${json['Provider']}', orElse: () => ProviderName.undefined)
           : ProviderName.undefined,
       urlPhotoProfile: json['PhotoProfile'] ?? '',
-      lastTimeOnline: json['LastTimeOnline'] is String
-          ? DateTime.parse(json['LastTimeOnline']) // Converte la stringa in DateTime
-          : json['LastTimeOnline'], // Mantieni il valore se già è un DateTime
-      lastUpdate: json['LastUpdate'] is String
-          ? DateTime.parse(json['LastUpdate']) // Converte la stringa in DateTime
-          : json['LastUpdate'], // Mantieni il valore se già è un DateTime
+      lastTimeOnline: (json['LastTimeOnline'] as Timestamp).toDate(),
+      lastUpdate: (json['LastUpdate'] as Timestamp).toDate(),
+
 
     );
   }

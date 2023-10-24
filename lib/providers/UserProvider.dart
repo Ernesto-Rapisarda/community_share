@@ -1,3 +1,4 @@
+import 'package:community_share/model/basic/user_details_basic.dart';
 import 'package:community_share/model/enum/provider.dart';
 import 'package:community_share/model/user_details.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -62,6 +63,14 @@ class UserProvider with ChangeNotifier{
   void setUserDetails(UserDetails userDetails) {
     _userDetails=userDetails;
     notifyListeners();
+  }
+
+  UserDetailsBasic getUserBasic(){
+    return UserDetailsBasic(
+        id: _userDetails.id!,
+        fullName: _userDetails.fullName,
+        location: _userDetails.location,
+        urlPhotoProfile: _userDetails.urlPhotoProfile);
   }
 
 }

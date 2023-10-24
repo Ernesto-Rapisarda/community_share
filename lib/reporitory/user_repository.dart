@@ -11,8 +11,6 @@ class UserRepository {
 
   Future<void> createUserDetails(BuildContext context) async {
     try {
-      print(context.read<UserProvider>().userDetails.toString());
-
       await _db.collection("Users").doc(Auth().currentUser?.uid).set(context.read<UserProvider>().userDetails.toJson());
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

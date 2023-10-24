@@ -5,7 +5,7 @@ import 'package:community_share/providers/UserProvider.dart';
 import 'package:community_share/reporitory/user_repository.dart';
 import 'package:community_share/service/auth.dart';
 import 'package:community_share/service/user_service.dart';
-import 'package:community_share/view/add_product.dart';
+import 'package:community_share/view/product/add_product.dart';
 import 'package:community_share/view/community/community_main_page.dart';
 import 'package:community_share/view/community/screen/communities_list.dart';
 import 'package:community_share/view/community/components/community_app_bar.dart';

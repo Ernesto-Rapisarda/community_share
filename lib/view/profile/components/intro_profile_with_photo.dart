@@ -34,7 +34,7 @@ class _IntroProfileState extends State<IntroProfile> {
         _imageUrl = imageUrl;
       });*/
       if(imageUrl != null){
-        context.read<UserProvider>().userDetails.urlPhotoProfile=imageUrl;
+        context.read<UserProvider>().updateUser(urlPhotoProfile: imageUrl);
         await UserRepository().updateUserDetails(context);
       }
     }

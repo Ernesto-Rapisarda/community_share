@@ -1,36 +1,74 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:community_share/model/basic/user_details_basic.dart';
+import 'package:community_share/model/enum/product_availability.dart';
 import 'package:community_share/model/enum/product_condition.dart';
+import 'package:community_share/model/user_details.dart';
 
-class Product{
-  String id='';
-  String title='';
-  String description='';
-  String uploadDate='';
-  ProductCondition condition=ProductCondition.newWithTag;
-  int likesNumber=0;
-  String urlImage='';
+class Product {
+  //le info basic
+  final String? id;
+  String title;
+  String description;
+  String urlImages;
+  String locationProduct;
+
+  //date
+  DateTime uploadDate;
+  DateTime lastUpdateDate;
+
+  //enum descrittivi
+  ProductCondition condition;
+  ProductAvailability availability;
+
+  //altre info
+  int likesNumber;
+  UserDetailsBasic giver;
 
   Product({
-  required this.id,
-  required this.title,
-  required this.description,
-  required this.uploadDate,
-  required this.condition,
-  required this.likesNumber,
-  required this.urlImage});
+    this.id,
+    required this.title,
+    required this.description,
+    required this.urlImages,
+    required this.locationProduct,
+    required this.uploadDate,
+    required this.lastUpdateDate,
+    required this.condition,
+    required this.availability,
+    required this.giver, // Utilizza solo l'ID dell'utente invece di un oggetto UserDetails
+    this.likesNumber = 0,
+  });
 
-
-//mancano user e productCat
-
-  Map<String, dynamic> toJson() {
+  toJson() {
     return {
-      'id': id,
       'title': title,
       'description': description,
+      'urlImages': urlImages,
+      'locationProduct': locationProduct,
       'uploadDate': uploadDate,
-      'condition': condition.toString(),
+      'lastUpdateDate': lastUpdateDate,
+      'condition': condition.name,
+      'availability': availability.name,
       'likesNumber': likesNumber,
-      'urlImage': urlImage,
+      'giver': giver.toJson(),
     };
   }
+
+  factory Product.fromJson(Map<String, dynamic> json){
+    return Product(
+        id: json['id'],
+        title: json['title'],
+        description: json['description'],
+        urlImages: json['urlImages'],
+        locationProduct: json['locationProduct'],
+        uploadDate: (json['uploadDate'] as Timestamp).toDate(),
+        lastUpdateDate: (json['lastUpdateDate'] as Timestamp).toDate(),
+        condition: ProductCondition.values.firstWhere(
+                (element) => element.toString() == 'ProductCondition.${json['condition']}'),
+        availability: ProductAvailability.values.firstWhere(
+                (element) => element.toString() == 'ProductAvailability.${json['availability']}'),
+
+        giver: UserDetailsBasic.fromJson(json['giver']),);
+  }
+
 
 }

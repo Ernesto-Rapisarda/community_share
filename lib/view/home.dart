@@ -7,7 +7,7 @@ import '../model/product.dart';
 class Home extends StatelessWidget {
   Home({super.key});
 
-  final List<Product> products = [
+  final List<Product> products =[]; /*[
     Product(
         id: '1',
         title: 'Sample Product 1',
@@ -215,7 +215,7 @@ class Home extends StatelessWidget {
         likesNumber: 100,
         urlImage:
         'https://as1.ftcdn.net/v2/jpg/02/65/23/70/1000_F_265237090_Muthvb72m2POYFjyx7F5UCQLh9JdBtKN.jpg'),
-  ];
+  ];*/
 
   @override
   Widget build(BuildContext context) {

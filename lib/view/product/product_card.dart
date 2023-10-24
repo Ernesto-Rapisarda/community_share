@@ -27,7 +27,8 @@ class ProductCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Image.network(
-                  product.urlImage,
+                  'https://img.freepik.com/free-photo/cosmetics-product-advertising-stand-exhibition-wooden-podium-green-background-with-leaves-sha_1258-170111.jpg?t=st=1698164268~exp=1698167868~hmac=2f63555e1a9cabee2727d5bb9cada9873e45d20a551075db913a3e09c8f132ba&w=740',
+                  //product.urlImages,
                   fit: BoxFit.cover,
                 ),
                 SizedBox(height: 8),
