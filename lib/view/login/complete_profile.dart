@@ -7,7 +7,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+
+import '../../service/image_service.dart';
 
 
 class CompleteProfile extends StatefulWidget{
@@ -29,8 +32,23 @@ class _CompleteProfileState extends State<CompleteProfile> {
       location: _location.text,
       phoneNumber: _phoneNumber.text,
     );
-    await UserRepository().createUserDetails(context);
+    /*await UserRepository().createUserDetails(context);
+    context.go('/');*/
+    await Auth().completeRegistration(context);
     context.go('/');
+  }
+
+  void selectImage() async{
+    XFile? imageFile = await ImageService().pickImage(ImageSource.gallery);
+    if (imageFile != null) {
+      String? imageUrl = await ImageService().uploadImage(imageFile);
+      /*setState(() {
+        _imageUrl = imageUrl;
+      });*/
+      if(imageUrl != null){
+        context.read<UserProvider>().updateUser(urlPhotoProfile: imageUrl);
+      }
+    }
   }
 
 
@@ -42,6 +60,25 @@ class _CompleteProfileState extends State<CompleteProfile> {
         child: Column(
           children: [
             WelcomeWidget(),
+            Stack(
+              children: [
+                CircleAvatar(
+                  radius: 64,
+                  backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                  backgroundImage: context.read<UserProvider>().userDetails.urlPhotoProfile != ''
+                      ? NetworkImage(context.read<UserProvider>().userDetails.urlPhotoProfile)
+                      : AssetImage('assets/images/user_photos/examples/UserProfileDefault.png') as ImageProvider<Object>,
+                ),
+                Positioned(
+                    bottom: -10,
+                    left: 80,
+                    child: IconButton(
+                      onPressed: () { selectImage(); },
+                      icon: Icon(Icons.add_a_photo,size: 20,color: Theme.of(context).colorScheme.primary,),
+
+                    ))
+              ],
+            ),
             ConstrainedBox(
               constraints: BoxConstraints(
                   minWidth: 50.0,

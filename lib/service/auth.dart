@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:community_share/controllers/show_snack_bar.dart';
 import 'package:community_share/model/enum/provider.dart';
 import 'package:community_share/model/user_details.dart';
 import 'package:community_share/providers/UserProvider.dart';
+import 'package:community_share/reporitory/user_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
@@ -35,9 +37,16 @@ class Auth {
           email: email, password: password);
       await sendEmailVerification(context);
       context.read<UserProvider>().setFirstSignIn();
-      context.read<UserProvider>().updateUser(
-          provider: ProviderName.email,
-        email: email,
+      context.read<UserProvider>().setUserDetails(
+        UserDetails(
+            fullName: '',
+            location: '',
+            phoneNumber: '',
+            email: email,
+            provider: ProviderName.email,
+            urlPhotoProfile: '',
+            lastTimeOnline: DateTime.now(),
+            lastUpdate: DateTime.now())
       );
       context.go('/complete_registration');
     } on FirebaseAuthException catch (e) {
@@ -106,6 +115,18 @@ class Auth {
     }on FirebaseAuthException catch (e){
       showSnackBar(context, e.message!);
 
+    }
+  }
+
+  Future<void> completeRegistration(BuildContext context) async{
+    try{
+      final UserRepository userRepository = UserRepository();
+
+      await userRepository.createUserDetails(context);
+
+    }on FirebaseException catch (e)
+    {
+      showSnackBar(context, e.message!);
     }
   }
 }

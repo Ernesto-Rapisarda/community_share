@@ -3,6 +3,7 @@ import 'package:community_share/providers/UserProvider.dart';
 import 'package:community_share/service/auth.dart';
 import 'package:community_share/navigation/app_router.dart';
 import 'package:community_share/navigation/community_route_generator.dart';
+import 'package:community_share/service/user_service.dart';
 import 'package:community_share/view/login/login.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -18,23 +19,33 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  UserProvider userProvider = UserProvider();
+  UserService userService = UserService(userProvider);
+
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(
         create: (_) => UserProvider(),
       )
     ],
-    child: MyApp(),
+    child: MyApp(userService: userService),
   ));
 }
 
 class MyApp extends StatelessWidget {
   final GoRouter _router = AppRouter().router;
+  final UserService _userService;
 
-  MyApp({super.key});
+  MyApp({Key? key, required UserService userService})
+      : _userService = userService,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    if(Auth().currentUser != null){
+      _userService.initializeUser(context);
+    }
     return MaterialApp.router(
       title: 'Community Share',
       theme: ThemeData(

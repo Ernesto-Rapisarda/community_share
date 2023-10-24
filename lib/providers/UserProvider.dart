@@ -5,7 +5,12 @@ import 'package:flutter/material.dart';
 
 class UserProvider with ChangeNotifier{
   bool _firstSignIn = false;
-  UserDetails _userDetails = UserDetails(fullName: '', location: '', phoneNumber: '', email: '', provider: ProviderName.undefined, urlPhotoProfile: '');
+  late UserDetails _userDetails ;
+
+   //UserDetails(fullName: '', location: '', phoneNumber: '', email: '', provider: ProviderName.undefined, urlPhotoProfile: '', lastTimeOnline: null,lastUpdate: null);
+
+
+
 
   UserDetails get userDetails => _userDetails;
   bool get firstSignIn => _firstSignIn;
@@ -15,7 +20,11 @@ class UserProvider with ChangeNotifier{
       String? location,
       String? phoneNumber,
       String? email,
-     ProviderName? provider}){
+     ProviderName? provider,
+      String? urlPhotoProfile,
+        DateTime? lastTimeOnline,
+        DateTime? lastUpdate
+      }){
     if(fullName != null && _userDetails.fullName != fullName){
       _userDetails.fullName = fullName;
     }
@@ -33,6 +42,15 @@ class UserProvider with ChangeNotifier{
     }
     if(provider != null && _userDetails.provider != provider){
       _userDetails.provider = provider;
+    }
+    if(urlPhotoProfile != null && _userDetails.urlPhotoProfile != urlPhotoProfile){
+      _userDetails.urlPhotoProfile = urlPhotoProfile;
+    }
+    if(lastTimeOnline != null && _userDetails.lastTimeOnline.isBefore(lastTimeOnline)){
+      _userDetails.lastTimeOnline = lastTimeOnline;
+    }
+    if(lastUpdate != null && _userDetails.lastUpdate.isBefore(lastUpdate)){
+      _userDetails.lastUpdate = lastUpdate;
     }
     notifyListeners();
   }

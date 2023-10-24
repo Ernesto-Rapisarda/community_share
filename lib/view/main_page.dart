@@ -1,8 +1,10 @@
 
 
 import 'package:community_share/main.dart';
+import 'package:community_share/providers/UserProvider.dart';
 import 'package:community_share/reporitory/user_repository.dart';
 import 'package:community_share/service/auth.dart';
+import 'package:community_share/service/user_service.dart';
 import 'package:community_share/view/add_product.dart';
 import 'package:community_share/view/community/community_main_page.dart';
 import 'package:community_share/view/community/screen/communities_list.dart';
@@ -16,6 +18,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:provider/provider.dart';
 
 
 class MainPage extends StatefulWidget {
@@ -34,13 +37,15 @@ class _MainPageState extends State<MainPage> {
   List<Widget> _children = [Home()];
 
 
-  @override
+/*  @override
   void initState(){
     super.initState();
-    UserRepository().getUserDetails(context);
+    UserService().initializeUser(context);
+    print(context.read<UserProvider>().userDetails);
 
 
-  }
+
+  }*/
 
 /*  Future<void> signOut() async{
     await Auth().signOut();

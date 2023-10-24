@@ -8,6 +8,10 @@ class UserDetails {
   String email;
   ProviderName provider;
   String urlPhotoProfile;
+  DateTime lastTimeOnline;
+  DateTime lastUpdate;
+
+
 
   UserDetails({
     this.id,
@@ -16,7 +20,9 @@ class UserDetails {
     required this.phoneNumber,
     required this.email,
     required this.provider,
-    required this.urlPhotoProfile
+    required this.urlPhotoProfile,
+    required this.lastTimeOnline,
+    required this.lastUpdate
 
 });
 
@@ -27,7 +33,9 @@ class UserDetails {
       "PhoneNumber": phoneNumber,
       "Email": email,
       "Provider": provider.name,
-      "PhotoProfile": urlPhotoProfile
+      "PhotoProfile": urlPhotoProfile,
+      "LastTimeOnline": lastTimeOnline,
+      "LastUpdate": lastUpdate
     };
   }
 
@@ -42,13 +50,18 @@ class UserDetails {
           ? ProviderName.values.firstWhere((element) => element.toString() == 'ProviderName.${json['Provider']}', orElse: () => ProviderName.undefined)
           : ProviderName.undefined,
       urlPhotoProfile: json['PhotoProfile'] ?? '',
+      lastTimeOnline: json['LastTimeOnline'] is String
+          ? DateTime.parse(json['LastTimeOnline']) // Converte la stringa in DateTime
+          : json['LastTimeOnline'], // Mantieni il valore se già è un DateTime
+      lastUpdate: json['LastUpdate'] is String
+          ? DateTime.parse(json['LastUpdate']) // Converte la stringa in DateTime
+          : json['LastUpdate'], // Mantieni il valore se già è un DateTime
+
     );
   }
 
   @override
   String toString() {
-    return 'UserDetails{fullName: $fullName, location: $location, phoneNumber: $phoneNumber, email: $email, provider: ${provider.name}}';
+    return 'UserDetails{id: $id, fullName: $fullName, location: $location, phoneNumber: $phoneNumber, email: $email, provider: $provider, urlPhotoProfile: $urlPhotoProfile, lastTimeOnline: $lastTimeOnline, lastUpdate: $lastUpdate}';
   }
-
-
 }

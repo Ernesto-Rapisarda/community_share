@@ -30,7 +30,7 @@ class _ProfileState extends State<Profile> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-              /*padding: EdgeInsets.only(bottom: 10), */child: IntroProfile()),
+              child: IntroProfile()),
           //Text('CONTRIBUTO SOCIALE', style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
           RowMenusProfile(
             label: 'Oggetti donati',
