@@ -35,7 +35,7 @@ class Auth {
           email: email, password: password);
       await sendEmailVerification(context);
       context.read<UserProvider>().setFirstSignIn();
-      context.read<UserProvider>().setUser(
+      context.read<UserProvider>().updateUser(
           provider: ProviderName.email,
         email: email,
       );

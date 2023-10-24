@@ -1,6 +1,7 @@
 
 
 import 'package:community_share/main.dart';
+import 'package:community_share/reporitory/user_repository.dart';
 import 'package:community_share/service/auth.dart';
 import 'package:community_share/view/add_product.dart';
 import 'package:community_share/view/community/community_main_page.dart';
@@ -27,8 +28,19 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+
+
   int _selectedIndex = 0;
   List<Widget> _children = [Home()];
+
+
+  @override
+  void initState(){
+    super.initState();
+    UserRepository().getUserDetails(context);
+
+
+  }
 
 /*  Future<void> signOut() async{
     await Auth().signOut();

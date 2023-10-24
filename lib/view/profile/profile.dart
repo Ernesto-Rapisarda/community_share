@@ -13,6 +13,9 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+
+
+
   Future<void> signOut() async {
     await Auth().signOut();
     context.go('/login');

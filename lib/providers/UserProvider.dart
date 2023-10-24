@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 
 class UserProvider with ChangeNotifier{
   bool _firstSignIn = false;
-  UserDetails _userDetails = UserDetails(fullName: '', location: '', phoneNumber: '', email: '', provider: ProviderName.undefined);
+  UserDetails _userDetails = UserDetails(fullName: '', location: '', phoneNumber: '', email: '', provider: ProviderName.undefined, urlPhotoProfile: '');
 
   UserDetails get userDetails => _userDetails;
   bool get firstSignIn => _firstSignIn;
 
-  void setUser(
+  void updateUser(
       {String? fullName,
       String? location,
       String? phoneNumber,
@@ -39,6 +39,11 @@ class UserProvider with ChangeNotifier{
 
   void setFirstSignIn(){
     _firstSignIn=!_firstSignIn;
+  }
+
+  void setUserDetails(UserDetails userDetails) {
+    _userDetails=userDetails;
+    notifyListeners();
   }
 
 }

@@ -24,7 +24,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
   final TextEditingController _phoneNumber = TextEditingController();
 
   Future<void> completeRegistration() async{
-    context.read<UserProvider>().setUser(
+    context.read<UserProvider>().updateUser(
       fullName: _fullName.text,
       location: _location.text,
       phoneNumber: _phoneNumber.text,
@@ -61,6 +61,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
                     label: Text(AppLocalizations.of(context)!.choiceDisplayedName)),
               ),
             ),
+            SizedBox(height: 8,),
             ConstrainedBox(
               constraints: BoxConstraints(
                   minWidth: 50.0,
@@ -77,10 +78,12 @@ class _CompleteProfileState extends State<CompleteProfile> {
                     focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(width: 3),
                         borderRadius: BorderRadius.circular(10.0)),
-                    label: Text(AppLocalizations.of(context)!.choiceDisplayedName)),
+                    label: Text(AppLocalizations.of(context)!.choiceLocation)),
               ),
             ),
+            SizedBox(height: 8,),
             ConstrainedBox(
+
               constraints: BoxConstraints(
                   minWidth: 50.0,
                   maxWidth: MediaQuery.of(context).size.width * 0.75,
@@ -96,14 +99,16 @@ class _CompleteProfileState extends State<CompleteProfile> {
                     focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(width: 3),
                         borderRadius: BorderRadius.circular(10.0)),
-                    label: Text(AppLocalizations.of(context)!.choiceDisplayedName)),
+                    label: Text(AppLocalizations.of(context)!.addYourPhoneNumber)),
               ),
             ),
+            SizedBox(height: 8,),
             OutlinedButton(
                 onPressed: () {
+                  completeRegistration();
 
                 },
-                child: Text(AppLocalizations.of(context)!.signin)),
+                child: Text(AppLocalizations.of(context)!.completeRegistration)),
 
 
           ],
