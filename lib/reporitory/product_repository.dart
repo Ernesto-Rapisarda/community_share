@@ -24,5 +24,33 @@ class ProductRepository{
     }
   }
 
+  Future<List<Product>> getProducts(BuildContext context) async {
+    List<Product> products = [];
+
+    try {
+      QuerySnapshot<Map<String, dynamic>> snapshot = await _db.collection('products').get();
+
+      snapshot.docs.forEach((DocumentSnapshot<Map<String, dynamic>> document) {
+        Product product = Product.fromJson(document.data()!);
+        product.id = document.id;
+        products.add(product);
+      });
+
+      return products;
+    } catch (error) {
+      // Gestisci gli errori qui, ad esempio mostrando un messaggio all'utente
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Failed to load products. Please try again."),
+          backgroundColor: Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
+          duration: Duration(seconds: 2),
+        ),
+      );
+
+      // Restituisci una lista vuota o lancia l'errore a seconda del tuo caso d'uso
+      return [];
+    }
+  }
+
 
 }

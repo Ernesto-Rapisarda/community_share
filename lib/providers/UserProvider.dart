@@ -6,7 +6,16 @@ import 'package:flutter/material.dart';
 
 class UserProvider with ChangeNotifier{
   bool _firstSignIn = false;
-  late UserDetails _userDetails ;
+  late UserDetails _userDetails = UserDetails(
+    fullName: '',
+    location: '',
+    phoneNumber: '',
+    email: '',
+    provider: ProviderName.undefined,
+    urlPhotoProfile: '',
+    lastTimeOnline: DateTime.now(),
+    lastUpdate: DateTime.now(),
+  );
 
    //UserDetails(fullName: '', location: '', phoneNumber: '', email: '', provider: ProviderName.undefined, urlPhotoProfile: '', lastTimeOnline: null,lastUpdate: null);
 
