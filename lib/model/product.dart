@@ -62,10 +62,12 @@ class Product {
         locationProduct: json['locationProduct'],
         uploadDate: (json['uploadDate'] as Timestamp).toDate(),
         lastUpdateDate: (json['lastUpdateDate'] as Timestamp).toDate(),
-        condition: ProductCondition.values.firstWhere(
-                (element) => element.toString() == 'ProductCondition.${json['condition']}'),
-        availability: ProductAvailability.values.firstWhere(
-                (element) => element.toString() == 'ProductAvailability.${json['availability']}'),
+        condition: json['condition'] != null
+            ? productConditionFromString(json['condition'])
+            : ProductCondition.unknown,
+        availability: json['availability'] != null
+            ? productAvailabilityFromString(json['availability'])
+            : ProductAvailability.pending,
 
         giver: UserDetailsBasic.fromJson(json['giver']),);
   }

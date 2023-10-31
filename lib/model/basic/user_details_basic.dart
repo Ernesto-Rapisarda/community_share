@@ -19,7 +19,7 @@ class UserDetailsBasic {
 
   factory UserDetailsBasic.fromJson(Map<String, dynamic> json){
     return UserDetailsBasic(
-      id: json['id'],
+      id: json['id'] ?? '',
       fullName: json['FullName'] ?? '',
       location: json['Location'] ?? '',
       urlPhotoProfile: json['PhotoProfile'] ?? ''

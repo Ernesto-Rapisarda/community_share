@@ -20,19 +20,9 @@ class _HomeState extends State<Home> {
     try {
       List<Product> products = await ProductService().getProducts(context);
       setState(() {
-        if(products.isEmpty){
-          print('vuoto');
-        }
-        else{
-          print('non vuoto');
-          print(products.length);
-        }
-
-
         _products = products;
       });
     } catch (error) {
-      print(error);
       showSnackBar(context, error.toString());
     }
   }

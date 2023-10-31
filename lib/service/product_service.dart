@@ -16,9 +16,7 @@ class ProductService {
   }
 
   Future<List<Product>> getProducts(BuildContext context) async {
-    List<Product> products =[];
-    products = await _productRepository.getProducts(context);
-    return products;
+    return await _productRepository.getProducts(context);
   }
 
 }
