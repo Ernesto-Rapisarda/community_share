@@ -36,7 +36,6 @@ class ProductRepository{
       QuerySnapshot<Map<String, dynamic>> snapshot = await _db.collection('products').get();
 
       snapshot.docs.forEach((DocumentSnapshot<Map<String, dynamic>> document) {
-        print('Raw Data: ${document.data()}');
         Product product = Product.fromJson(document.data()!);
         product.id = document.id;
         products.add(product);

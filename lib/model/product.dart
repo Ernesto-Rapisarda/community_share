@@ -6,7 +6,7 @@ import 'package:community_share/model/user_details.dart';
 
 class Product {
   //le info basic
-  late final String? id;
+  String? id;
   String title;
   String description;
   String urlImages;
