@@ -44,7 +44,7 @@ class CommunityCard extends StatelessWidget{
                       Row(
                         children: [
                           FaIcon(FontAwesomeIcons.users, size: 16,),
-                          Text('${community.members.length} members'),
+                          Text(' members'),
                         ],
                       ),
                     ],

@@ -1,5 +1,6 @@
 import 'package:community_share/providers/UserProvider.dart';
 import 'package:community_share/providers/product_provider.dart';
+import 'package:community_share/view/community/screen/add_community.dart';
 import 'package:community_share/view/community/screen/community_home.dart';
 import 'package:community_share/view/login/complete_profile.dart';
 import 'package:community_share/view/product/full_product.dart';
@@ -116,6 +117,9 @@ class AppRouter {
                   return MaterialPage(child: Addresses());
                 }
             ),
+            GoRoute(path: 'communities/add',pageBuilder: (context,state){
+              return MaterialPage(child: AddCommunity());
+            })
 
           ]
         ),

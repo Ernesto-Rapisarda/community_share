@@ -1,4 +1,6 @@
 import 'package:community_share/model/enum/community_type.dart';
+import 'package:community_share/service/community_service.dart';
+import 'package:community_share/service/product_service.dart';
 import 'package:community_share/view/community/components/community_app_bar.dart';
 import 'package:community_share/view/community/components/community_card.dart';
 import 'package:flutter/material.dart';
@@ -15,30 +17,28 @@ class CommunitiesList extends StatefulWidget {
 class _CommunitiesListState extends State<CommunitiesList> {
   List<Community> myCommunities = [];
   List<Community> nearCommunities = [];
+  final CommunityService _communityService = CommunityService();
+  bool isLoading = true;
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     fetchCommunitiesData();
   }
 
-  void fetchCommunitiesData() {
-    // Popola la lista myCommunities
-    Community myCommunity1 = Community();
-    myCommunity1.members = ['ciao', 'ciao1', 'ciao2'];
-    myCommunity1.locationSite = 'Milano';
-    myCommunity1.type = CommunityType.religiousInstitution;
-    myCommunity1.urlLogo = 'assets/images/chiesa_nocera.jpg';
-    myCommunity1.name = 'Chiesa di Nocera bla bla bla';
-    for (int i = 0; i < 10; i++) {
-      myCommunities.add(myCommunity1);
-      nearCommunities.add(myCommunity1);
-    }
-    setState(() {});
+  void fetchCommunitiesData() async {
+    List<Community> communities = await _communityService.getMyCommunities(context);
+    setState(() {
+      myCommunities = communities;
+      isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return CircularProgressIndicator(); // Visualizza un indicatore di caricamento finché i dati non sono pronti
+    }
     return Column(
       children: [
         Text(

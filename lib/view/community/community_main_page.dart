@@ -1,5 +1,6 @@
-import 'package:community_share/view/community/screen/communities_list.dart';
+import 'package:community_share/view/community/components/communities_list.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 
 class CommunitiesMainPage extends StatefulWidget{
@@ -20,7 +21,14 @@ class _CommunitiesMainPageState extends State<CommunitiesMainPage> {
 
       body: Center(
         child: CommunitiesList(),
-      )
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          context.go('/communities/add');
+        },
+        tooltip: 'Create new community',
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }

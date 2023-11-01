@@ -7,7 +7,7 @@ import 'package:community_share/service/auth.dart';
 import 'package:community_share/service/user_service.dart';
 import 'package:community_share/view/product/add_product.dart';
 import 'package:community_share/view/community/community_main_page.dart';
-import 'package:community_share/view/community/screen/communities_list.dart';
+import 'package:community_share/view/community/components/communities_list.dart';
 import 'package:community_share/view/community/components/community_app_bar.dart';
 import 'package:community_share/view/mail_box.dart';
 import 'package:community_share/view/home.dart';
@@ -100,7 +100,7 @@ class _MainPageState extends State<MainPage> {
                   text: "Inserisci",
                   icon: FontAwesomeIcons.circlePlus,),
                 GButton(
-                  text: "Communità",
+                  text: "Comunità",
                   icon: FontAwesomeIcons.peopleGroup,),
                 GButton(
                   text: "Messaggi",
