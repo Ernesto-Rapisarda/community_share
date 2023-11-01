@@ -1,22 +1,24 @@
 import 'dart:ui';
 
+import 'package:community_share/providers/product_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../../model/product.dart';
 
 class FullProduct extends StatefulWidget {
-  final Product product;
 
-  const FullProduct({super.key, required this.product});
+  const FullProduct({super.key});
 
   @override
   State<StatefulWidget> createState() => _FullProductState();
 }
 
 class _FullProductState extends State<FullProduct> {
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -27,7 +29,7 @@ class _FullProductState extends State<FullProduct> {
           child: Stack(children: [
             SizedBox(
               width: double.infinity,
-              child: Image.network(widget.product.urlImages),
+              child: Image.network(context.read<ProductProvider>().productVisualized.urlImages),
             ),
             topActionBar(context),
             Positioned(top: 230, left: 0, right: 0, child: scrollableSpace()),
@@ -116,7 +118,7 @@ class _FullProductState extends State<FullProduct> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              widget.product.title,
+              context.read<ProductProvider>().productVisualized.title,
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onPrimaryContainer,
                 fontSize: 20,
@@ -133,7 +135,7 @@ class _FullProductState extends State<FullProduct> {
                   width: 8,
                 ),
                 Text(
-                  widget.product.locationProduct,
+                  context.read<ProductProvider>().productVisualized.locationProduct,
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.onPrimaryContainer,
                     fontSize: 16,
@@ -152,7 +154,7 @@ class _FullProductState extends State<FullProduct> {
                   fontWeight: FontWeight.bold),
             ),
             Text(
-              widget.product.description,
+              context.read<ProductProvider>().productVisualized.description,
               style: TextStyle(
                   color: Theme.of(context).colorScheme.onPrimaryContainer,
                   fontSize: 16),
@@ -179,7 +181,7 @@ class _FullProductState extends State<FullProduct> {
                         fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    widget.product.condition.name,
+                    context.read<ProductProvider>().productVisualized.condition.name,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onPrimaryContainer,
                       fontSize: 16,
@@ -200,7 +202,7 @@ class _FullProductState extends State<FullProduct> {
                         fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    widget.product.availability.name,
+                    context.read<ProductProvider>().productVisualized.availability.name,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onPrimaryContainer,
                       fontSize: 16,
@@ -221,7 +223,7 @@ class _FullProductState extends State<FullProduct> {
                         fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    DateFormat('dd-MM-yyyy').format(widget.product.uploadDate),
+                    DateFormat('dd-MM-yyyy').format(context.read<ProductProvider>().productVisualized.uploadDate),
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onPrimaryContainer,
                       fontSize: 16,
@@ -252,7 +254,7 @@ class _FullProductState extends State<FullProduct> {
                       image: DecorationImage(
                         fit: BoxFit.cover, // Adatta l'immagine al cerchio
                         image:
-                            NetworkImage(widget.product.giver.urlPhotoProfile),
+                            NetworkImage(context.read<ProductProvider>().productVisualized.giver.urlPhotoProfile),
                       ),
                     ),
                   ),
@@ -261,7 +263,7 @@ class _FullProductState extends State<FullProduct> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        widget.product.giver.fullName,
+                        context.read<ProductProvider>().productVisualized.giver.fullName,
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -277,7 +279,7 @@ class _FullProductState extends State<FullProduct> {
                             width: 8,
                           ),
                           Text(
-                            widget.product.giver.location,
+                            context.read<ProductProvider>().productVisualized.giver.location,
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.grey,

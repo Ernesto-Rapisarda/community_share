@@ -1,6 +1,8 @@
+import 'package:community_share/providers/product_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../../model/enum/product_condition.dart';
 import '../../model/product.dart';
@@ -14,7 +16,8 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.go('/product/details/${product.id}', extra: product);
+        context.read<ProductProvider>().setProductVisualized(product);
+        context.go('/product/details/${product.id}'/*, extra: product*/);
       },
       child: Card(
         color: Theme.of(context).cardTheme.color,

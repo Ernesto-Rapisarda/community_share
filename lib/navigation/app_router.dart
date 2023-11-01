@@ -1,4 +1,5 @@
 import 'package:community_share/providers/UserProvider.dart';
+import 'package:community_share/providers/product_provider.dart';
 import 'package:community_share/view/community/screen/community_home.dart';
 import 'package:community_share/view/login/complete_profile.dart';
 import 'package:community_share/view/product/full_product.dart';
@@ -50,9 +51,9 @@ class AppRouter {
             GoRoute(
                 path: 'product/details/:productId',
                 pageBuilder: (context, state){/*
-                  String? communityName = state.pathParameters['communityName'];*/
-                  Product product = state.extra as Product;
-                  return MaterialPage(child: FullProduct(product: product));
+                  String? communityName = state.pathParameters['communityName'];
+                  Product product = state.extra as Product;*/
+                  return MaterialPage(child: FullProduct());
                 }
             ),
             GoRoute(

@@ -1,7 +1,6 @@
 import 'package:community_share/view/community/screen/communities_list.dart';
 import 'package:flutter/material.dart';
 
-import '../../navigation/community_route_generator.dart';
 
 class CommunitiesMainPage extends StatefulWidget{
   const CommunitiesMainPage({super.key});
