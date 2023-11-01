@@ -16,7 +16,7 @@ class ProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.read<ProductProvider>().setProductVisualized(product);
+        context.read<ProductProvider>().setProductVisualized(context,product);
         context.go('/product/details/${product.id}'/*, extra: product*/);
       },
       child: Card(

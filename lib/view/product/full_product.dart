@@ -1,6 +1,9 @@
 import 'dart:ui';
 
+import 'package:community_share/providers/UserProvider.dart';
 import 'package:community_share/providers/product_provider.dart';
+import 'package:community_share/service/auth.dart';
+import 'package:community_share/service/product_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -18,6 +21,7 @@ class FullProduct extends StatefulWidget {
 }
 
 class _FullProductState extends State<FullProduct> {
+  ProductService _productService = ProductService();
 
   @override
   Widget build(BuildContext context) {
@@ -78,14 +82,24 @@ class _FullProductState extends State<FullProduct> {
                 child: SizedBox(
               width: double.infinity,
             )),
-            //todo aggiungere gestione colore like
             InkWell(
-              onTap: () {},
-              child: FaIcon(
-                FontAwesomeIcons.heart,
+              onTap: () {
+                if(Auth().currentUser?.uid != context.read<ProductProvider>().productVisualized.giver.id){
+                  _productService.setLike(context);
+                }
+              },
+              child: context.watch<ProductProvider>().productLiked.contains(context.read<UserProvider>().getUserBasic())
+                  ? FaIcon(
+                FontAwesomeIcons.solidHeart,
                 size: 20,
-                color: Colors.white,
-              ),
+                color: Colors.red,
+
+              )
+                  : FaIcon(
+              FontAwesomeIcons.heart,
+              size: 20,
+              color: Colors.white,
+            )
             ),
             SizedBox(
               width: 8,

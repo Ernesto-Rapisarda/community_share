@@ -57,6 +57,80 @@ class ProductRepository{
 
   }
 
+  Future<List<UserDetailsBasic>> getProductLikes(BuildContext context, String? id) async{
+    List<UserDetailsBasic> users = [];
+    try{
+      QuerySnapshot<Map<String, dynamic>> snapshot = await _db.collection('products').doc(id).collection('likes').get();
+      snapshot.docs.forEach((DocumentSnapshot<Map<String, dynamic>> document) {
+          UserDetailsBasic userDetailsBasic = UserDetailsBasic.fromJson(document.data()!);
+          users.add(userDetailsBasic);
+
+        });
+
+      return users;
+
+
+    }catch(error){
+      print(error.toString());
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(error.toString()),
+          backgroundColor: Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
+          duration: Duration(seconds: 2),
+        ),
+      );
+
+      return [];
+    }
+  }
+
+  Future<void> setLikes(BuildContext context, Product tmpProduct, UserDetailsBasic tmp, bool adding)async {
+    try{
+      await _db
+          .collection('products')
+          .doc(tmpProduct.id)
+          .update(tmpProduct.toJson());
+
+      if(adding){
+        await _db
+            .collection('products')
+            .doc(tmpProduct.id)
+            .collection('likes')
+            .add(tmp.toJson());
+      }
+      else{
+        QuerySnapshot<Map<String, dynamic>> querySnapshot = await _db
+            .collection('products')
+            .doc(tmpProduct.id)
+            .collection('likes')
+            .where('Id', isEqualTo: tmp.id)
+            .get();
+
+        if (querySnapshot.docs.isNotEmpty) {
+          await _db
+              .collection('products')
+              .doc(tmpProduct.id)
+              .collection('likes')
+              .doc(querySnapshot.docs.first.id)
+              .delete();
+        }
+      }
+
+
+
+
+    }catch (error){
+      print(error.toString());
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(error.toString()),
+          backgroundColor: Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
+  }
+
 /*  Future<List<Product>> getProducts(BuildContext context) async {
     List<Product> products = [];
 

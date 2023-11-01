@@ -1,3 +1,5 @@
+import 'package:community_share/model/basic/user_details_basic.dart';
+import 'package:community_share/service/product_service.dart';
 import 'package:flutter/material.dart';
 
 import '../model/enum/product_availability.dart';
@@ -6,8 +8,15 @@ import '../model/product.dart';
 
 class ProductProvider with ChangeNotifier {
   late Product _productVisualized;
+  late List<UserDetailsBasic> _productLiked;
+  final ProductService _productService = ProductService();
+
+  ProductProvider(){
+    _productLiked = [];
+  }
 
   Product get productVisualized => _productVisualized;
+  List<UserDetailsBasic> get productLiked => _productLiked;
 
   void updateProductVisualized({
     String? title,
@@ -44,11 +53,23 @@ class ProductProvider with ChangeNotifier {
 
   }
 
-  void setProductVisualized(Product product){
+  void setProductVisualized(BuildContext context, Product product) async{
     _productVisualized = product;
+    _productLiked = await _productService.getProductLikes(context,product.id);
+    _productLiked.forEach((element) {print(element.toString());});
     notifyListeners();
   }
 
-  void setOrRemoveLikes(){
+
+  void setOrRemoveLikes(BuildContext context,bool adding, UserDetailsBasic tmp){
+    if(adding){
+      _productVisualized.likesNumber = _productVisualized.likesNumber + 1;
+      _productLiked.add(tmp);
+    }
+    else{
+      _productVisualized.likesNumber = _productVisualized.likesNumber - 1;
+      _productLiked.removeWhere((user)=> user.id == tmp.id);
+    }
+    notifyListeners();
   }
 }
