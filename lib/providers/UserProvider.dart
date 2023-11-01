@@ -76,7 +76,7 @@ class UserProvider with ChangeNotifier{
 
   UserDetailsBasic getUserBasic(){
     return UserDetailsBasic(
-        id: 'id_finto'!,
+        id: _userDetails.id!,
         fullName: _userDetails.fullName,
         location: _userDetails.location,
         urlPhotoProfile: _userDetails.urlPhotoProfile);

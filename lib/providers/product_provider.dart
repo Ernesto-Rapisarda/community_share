@@ -48,4 +48,7 @@ class ProductProvider with ChangeNotifier {
     _productVisualized = product;
     notifyListeners();
   }
+
+  void setOrRemoveLikes(){
+  }
 }

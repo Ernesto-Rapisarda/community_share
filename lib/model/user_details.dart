@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'enum/provider.dart';
 
 class UserDetails {
-  final String? id;
+  String? id;
   String fullName;
   String location;
   String phoneNumber;

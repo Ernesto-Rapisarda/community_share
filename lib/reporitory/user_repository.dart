@@ -12,6 +12,8 @@ class UserRepository {
   Future<void> createUserDetails(BuildContext context) async {
     try {
       await _db.collection("Users").doc(Auth().currentUser?.uid).set(context.read<UserProvider>().userDetails.toJson());
+      context.read<UserProvider>().userDetails.id = Auth().currentUser?.uid;
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Your account has been created"),
@@ -33,8 +35,6 @@ class UserRepository {
 
   Future<void> updateUserDetails(BuildContext context) async {
     try {
-      print(context.read<UserProvider>().userDetails.toString());
-
       await _db
           .collection("Users")
           .doc(Auth().currentUser?.uid)
@@ -64,6 +64,7 @@ class UserRepository {
 
       if (userDocument.exists) {
         UserDetails userDetails = UserDetails.fromJson(userDocument.data() as Map<String, dynamic>);
+        userDetails.id = userDocument.id;
         context.read<UserProvider>().setUserDetails(userDetails);
         return userDetails;
       } else {

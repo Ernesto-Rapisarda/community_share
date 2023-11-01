@@ -34,7 +34,7 @@ class Product {
     required this.lastUpdateDate,
     required this.condition,
     required this.availability,
-    required this.giver, // Utilizza solo l'ID dell'utente invece di un oggetto UserDetails
+    required this.giver,
     this.likesNumber = 0,
   });
 
@@ -55,7 +55,7 @@ class Product {
 
   factory Product.fromJson(Map<String, dynamic> json){
     return Product(
-        id: json['id'],
+        //id: json['id'],
         title: json['title'],
         description: json['description'],
         urlImages: json['urlImages'],
@@ -68,6 +68,7 @@ class Product {
         availability: json['availability'] != null
             ? productAvailabilityFromString(json['availability'])
             : ProductAvailability.pending,
+
 
         giver: UserDetailsBasic.fromJson(json['giver']),);
   }
