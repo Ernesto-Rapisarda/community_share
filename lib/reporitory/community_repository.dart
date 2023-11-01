@@ -53,4 +53,29 @@ class CommunityRepository{
       return [];
     }
   }
+
+  Future<void> joinCommunity(BuildContext context, Community community) async{
+    try{
+      await _db
+          .collection('communities')
+          .doc(community.id)
+          .collection('members')
+          .add(context.read<UserProvider>().getUserBasic().toJson());
+      await _db
+          .collection('Users')
+          .doc(context.read<UserProvider>().userDetails.id)
+          .collection('myCommunities')
+          .add(community.toJson());
+
+    }catch (error){
+      print(error.toString());
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(error.toString()),
+          backgroundColor: Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
+  }
 }
