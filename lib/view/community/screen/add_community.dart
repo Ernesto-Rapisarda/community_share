@@ -42,6 +42,7 @@ class _AddCommunity extends State<AddCommunity>{
       description: _descriptionController.text,
       locationSite: _locationController.text,
       urlLogo: _imageUrl,
+      members: 1,
       type: _communityType,
       founder: context.read<UserProvider>().getUserBasic()
     );

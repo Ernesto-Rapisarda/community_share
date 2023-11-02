@@ -18,6 +18,7 @@ class Community {
   String urlLogo;
   String name;
   String description;
+  int members;
 
   UserDetailsBasic founder;
 
@@ -30,6 +31,7 @@ class Community {
       required this.urlLogo,
       required this.description,
       required this.name,
+        required this.members,
       required this.founder,
       });
 
@@ -41,6 +43,7 @@ class Community {
       'type': type.name,
       'locationSite': locationSite,
       'founder': founder.toJson(),
+      'members_number': members
 
     };
   }
@@ -54,7 +57,8 @@ class Community {
             ? communityTypeFromString(json['type'])
             : CommunityType.undefined,
         locationSite: json['locationSite'],
-      founder: UserDetailsBasic.fromJson(json['founder'])
+      founder: UserDetailsBasic.fromJson(json['founder']),
+      members: json['members_number']
 
     );
   }

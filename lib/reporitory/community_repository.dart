@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:community_share/model/community.dart';
+import 'package:community_share/model/event.dart';
 import 'package:community_share/providers/UserProvider.dart';
+import 'package:community_share/providers/community_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -76,6 +78,37 @@ class CommunityRepository{
           duration: Duration(seconds: 2),
         ),
       );
+    }
+  }
+
+  Future<List<Event>> getEventsForCommunity(BuildContext context) async{
+    List<Event> events =[];
+    try{
+      QuerySnapshot<Map<String, dynamic>> snapshot = await _db
+          .collection('communities')
+          .doc(context.read<CommunityProvider>().community.id)
+      .collection('events')
+          .get();
+
+
+      snapshot.docs.forEach((DocumentSnapshot<Map<String, dynamic>> document) {
+        Event event = Event.fromJson(document.data()!);
+        event.id = document.id;
+        events.add(event);
+      });
+
+      return events;
+
+    }catch (error){
+      print(error.toString());
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(error.toString()),
+          backgroundColor: Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return [];
     }
   }
 }
