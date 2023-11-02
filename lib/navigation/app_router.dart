@@ -45,8 +45,8 @@ class AppRouter {
                 path: 'communities/home/:communityName',
                 pageBuilder: (context, state){
                   String? communityName = state.pathParameters['communityName'];
-                  Community community = state.extra as Community;
-                  return MaterialPage(child: CommunityHome(community: community));
+                  //Community community = state.extra as Community;
+                  return MaterialPage(child: CommunityHome());
                 }
             ),
             GoRoute(

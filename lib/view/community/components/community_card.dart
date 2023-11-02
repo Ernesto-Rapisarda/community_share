@@ -1,10 +1,12 @@
 import 'package:community_share/main.dart';
 import 'package:community_share/model/community.dart';
+import 'package:community_share/providers/community_provider.dart';
 import 'package:community_share/service/community_service.dart';
 import 'package:community_share/view/community/screen/community_home.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class CommunityCard extends StatefulWidget{
   late Community community;
@@ -20,14 +22,16 @@ class _CommunityCardState extends State<CommunityCard> {
 
   void joinCommunity() async{
     await _communityService.joinCommunity(context,widget.community);
-    context.go('/communities/home/${widget.community.name}',extra: widget.community);
+    context.read<CommunityProvider>().community = widget.community;
+    context.go('/communities/home/${widget.community.name}');
   }
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: (){
-        context.go('/communities/home/${widget.community.name}',extra: widget.community);
+        context.read<CommunityProvider>().community = widget.community;
+        context.go('/communities/home/${widget.community.name}');
       },
       child: Card(
           elevation: 3,

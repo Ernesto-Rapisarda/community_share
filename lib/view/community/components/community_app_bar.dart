@@ -1,14 +1,15 @@
 import 'package:community_share/model/community.dart';
+import 'package:community_share/providers/community_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class CommunityAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final Community community;
   final TabController tabController;
 
 
-  CommunityAppBar({required this.community, required this.tabController});
+  const CommunityAppBar({super.key, required this.tabController});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,7 @@ class CommunityAppBar extends StatelessWidget implements PreferredSizeWidget {
           toolbarHeight: 80,
           backgroundColor: Colors.white,
           title: Text(
-            community.name,
+            context.watch<CommunityProvider>().community.name,
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
             style: TextStyle(color: Theme.of(context).colorScheme.primary),
@@ -35,8 +36,8 @@ class CommunityAppBar extends StatelessWidget implements PreferredSizeWidget {
                 border: Border.all(color: Colors.black, width: 1.0),
               ),
               child: ClipOval(
-                child: Image.asset(
-                  community.urlLogo,
+                child: Image.network(
+                  context.watch<CommunityProvider>().community.urlLogo,
                   width: 30,
                   height: 30,
                   fit: BoxFit.cover,
@@ -49,7 +50,7 @@ class CommunityAppBar extends StatelessWidget implements PreferredSizeWidget {
               tabs: [
             Tab(
               icon: FaIcon(FontAwesomeIcons.calendar),
-              text: 'Eventi',
+              text: 'Home',
             ),
             Tab(
               icon: FaIcon(FontAwesomeIcons.list),

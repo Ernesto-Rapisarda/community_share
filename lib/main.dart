@@ -1,5 +1,6 @@
 import 'package:community_share/l10n/l10n.dart';
 import 'package:community_share/providers/UserProvider.dart';
+import 'package:community_share/providers/community_provider.dart';
 import 'package:community_share/providers/product_provider.dart';
 import 'package:community_share/service/auth.dart';
 import 'package:community_share/navigation/app_router.dart';
@@ -26,7 +27,8 @@ void main() async {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => UserProvider()),
-      ChangeNotifierProvider(create: (_)=>ProductProvider())
+      ChangeNotifierProvider(create: (_) => ProductProvider()),
+      ChangeNotifierProvider(create: (_) => CommunityProvider())
     ],
     child: MyApp(userService: userService),
   ));
