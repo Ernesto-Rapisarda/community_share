@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:community_share/model/basic/user_details_basic.dart';
 import 'package:community_share/model/community.dart';
 import 'package:community_share/model/event.dart';
 import 'package:community_share/providers/UserProvider.dart';
@@ -98,6 +99,37 @@ class CommunityRepository{
       });
 
       return events;
+
+    }catch (error){
+      print(error.toString());
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(error.toString()),
+          backgroundColor: Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return [];
+    }
+  }
+
+  Future<List<UserDetailsBasic>> getMembers(BuildContext context) async{
+    List<UserDetailsBasic> members=[];
+    try{
+      QuerySnapshot<Map<String, dynamic>> snapshot = await _db
+          .collection('communities')
+          .doc(context.read<CommunityProvider>().community.id)
+          .collection('members')
+          .get();
+
+
+      snapshot.docs.forEach((DocumentSnapshot<Map<String, dynamic>> document) {
+        UserDetailsBasic member = UserDetailsBasic.fromJson(document.data()!);
+        member.id = document.id;
+        members.add(member);
+      });
+
+      return members;
 
     }catch (error){
       print(error.toString());

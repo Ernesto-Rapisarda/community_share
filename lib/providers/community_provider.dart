@@ -58,7 +58,6 @@ class CommunityProvider with ChangeNotifier {
   }
 
   set members(List<UserDetailsBasic> value) {
-    print('ci entro');
     _members = value;
     notifyListeners();
 

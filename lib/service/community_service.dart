@@ -1,5 +1,6 @@
 
 
+import 'package:community_share/model/basic/user_details_basic.dart';
 import 'package:community_share/providers/community_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
@@ -24,6 +25,10 @@ class CommunityService{
 
   Future<void> getEventsForCommunity(BuildContext context) async{
     context.read<CommunityProvider>().events = await _communityRepository.getEventsForCommunity(context);
+  }
+
+  Future<List<UserDetailsBasic>> getMembers(BuildContext context) async{
+    return await _communityRepository.getMembers(context);
   }
 
 }

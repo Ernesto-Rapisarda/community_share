@@ -28,21 +28,24 @@ class CommunityAppBar extends StatelessWidget implements PreferredSizeWidget {
           automaticallyImplyLeading: true,
 
           actions: [
-            Container(
-              width: 50,
-              height: 50,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: Colors.black, width: 1.0),
-              ),
-              child: ClipOval(
-                child: Image.network(
-                  context.watch<CommunityProvider>().community.urlLogo,
-                  width: 30,
-                  height: 30,
-                  fit: BoxFit.cover,
-                ),
-              ),
+            PopupMenuButton<String>(
+              onSelected: (value) {
+                //todo
+                // Handle menu item selection here
+                if (value == 'settings') {
+                  // Handle settings action
+                } else if (value == 'logout') {
+                  // Handle logout action
+                }
+              },
+              itemBuilder: (BuildContext context) {
+                return ['Settings', 'Logout'].map((String choice) {
+                  return PopupMenuItem<String>(
+                    value: choice.toLowerCase(),
+                    child: Text(choice),
+                  );
+                }).toList();
+              },
             ),
           ],
           bottom: TabBar(
