@@ -6,14 +6,14 @@ import 'package:provider/provider.dart';
 
 import '../../../service/community_service.dart';
 
-class PresentationAndEventsTab extends StatefulWidget {
-  const PresentationAndEventsTab({super.key});
+class HomeCommunity extends StatefulWidget {
+  const HomeCommunity({super.key});
 
   @override
-  State<PresentationAndEventsTab> createState() => _PresentationAndEventsTabState();
+  State<HomeCommunity> createState() => _HomeCommunityState();
 }
 
-class _PresentationAndEventsTabState extends State<PresentationAndEventsTab> {
+class _HomeCommunityState extends State<HomeCommunity> {
 
   @override
   void initState() {

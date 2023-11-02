@@ -1,7 +1,7 @@
 import 'package:community_share/providers/UserProvider.dart';
 import 'package:community_share/providers/product_provider.dart';
 import 'package:community_share/view/community/screen/add_community.dart';
-import 'package:community_share/view/community/screen/community_home.dart';
+import 'package:community_share/view/community/screen/community_main_screen.dart';
 import 'package:community_share/view/login/complete_profile.dart';
 import 'package:community_share/view/product/full_product.dart';
 import 'package:community_share/view/main_page.dart';
@@ -46,7 +46,7 @@ class AppRouter {
                 pageBuilder: (context, state){
                   String? communityName = state.pathParameters['communityName'];
                   //Community community = state.extra as Community;
-                  return MaterialPage(child: CommunityHome());
+                  return MaterialPage(child: CommunityMainScreen());
                 }
             ),
             GoRoute(

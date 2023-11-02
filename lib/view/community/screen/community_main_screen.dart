@@ -1,7 +1,7 @@
 import 'package:community_share/providers/community_provider.dart';
 import 'package:community_share/view/community/components/community_app_bar.dart';
 import 'package:community_share/view/community/screen/chat_tab.dart';
-import 'package:community_share/view/community/screen/presentation_and_events.dart';
+import 'package:community_share/view/community/screen/home_community.dart';
 import 'package:community_share/view/community/screen/offers_tab.dart';
 import 'package:community_share/view/community/screen/search_tab.dart';
 import 'package:community_share/view/community/screen/user_list_tab.dart';
@@ -10,14 +10,14 @@ import 'package:provider/provider.dart';
 
 import '../../../model/community.dart';
 
-class CommunityHome extends StatefulWidget{
-  const CommunityHome({super.key});
+class CommunityMainScreen extends StatefulWidget{
+  const CommunityMainScreen({super.key});
 
   @override
-  State<CommunityHome> createState() => _CommunityHomeState();
+  State<CommunityMainScreen> createState() => _CommunityMainScreenState();
 }
 
-class _CommunityHomeState extends State<CommunityHome> with TickerProviderStateMixin {
+class _CommunityMainScreenState extends State<CommunityMainScreen> with TickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -40,7 +40,7 @@ class _CommunityHomeState extends State<CommunityHome> with TickerProviderStateM
         body:TabBarView(
           controller: _tabController,
           children: [
-            PresentationAndEventsTab(),
+            HomeCommunity(),
             OffersTab(),
             SearchTab(),
             ChatTab(),

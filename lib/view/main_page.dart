@@ -6,7 +6,7 @@ import 'package:community_share/reporitory/user_repository.dart';
 import 'package:community_share/service/auth.dart';
 import 'package:community_share/service/user_service.dart';
 import 'package:community_share/view/product/add_product.dart';
-import 'package:community_share/view/community/community_main_page.dart';
+import 'package:community_share/view/community/communities_main_screen.dart';
 import 'package:community_share/view/community/components/communities_list.dart';
 import 'package:community_share/view/community/components/community_app_bar.dart';
 import 'package:community_share/view/mail_box.dart';
@@ -58,7 +58,7 @@ class _MainPageState extends State<MainPage> {
     setState(() {
       if(_children.length==1){
         _children.add(AddProduct());
-        _children.add(CommunitiesMainPage());
+        _children.add(CommunitiesMainScreen());
         _children.add(MailBox());
         _children.add(Profile());
       }

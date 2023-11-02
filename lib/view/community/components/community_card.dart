@@ -2,7 +2,7 @@ import 'package:community_share/main.dart';
 import 'package:community_share/model/community.dart';
 import 'package:community_share/providers/community_provider.dart';
 import 'package:community_share/service/community_service.dart';
-import 'package:community_share/view/community/screen/community_home.dart';
+import 'package:community_share/view/community/screen/community_main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';

@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 
-class CommunitiesMainPage extends StatefulWidget{
-  const CommunitiesMainPage({super.key});
+class CommunitiesMainScreen extends StatefulWidget{
+  const CommunitiesMainScreen({super.key});
 
 
 
   @override
-  State<CommunitiesMainPage> createState() => _CommunitiesMainPageState();
+  State<CommunitiesMainScreen> createState() => _CommunitiesMainScreenState();
 }
 
-class _CommunitiesMainPageState extends State<CommunitiesMainPage> {
+class _CommunitiesMainScreenState extends State<CommunitiesMainScreen> {
 
   @override
   Widget build(BuildContext context) {
