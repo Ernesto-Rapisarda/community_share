@@ -70,6 +70,7 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    print(context.read<UserProvider>().userDetails.toString());
     return SafeArea(child: Scaffold(
 /*      appBar: AppBar(
         title: Text('todo'),

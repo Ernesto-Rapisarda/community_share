@@ -4,6 +4,7 @@ import 'package:community_share/providers/UserProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../model/community.dart';
 import '../service/auth.dart';
 
 class UserRepository {
@@ -65,7 +66,7 @@ class UserRepository {
       if (userDocument.exists) {
         UserDetails userDetails = UserDetails.fromJson(userDocument.data() as Map<String, dynamic>);
         userDetails.id = userDocument.id;
-        context.read<UserProvider>().setUserDetails(userDetails);
+        //context.read<UserProvider>().setData(userDetails,[]);
         return userDetails;
       } else {
         throw Exception("User not found in database");
@@ -74,5 +75,34 @@ class UserRepository {
       print(error.toString());
       throw Exception("Failed to fetch user details");
     }
+  }
+
+  Future<List<Community>> getMyCommunities(BuildContext context) async{
+    List<Community> myCommunities =[];
+    try {
+      QuerySnapshot<Map<String, dynamic>> snapshot = await _db.collection("Users").doc(Auth().currentUser?.uid).collection('myCommunities').get();
+
+
+      snapshot.docs.forEach((DocumentSnapshot<Map<String, dynamic>> document) {
+        Community community = Community.fromJson(document.data()!);
+        community.id = document.id;
+        myCommunities.add(community);
+      });
+
+      return myCommunities;
+    } catch (error) {
+      print(error.toString());
+      /*ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(error.toString()),
+          backgroundColor: Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
+          duration: Duration(seconds: 2),
+        ),
+      );*/
+      throw Exception(error.toString());
+
+      return [];
+    }
+
   }
 }

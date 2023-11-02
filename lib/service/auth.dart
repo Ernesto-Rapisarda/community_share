@@ -37,7 +37,7 @@ class Auth {
           email: email, password: password);
       await sendEmailVerification(context);
       context.read<UserProvider>().setFirstSignIn();
-      context.read<UserProvider>().setUserDetails(
+      context.read<UserProvider>().setData(
         UserDetails(
             fullName: '',
             location: '',
@@ -47,7 +47,7 @@ class Auth {
             urlPhotoProfile: '',
             lastTimeOnline: DateTime.now(),
             lastUpdate: DateTime.now())
-      );
+          ,[]);
       context.go('/complete_registration');
     } on FirebaseAuthException catch (e) {
       showSnackBar(context, e.message!);
@@ -75,7 +75,6 @@ class Auth {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
 
       final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
-      print('ciao');
 
       if(googleUser != null ){
         final AuthCredential credential = GoogleAuthProvider.credential(

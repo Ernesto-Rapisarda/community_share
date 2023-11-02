@@ -42,6 +42,7 @@ class _IntroProfileState extends State<IntroProfile> {
 
   @override
   Widget build(BuildContext context) {
+    print(context.read<UserProvider>().userDetails.toString());
     return Container(
       color: Theme.of(context).colorScheme.secondaryContainer,
       padding: EdgeInsets.all(15),

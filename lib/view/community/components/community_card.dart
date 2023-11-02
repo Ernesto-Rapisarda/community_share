@@ -1,12 +1,15 @@
 import 'package:community_share/main.dart';
 import 'package:community_share/model/community.dart';
 import 'package:community_share/providers/community_provider.dart';
+import 'package:community_share/service/auth.dart';
 import 'package:community_share/service/community_service.dart';
 import 'package:community_share/view/community/screen/community_main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+
+import '../../../providers/UserProvider.dart';
 
 class CommunityCard extends StatefulWidget{
   late Community community;
@@ -63,10 +66,14 @@ class _CommunityCardState extends State<CommunityCard> {
                           Text(' members'),
                         ],
                       ),
-                      OutlinedButton(
-                          onPressed: (){
-                            joinCommunity();
-                          }, child: Text('Join'))
+                      Auth().currentUser?.uid != widget.community.founder.id && !context.read<UserProvider>().myCommunities.contains(widget.community)
+                          ? OutlinedButton(
+                            onPressed: (){
+                              joinCommunity();
+                            }, child: Text('Join'))
+                      : Center()
+
+
                     ],
                   ),
 

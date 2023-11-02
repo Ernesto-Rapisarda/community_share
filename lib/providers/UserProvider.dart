@@ -4,6 +4,8 @@ import 'package:community_share/model/user_details.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../model/community.dart';
+
 class UserProvider with ChangeNotifier{
   bool _firstSignIn = false;
   late UserDetails _userDetails = UserDetails(
@@ -16,6 +18,7 @@ class UserProvider with ChangeNotifier{
     lastTimeOnline: DateTime.now(),
     lastUpdate: DateTime.now(),
   );
+  List<Community> _myCommunities = [];
 
    //UserDetails(fullName: '', location: '', phoneNumber: '', email: '', provider: ProviderName.undefined, urlPhotoProfile: '', lastTimeOnline: null,lastUpdate: null);
 
@@ -24,6 +27,7 @@ class UserProvider with ChangeNotifier{
 
   UserDetails get userDetails => _userDetails;
   bool get firstSignIn => _firstSignIn;
+  List<Community> get myCommunities => _myCommunities;
 
   void updateUser(
       {String? fullName,
@@ -69,10 +73,14 @@ class UserProvider with ChangeNotifier{
     _firstSignIn=!_firstSignIn;
   }
 
-  void setUserDetails(UserDetails userDetails) {
+  void setData(UserDetails userDetails, List<Community> communities) {
     _userDetails=userDetails;
+    //print(_userDetails.toString());
+    _myCommunities = communities;
     notifyListeners();
   }
+
+
 
   UserDetailsBasic getUserBasic(){
     return UserDetailsBasic(
@@ -81,5 +89,6 @@ class UserProvider with ChangeNotifier{
         location: _userDetails.location,
         urlPhotoProfile: _userDetails.urlPhotoProfile);
   }
+
 
 }
