@@ -1,3 +1,4 @@
+import 'package:community_share/providers/UserProvider.dart';
 import 'package:community_share/view/profile/components/intro_profile_with_photo.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

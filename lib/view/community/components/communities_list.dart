@@ -28,8 +28,10 @@ class _CommunitiesListState extends State<CommunitiesList> {
 
   void fetchCommunitiesData() async {
     List<Community> communities = await _communityService.getMyCommunities(context);
+    List<Community> allCommunities = await _communityService.getAllCommunities(context);
     setState(() {
       myCommunities = communities;
+      nearCommunities = allCommunities;
       isLoading = false;
     });
   }
@@ -66,7 +68,7 @@ class _CommunitiesListState extends State<CommunitiesList> {
           child: ListView(
             scrollDirection: Axis.horizontal,
             children: [
-              for (Community community in myCommunities)
+              for (Community community in nearCommunities)
                 CommunityCard(community)
             ],
           ),

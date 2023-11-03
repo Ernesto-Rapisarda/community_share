@@ -143,4 +143,37 @@ class CommunityRepository{
       return [];
     }
   }
+
+  Future<List<Community>> getAllCommunities(BuildContext context) async{
+    List<Community> myCommunities = [];
+
+    try{
+      QuerySnapshot<Map<String, dynamic>> snapshot = await _db
+          .collection('communities')
+          .where('founder.Id', isNotEqualTo: context.read<UserProvider>().userDetails.id)
+          .get();
+
+      snapshot.docs.forEach((DocumentSnapshot<Map<String, dynamic>> document) {
+        Community community = Community.fromJson(document.data()!);
+        community.id = document.id;
+        if(!context.read<UserProvider>().myCommunities.contains(community)){
+          myCommunities.add(community);
+
+        }
+      });
+
+      return myCommunities;
+    }catch (error){
+      print(error.toString());
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(error.toString()),
+          backgroundColor: Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
+          duration: Duration(seconds: 2),
+        ),
+      );
+
+      return [];
+    }
+  }
 }
