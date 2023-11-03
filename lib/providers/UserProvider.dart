@@ -90,5 +90,10 @@ class UserProvider with ChangeNotifier{
         urlPhotoProfile: _userDetails.urlPhotoProfile);
   }
 
+  void addCommunity(Community community){
+    _myCommunities.add(community);
+    notifyListeners();
+  }
+
 
 }

@@ -28,11 +28,11 @@ class CommunityRepository{
 
   Future<List<Community>> getMyCommunities(BuildContext context) async{
     List<Community> myCommunities = [];
-
+    //todo non va bene
     try{
       QuerySnapshot<Map<String, dynamic>> snapshot = await _db
           .collection('communities')
-          .where('founder.Id',isEqualTo: context.read<UserProvider>().userDetails.id)
+          .where('members.Id',isEqualTo: context.read<UserProvider>().userDetails.id)
           .get();
 
 

@@ -31,6 +31,7 @@ class CommunityService{
     }
 
     await _communityRepository.joinCommunity(context, community);
+    context.read<UserProvider>().addCommunity(community);
   }
 
   Future<void> getEventsForCommunity(BuildContext context) async{

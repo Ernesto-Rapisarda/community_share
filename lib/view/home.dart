@@ -1,10 +1,10 @@
-import 'package:community_share/controllers/show_snack_bar.dart';
 import 'package:community_share/service/product_service.dart';
 import 'package:community_share/view/generic_components/product_grid.dart';
 import 'package:flutter/material.dart';
 
 import '../model/enum/product_condition.dart';
 import '../model/product.dart';
+import '../utils/show_snack_bar.dart';
 
 class Home extends StatefulWidget {
   Home({super.key});

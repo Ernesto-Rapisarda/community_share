@@ -1,5 +1,5 @@
 import 'package:community_share/service/auth.dart';
-import 'package:community_share/controllers/show_snack_bar.dart';
+import 'package:community_share/utils//show_snack_bar.dart';
 import 'package:community_share/view/generic_components/SocialColors.dart';
 import 'package:community_share/view/generic_components/social_widget_button.dart';
 import 'package:community_share/view/login/components/welcome.dart';

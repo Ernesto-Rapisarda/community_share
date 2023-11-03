@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:community_share/controllers/show_snack_bar.dart';
+import 'package:community_share/utils/show_snack_bar.dart';
 import 'package:community_share/model/enum/provider.dart';
 import 'package:community_share/model/user_details.dart';
 import 'package:community_share/providers/UserProvider.dart';

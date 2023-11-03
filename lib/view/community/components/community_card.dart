@@ -14,7 +14,7 @@ import '../../../providers/UserProvider.dart';
 class CommunityCard extends StatefulWidget{
   late Community community;
 
-  CommunityCard(this.community, {Key? key}) : super(key: key);
+  CommunityCard(this.community, {super.key});
 
   @override
   State<CommunityCard> createState() => _CommunityCardState();
