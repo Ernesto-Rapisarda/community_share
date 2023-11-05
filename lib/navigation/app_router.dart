@@ -1,8 +1,11 @@
+
+
 import 'package:community_share/providers/UserProvider.dart';
 import 'package:community_share/providers/product_provider.dart';
 import 'package:community_share/view/community/screen/add_community.dart';
 import 'package:community_share/view/community/screen/community_main_screen.dart';
 import 'package:community_share/view/login/complete_profile.dart';
+import 'package:community_share/view/product/add_product.dart';
 import 'package:community_share/view/product/full_product.dart';
 import 'package:community_share/view/main_page.dart';
 import 'package:community_share/view/login/login.dart';
@@ -33,109 +36,123 @@ class AppRouter {
 
   static GoRouter _createRouter() {
     return GoRouter(
-      initialLocation: Auth().currentUser != null /*&& Auth().currentUser!.emailVerified*/ && !UserProvider().firstSignIn ? '/' : '/login',
+      initialLocation:
+          Auth().currentUser != null /*&& Auth().currentUser!.emailVerified*/ &&
+                  !UserProvider().firstSignIn
+              ? '/'
+              : '/login',
       routes: [
         GoRoute(
-          path: '/',
-          pageBuilder: (context, state) {
-            return const MaterialPage(child: MainPage(),);
-          },
-          routes: <RouteBase>[
-            GoRoute(
-                path: 'communities/home/:communityName',
-                pageBuilder: (context, state){
-                  String? communityName = state.pathParameters['communityName'];
-                  //Community community = state.extra as Community;
-                  return MaterialPage(child: CommunityMainScreen());
-                }
-            ),
-            GoRoute(
-                path: 'product/details/:productId',
-                pageBuilder: (context, state){/*
+            path: '/',
+            pageBuilder: (context, state) {
+              return const MaterialPage(
+                child: MainPage(),
+              );
+            },
+            routes: <RouteBase>[
+              GoRoute(
+                  path: 'communities/home/:communityName',
+                  pageBuilder: (context, state) {
+                    String? communityName =
+                        state.pathParameters['communityName'];
+                    //Community community = state.extra as Community;
+                    return MaterialPage(child: CommunityMainScreen());
+                  }),
+              GoRoute(
+                  path: 'product/details/:productId',
+                  pageBuilder: (context, state) {
+                    /*
                   String? communityName = state.pathParameters['communityName'];
                   Product product = state.extra as Product;*/
-                  return MaterialPage(child: FullProduct());
-                }
-            ),
-            GoRoute(
-                path: 'profile/paletta_colori',
-              pageBuilder: (context,state){
-                  return MaterialPage(child: PalettaColori());
-              }
-            ),
-            GoRoute(
-                path: 'profile/donated_products',
-                pageBuilder: (context,state){
-                  return MaterialPage(child: DonatedProducts());
-                }
-            ),
-            GoRoute(
-                path: 'profile/received_products',
-                pageBuilder: (context,state){
-                  return MaterialPage(child: ReceivedProducts());
-                }
-            ),
-            GoRoute(
-                path: 'profile/needed_products',
-                pageBuilder: (context,state){
-                  return MaterialPage(child: NeededProducts());
-                }
-            ),
-            GoRoute(
-                path: 'profile/donations_done',
-                pageBuilder: (context,state){
-                  return MaterialPage(child: DonationsDone());
-                }
-            ),
-            GoRoute(
-                path: 'profile/notifications',
-                pageBuilder: (context,state){
-                  return MaterialPage(child: Notifications());
-                }
-            ),
-            GoRoute(
-                path: 'profile/settings',
-                pageBuilder: (context,state){
-                  return MaterialPage(child: ProfileSettings());
-                }
-            ),
-            GoRoute(
-                path: 'profile/email_change',
-                pageBuilder: (context,state){
-                  return MaterialPage(child: EmailChange());
-                }
-            ),
-            GoRoute(
-                path: 'profile/password_change',
-                pageBuilder: (context,state){
-                  return MaterialPage(child: PasswordChange());
-                }
-            ),
-            GoRoute(
-                path: 'profile/addresses',
-                pageBuilder: (context,state){
-                  return MaterialPage(child: Addresses());
-                }
-            ),
-            GoRoute(path: 'communities/add',pageBuilder: (context,state){
-              return MaterialPage(child: AddCommunity());
-            })
+                    return MaterialPage(child: FullProduct());
+                  },
+                routes: <RouteBase>[
+                  GoRoute(path: 'edit',
+                    pageBuilder: (context, state){
+                    return MaterialPage(child: AddProduct(isEdit: true,));
+                    }
 
-          ]
-        ),
+                  )
+                ]
+                  ),
+
+              GoRoute(
+                  path: 'profile/paletta_colori',
+                  pageBuilder: (context, state) {
+                    return MaterialPage(child: PalettaColori());
+                  }),
+              GoRoute(
+                  path: 'profile/donated_products',
+                  pageBuilder: (context, state) {
+                    return MaterialPage(child: DonatedProducts());
+                  }),
+              GoRoute(
+                  path: 'profile/received_products',
+                  pageBuilder: (context, state) {
+                    return MaterialPage(child: ReceivedProducts());
+                  }),
+              GoRoute(
+                  path: 'profile/needed_products',
+                  pageBuilder: (context, state) {
+                    return MaterialPage(child: NeededProducts());
+                  }),
+              GoRoute(
+                  path: 'profile/donations_done',
+                  pageBuilder: (context, state) {
+                    return MaterialPage(child: DonationsDone());
+                  }),
+              GoRoute(
+                  path: 'profile/notifications',
+                  pageBuilder: (context, state) {
+                    return MaterialPage(child: Notifications());
+                  }),
+              GoRoute(
+                  path: 'profile/settings',
+                  pageBuilder: (context, state) {
+                    return MaterialPage(child: ProfileSettings());
+                  }),
+              GoRoute(
+                  path: 'profile/email_change',
+                  pageBuilder: (context, state) {
+                    return MaterialPage(child: EmailChange());
+                  }),
+              GoRoute(
+                  path: 'profile/password_change',
+                  pageBuilder: (context, state) {
+                    return MaterialPage(child: PasswordChange());
+                  }),
+              GoRoute(
+                  path: 'profile/addresses',
+                  pageBuilder: (context, state) {
+                    return MaterialPage(child: Addresses());
+                  }),
+              GoRoute(
+                  path: 'communities/add',
+                  pageBuilder: (context, state) {
+                    return MaterialPage(child: AddCommunity());
+                  }),
+/*              GoRoute(
+                  path: 'product/edit/:productId',
+                  pageBuilder: (context, state) {
+                    return MaterialPage(child: AddProduct(isEdit: true,));
+                  })*/
+            ]),
         GoRoute(
           path: '/login',
           pageBuilder: (context, state) {
-            return const MaterialPage(child: AuthPage(),);
+            return const MaterialPage(
+              child: AuthPage(),
+            );
           },
         ),
         GoRoute(
           path: '/complete_registration',
           pageBuilder: (context, state) {
-            return const MaterialPage(child: CompleteProfile(),);
+            return const MaterialPage(
+              child: CompleteProfile(),
+            );
           },
         ),
-
       ],
     );
   }

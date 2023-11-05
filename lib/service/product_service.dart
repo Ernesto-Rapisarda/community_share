@@ -9,11 +9,8 @@ import 'package:provider/provider.dart';
 class ProductService {
   final ProductRepository _productRepository = ProductRepository();
 
-  void createProduct(BuildContext context, Product product) async {
-
-
-
-    await _productRepository.createProduct(context,product);
+  Future<String> createProduct(BuildContext context, Product product) async {
+    return await _productRepository.createProduct(context,product);
   }
 
   Future<List<Product>> getProducts(BuildContext context) async {
@@ -39,6 +36,11 @@ class ProductService {
 
   getProductLikes(BuildContext context,String? id) async{
     return await _productRepository.getProductLikes(context, id);
+  }
+
+  Future<void> updateProduct(BuildContext context, Product product) async{
+    return await _productRepository.updateProduct(context, product);
+
   }
 
 }

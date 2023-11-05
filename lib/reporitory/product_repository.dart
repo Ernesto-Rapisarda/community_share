@@ -14,9 +14,11 @@ import '../service/auth.dart';
 class ProductRepository{
   final _db = FirebaseFirestore.instance;
 
-  Future<void> createProduct(BuildContext context, Product product) async{
+  Future<String> createProduct(BuildContext context, Product product) async{
     try{
-      await _db.collection('products').add(product.toJson());
+      DocumentReference documentReference = await _db.collection('products').add(product.toJson());
+      String productId = documentReference.id;
+      return productId;
     }
     catch (error){
       ScaffoldMessenger.of(context).showSnackBar(
@@ -26,6 +28,7 @@ class ProductRepository{
           duration: Duration(seconds: 2),
         ),
       );
+      return '';
     }
   }
 
@@ -119,6 +122,35 @@ class ProductRepository{
       }
 
 
+
+
+    }catch (error){
+      print(error.toString());
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(error.toString()),
+          backgroundColor: Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
+  }
+
+  Future <void> updateProduct(BuildContext context, Product product) async{
+    try{
+      print(product.id);
+      await _db
+          .collection("products")
+          .doc(product.id)
+          .update(product.toJson());
+
+      /*DocumentReference userDocRef = _db.collection('Users').doc(Auth().currentUser?.uid).collection('given_products').where(document.id);
+
+
+      await _db
+          .collection('Users')
+      .doc(Auth().currentUser?.uid)
+      .collection('given_products').update()*/
 
 
     }catch (error){

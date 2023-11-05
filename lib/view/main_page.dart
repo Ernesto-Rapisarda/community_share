@@ -57,7 +57,7 @@ class _MainPageState extends State<MainPage> {
   void _onItemTapped(int index) {
     setState(() {
       if(_children.length==1){
-        _children.add(AddProduct());
+        _children.add(AddProduct(isEdit: false,));
         _children.add(CommunitiesMainScreen());
         _children.add(MailBox());
         _children.add(Profile());
@@ -88,7 +88,7 @@ class _MainPageState extends State<MainPage> {
             child: GNav(
               gap: 8,
               backgroundColor: Theme.of(context).colorScheme.primary,
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.onPrimary,
               activeColor: Theme.of(context).colorScheme.onPrimaryContainer,
               tabBackgroundColor: Theme.of(context).colorScheme.primaryContainer,
               padding: EdgeInsets.all(16),

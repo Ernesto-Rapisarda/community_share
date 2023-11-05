@@ -49,22 +49,16 @@ class MyApp extends StatelessWidget {
     }
     return MaterialApp.router(
       title: 'Community Share',
-      theme: ThemeData(
+      theme: ThemeData.dark(useMaterial3: true),
+      //lightTheme: ThemeData.light(useMaterial3: true),
+      themeMode: ThemeMode.system,
+      /*theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
             seedColor: Colors.lightBlue
-                .shade100 /*, primary: Color(int.parse("ff77536c", radix: 16))*/),
+                .shade100 *//*, primary: Color(int.parse("ff77536c", radix: 16))*//*),
         useMaterial3: true,
-        /*iconTheme: IconThemeData(color: Color(int.parse("ff77536c", radix: 16))),
-        tabBarTheme: TabBarTheme(
-          labelColor: Color(int.parse("ff77536c", radix: 16)), // Imposta il colore del testo della tab selezionata a bianco
-          unselectedLabelColor: Color(int.parse("ff77536c", radix: 16)).withOpacity(0.5),
-          dividerColor: Color(int.parse("ff77536c", radix: 16)),*/
-        // Imposta il colore del testo delle tab non selezionate a bianco con opacità 0.5
-        /*indicator: BoxDecoration(
-            color: Colors.white, // Imposta il colore del riquadro di indicazione delle tab a bianco
-          ),
-        ),*/
-      ),
+
+      ),*/
 
       //internationalization
       supportedLocales: L10n.all,

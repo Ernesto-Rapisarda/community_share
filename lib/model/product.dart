@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:community_share/model/basic/user_details_basic.dart';
 import 'package:community_share/model/enum/product_availability.dart';
+import 'package:community_share/model/enum/product_category.dart';
 import 'package:community_share/model/enum/product_condition.dart';
 import 'package:community_share/model/user_details.dart';
 
@@ -19,6 +20,7 @@ class Product {
   //enum descrittivi
   ProductCondition condition;
   ProductAvailability availability;
+  ProductCategory productCategory;
 
   //altre info
   int likesNumber;
@@ -35,6 +37,7 @@ class Product {
     required this.condition,
     required this.availability,
     required this.giver,
+    required this.productCategory,
     this.likesNumber = 0,
   });
 
@@ -48,6 +51,7 @@ class Product {
       'lastUpdateDate': lastUpdateDate,
       'condition': condition.name,
       'availability': availability.name,
+      'category': productCategory.name,
       'likesNumber': likesNumber,
       'giver': giver.toJson(),
     };
@@ -68,6 +72,9 @@ class Product {
         availability: json['availability'] != null
             ? productAvailabilityFromString(json['availability'])
             : ProductAvailability.pending,
+        productCategory: json['category'] !=null
+            ? productCategoryFromString(json['category'])
+            : ProductCategory.other,
 
 
         giver: UserDetailsBasic.fromJson(json['giver']),);
