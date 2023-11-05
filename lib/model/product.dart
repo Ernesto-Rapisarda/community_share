@@ -82,5 +82,8 @@ class Product {
         giver: UserDetailsBasic.fromJson(json['giver']),);
   }
 
-
+  @override
+  String toString() {
+    return 'Product{id: $id, title: $title, description: $description, urlImages: $urlImages, locationProduct: $locationProduct, docRef: $docRef, uploadDate: $uploadDate, lastUpdateDate: $lastUpdateDate, condition: $condition, availability: $availability, productCategory: $productCategory, likesNumber: $likesNumber, giver: $giver}';
+  }
 }

@@ -12,22 +12,27 @@ import '../model/enum/product_condition.dart';
 import '../model/product.dart';
 import '../service/auth.dart';
 
-class ProductRepository{
+class ProductRepository {
   final _db = FirebaseFirestore.instance;
 
-  Future<void> createProduct(BuildContext context, Product product) async{
-    try{
-      DocumentReference documentReference = await _db.collection('products').add(product.toJson());
+  Future<void> createProduct(BuildContext context, Product product) async {
+    try {
+      DocumentReference documentReference =
+          await _db.collection('products').add(product.toJson());
       String docRef = documentReference.id;
-      product.docRef=docRef;
+      product.docRef = docRef;
       context.read<ProductProvider>().setProductVisualized(context, product);
-      await _db.collection('Users').doc(Auth().currentUser?.uid).collection('given_product').add(context.read<ProductProvider>().getProductBasic().toJson());
-    }
-    catch (error){
+      await _db
+          .collection('Users')
+          .doc(Auth().currentUser?.uid)
+          .collection('given_products')
+          .add(context.read<ProductProvider>().getProductBasic().toJson());
+    } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Something went wrong. Try again"),
-          backgroundColor: Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
+          backgroundColor:
+              Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
           duration: Duration(seconds: 2),
         ),
       );
@@ -38,8 +43,8 @@ class ProductRepository{
     List<Product> products = [];
 
     try {
-      QuerySnapshot<Map<String, dynamic>> snapshot = await _db.collection('products').get();
-
+      QuerySnapshot<Map<String, dynamic>> snapshot =
+          await _db.collection('products').get();
 
       snapshot.docs.forEach((DocumentSnapshot<Map<String, dynamic>> document) {
         Product product = Product.fromJson(document.data()!);
@@ -53,36 +58,36 @@ class ProductRepository{
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(error.toString()),
-          backgroundColor: Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
+          backgroundColor:
+              Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
           duration: Duration(seconds: 2),
         ),
       );
 
       return [];
     }
-
-
   }
 
-  Future<List<UserDetailsBasic>> getProductLikes(BuildContext context, String? id) async{
+  Future<List<UserDetailsBasic>> getProductLikes(
+      BuildContext context, String? id) async {
     List<UserDetailsBasic> users = [];
-    try{
-      QuerySnapshot<Map<String, dynamic>> snapshot = await _db.collection('products').doc(id).collection('likes').get();
+    try {
+      QuerySnapshot<Map<String, dynamic>> snapshot =
+          await _db.collection('products').doc(id).collection('likes').get();
       snapshot.docs.forEach((DocumentSnapshot<Map<String, dynamic>> document) {
-          UserDetailsBasic userDetailsBasic = UserDetailsBasic.fromJson(document.data()!);
-          users.add(userDetailsBasic);
-
-        });
+        UserDetailsBasic userDetailsBasic =
+            UserDetailsBasic.fromJson(document.data()!);
+        users.add(userDetailsBasic);
+      });
 
       return users;
-
-
-    }catch(error){
+    } catch (error) {
       print(error.toString());
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(error.toString()),
-          backgroundColor: Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
+          backgroundColor:
+              Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
           duration: Duration(seconds: 2),
         ),
       );
@@ -91,21 +96,21 @@ class ProductRepository{
     }
   }
 
-  Future<void> setLikes(BuildContext context, Product tmpProduct, UserDetailsBasic tmp, bool adding)async {
-    try{
+  Future<void> setLikes(BuildContext context, Product tmpProduct,
+      UserDetailsBasic tmp, bool adding) async {
+    try {
       await _db
           .collection('products')
           .doc(tmpProduct.docRef)
           .update(tmpProduct.toJson());
 
-      if(adding){
+      if (adding) {
         await _db
             .collection('products')
             .doc(tmpProduct.docRef)
             .collection('likes')
             .add(tmp.toJson());
-      }
-      else{
+      } else {
         QuerySnapshot<Map<String, dynamic>> querySnapshot = await _db
             .collection('products')
             .doc(tmpProduct.docRef)
@@ -122,45 +127,56 @@ class ProductRepository{
               .delete();
         }
       }
-
-
-
-
-    }catch (error){
+    } catch (error) {
       print(error.toString());
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(error.toString()),
-          backgroundColor: Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
+          backgroundColor:
+              Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
           duration: Duration(seconds: 2),
         ),
       );
     }
   }
 
-  Future <void> updateProduct(BuildContext context, Product product) async{
-    try{
-      print(product.id);
-      await _db
-          .collection("products")
-          .doc(product.docRef)
-          .update(product.toJson());
+  Future<void> updateProduct(BuildContext context, Product product) async {
+    try {
 
-      /*DocumentReference userDocRef = _db.collection('Users').doc(Auth().currentUser?.uid).collection('given_products').where(document.id);
+      print(product.toString());
 
+      await _db.collection('products').doc(product.docRef).update(product.toJson());
+      context.read<ProductProvider>().setProductVisualized(context, product);
 
-      await _db
+      QuerySnapshot<Map<String, dynamic>> querySnapshot = await _db
           .collection('Users')
-      .doc(Auth().currentUser?.uid)
-      .collection('given_products').update()*/
+          .doc(Auth().currentUser!.uid)
+          .collection('given_products')
+          .where('id', isEqualTo: product.id)
+          .limit(1)
+          .get();
 
+      print('size ${querySnapshot.size}') ;
 
-    }catch (error){
+      if (querySnapshot.docs.isNotEmpty) {
+        DocumentReference documentReference =
+            querySnapshot.docs.first.reference;
+
+        print(documentReference.id);
+        await _db
+            .collection('Users')
+            .doc(Auth().currentUser?.uid)
+            .collection('given_products')
+            .doc(documentReference.id)
+            .update(context.read<ProductProvider>().getProductBasic().toJson());
+      }
+    } catch (error) {
       print(error.toString());
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(error.toString()),
-          backgroundColor: Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
+          backgroundColor:
+              Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
           duration: Duration(seconds: 2),
         ),
       );
@@ -254,8 +270,4 @@ class ProductRepository{
       return [];
     }
   }*/
-
-
 }
-
-

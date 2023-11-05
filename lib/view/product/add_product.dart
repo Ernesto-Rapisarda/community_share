@@ -82,7 +82,10 @@ class _AddProductState extends State<AddProduct> {
         condition: _condition,
         availability: _availability,
         productCategory: _category,
-        giver: context.read<UserProvider>().getUserBasic());
+        giver: context.read<UserProvider>().getUserBasic()
+
+    );
+
 
     if(!widget.isEdit){
       await _productService.createProduct(context, product);
@@ -91,6 +94,7 @@ class _AddProductState extends State<AddProduct> {
       }
     }
     else{
+      product.docRef = context.read<ProductProvider>().productVisualized.docRef;
       await _productService.updateProduct(context, product);
       Navigator.of(context).pop();
     }
