@@ -1,10 +1,9 @@
-
-
 import 'package:community_share/main.dart';
 import 'package:community_share/providers/UserProvider.dart';
 import 'package:community_share/reporitory/user_repository.dart';
 import 'package:community_share/service/auth.dart';
 import 'package:community_share/service/user_service.dart';
+import 'package:community_share/utils/circular_load_indicator.dart';
 import 'package:community_share/view/product/add_product.dart';
 import 'package:community_share/view/community/communities_main_screen.dart';
 import 'package:community_share/view/community/components/communities_list.dart';
@@ -20,32 +19,24 @@ import 'package:go_router/go_router.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:provider/provider.dart';
 
-
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
-
-
 
   @override
   State<MainPage> createState() => _MainPageState();
 }
 
 class _MainPageState extends State<MainPage> {
-
-
+  late bool _isLoading ;
   int _selectedIndex = 0;
   List<Widget> _children = [Home()];
 
-
-/*  @override
-  void initState(){
+  @override
+  void initState() {
     super.initState();
     UserService().initializeUser(context);
     print(context.read<UserProvider>().userDetails);
-
-
-
-  }*/
+  }
 
 /*  Future<void> signOut() async{
     await Auth().signOut();
@@ -56,8 +47,10 @@ class _MainPageState extends State<MainPage> {
   //For changing the screen
   void _onItemTapped(int index) {
     setState(() {
-      if(_children.length==1){
-        _children.add(AddProduct(isEdit: false,));
+      if (_children.length == 1) {
+        _children.add(AddProduct(
+          isEdit: false,
+        ));
         _children.add(CommunitiesMainScreen());
         _children.add(MailBox());
         _children.add(Profile());
@@ -66,12 +59,12 @@ class _MainPageState extends State<MainPage> {
     });
   }
 
-
-
   @override
   Widget build(BuildContext context) {
-    print(context.read<UserProvider>().userDetails.toString());
-    return SafeArea(child: Scaffold(
+    _isLoading = context.watch<UserProvider>().isLoading;
+    if (!_isLoading) {
+      return SafeArea(
+          child: Scaffold(
 /*      appBar: AppBar(
         title: Text('todo'),
         actions: [
@@ -83,38 +76,44 @@ class _MainPageState extends State<MainPage> {
         bottomNavigationBar: Container(
           color: Theme.of(context).colorScheme.primary,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 8.0),
-
+            padding:
+                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
             child: GNav(
               gap: 8,
               backgroundColor: Theme.of(context).colorScheme.primary,
               color: Theme.of(context).colorScheme.onPrimary,
               activeColor: Theme.of(context).colorScheme.onPrimaryContainer,
-              tabBackgroundColor: Theme.of(context).colorScheme.primaryContainer,
+              tabBackgroundColor:
+                  Theme.of(context).colorScheme.primaryContainer,
               padding: EdgeInsets.all(16),
               onTabChange: _onItemTapped,
               tabs: [
                 GButton(
                   text: "Home",
-                  icon: FontAwesomeIcons.house,),
+                  icon: FontAwesomeIcons.house,
+                ),
                 GButton(
                   text: "Inserisci",
-                  icon: FontAwesomeIcons.circlePlus,),
+                  icon: FontAwesomeIcons.circlePlus,
+                ),
                 GButton(
                   text: "Comunità",
-                  icon: FontAwesomeIcons.peopleGroup,),
+                  icon: FontAwesomeIcons.peopleGroup,
+                ),
                 GButton(
                   text: "Messaggi",
-                  icon: FontAwesomeIcons.envelope,),
+                  icon: FontAwesomeIcons.envelope,
+                ),
                 GButton(
                   text: "Profilo",
-                  icon: FontAwesomeIcons.user,),
+                  icon: FontAwesomeIcons.user,
+                ),
               ],
             ),
           ),
         ),
 
-      /* navigazione curva CurvedNavigationBar(
+        /* navigazione curva CurvedNavigationBar(
           height: 60,
           color: Theme.of(context).colorScheme.primary,
           buttonBackgroundColor: Theme.of(context).colorScheme.primary,
@@ -130,7 +129,7 @@ class _MainPageState extends State<MainPage> {
           onTap: _onItemTapped,
         )*/
 
-      /*my version BottomNavigationBar(
+        /*my version BottomNavigationBar(
         iconSize: 32.0,
         showSelectedLabels: true,
         showUnselectedLabels: true,
@@ -160,6 +159,10 @@ class _MainPageState extends State<MainPage> {
         ],
         onTap: _onItemTapped,
       ),*/
-    ));
+      ));
+    }
+    else{
+      return CircularLoadingIndicator.circularInd(context);
+    }
   }
 }

@@ -21,8 +21,8 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  UserProvider userProvider = UserProvider();
-  UserService userService = UserService(userProvider);
+  /*UserProvider userProvider = UserProvider();
+  UserService userService = UserService(userProvider);*/
 
   runApp(MultiProvider(
     providers: [
@@ -30,23 +30,19 @@ void main() async {
       ChangeNotifierProvider(create: (_) => ProductProvider()),
       ChangeNotifierProvider(create: (_) => CommunityProvider())
     ],
-    child: MyApp(userService: userService),
+    child: MyApp(),
   ));
 }
 
 class MyApp extends StatelessWidget {
   final GoRouter _router = AppRouter().router;
-  final UserService _userService;
 
-  MyApp({Key? key, required UserService userService})
-      : _userService = userService,
-        super(key: key);
+  MyApp({super.key});
+
+
 
   @override
   Widget build(BuildContext context) {
-    if(Auth().currentUser != null){
-      _userService.initializeUser(context);
-    }
     return MaterialApp.router(
       title: 'Community Share',
       theme: ThemeData.dark(useMaterial3: true),
@@ -71,21 +67,7 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       routerConfig: _router,
-/*      routeInformationParser: AppRouter().router.routeInformationParser,
-      routerDelegate: AppRouter().router.routerDelegate,*/
 
-      //end internationalization
-
-      /*home: StreamBuilder(
-        stream: Auth().authStateChanges,
-        builder: (context, snapshot){
-          if(snapshot.hasData){
-            return const MyHomePage(title: 'title');
-          }else{
-            return const AuthPage();
-          }
-        },
-      ),*/
     );
   }
 }

@@ -5,6 +5,8 @@ import 'package:community_share/model/enum/product_category.dart';
 import 'package:community_share/model/enum/product_condition.dart';
 import 'package:community_share/model/user_details.dart';
 
+import 'community.dart';
+
 class Product {
   //le info basic
   String id;
@@ -27,6 +29,8 @@ class Product {
   int likesNumber;
   UserDetailsBasic giver;
 
+  List<Community> publishedOn;
+
   Product({
     required this.id,
     required this.title,
@@ -39,6 +43,7 @@ class Product {
     required this.availability,
     required this.giver,
     required this.productCategory,
+    required this.publishedOn,
     this.likesNumber = 0,
   });
 
@@ -56,6 +61,7 @@ class Product {
       'category': productCategory.name,
       'likesNumber': likesNumber,
       'giver': giver.toJson(),
+      'publishedOn': publishedOn,
     };
   }
 
@@ -77,6 +83,7 @@ class Product {
         productCategory: json['category'] !=null
             ? productCategoryFromString(json['category'])
             : ProductCategory.other,
+        publishedOn: json['publishedOn'],
 
 
         giver: UserDetailsBasic.fromJson(json['giver']),);

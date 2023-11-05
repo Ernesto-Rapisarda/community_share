@@ -8,6 +8,7 @@ import '../model/community.dart';
 
 class UserProvider with ChangeNotifier{
   bool _firstSignIn = false;
+  bool _isLoading = true;
   late UserDetails _userDetails = UserDetails(
     fullName: '',
     location: '',
@@ -28,6 +29,9 @@ class UserProvider with ChangeNotifier{
   UserDetails get userDetails => _userDetails;
   bool get firstSignIn => _firstSignIn;
   List<Community> get myCommunities => _myCommunities;
+
+
+  bool get isLoading => _isLoading;
 
   void updateUser(
       {String? fullName,
@@ -74,9 +78,13 @@ class UserProvider with ChangeNotifier{
   }
 
   void setData(UserDetails userDetails, List<Community> communities) {
+    print(communities);
+    print(communities.length);
     _userDetails=userDetails;
     //print(_userDetails.toString());
     _myCommunities = communities;
+    _isLoading = false;
+
     notifyListeners();
   }
 

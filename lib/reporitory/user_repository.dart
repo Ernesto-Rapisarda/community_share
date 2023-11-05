@@ -92,14 +92,14 @@ class UserRepository {
       return myCommunities;
     } catch (error) {
       print(error.toString());
-      /*ScaffoldMessenger.of(context).showSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(error.toString()),
           backgroundColor: Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
           duration: Duration(seconds: 2),
         ),
-      );*/
-      throw Exception(error.toString());
+      );
+      //throw Exception(error.toString());
 
       return [];
     }

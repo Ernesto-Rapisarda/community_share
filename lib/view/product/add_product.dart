@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
+import '../../model/community.dart';
 import '../../model/enum/product_availability.dart';
 import '../../model/enum/product_condition.dart';
 import '../../model/product.dart';
@@ -29,6 +30,8 @@ class _AddProductState extends State<AddProduct> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
+  late List<Community> myCommunities = [];
+  List<Community> _selectedCommunities = [];
   String _urlImage =
       'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/digital_camera_photo-1080x675.jpg';
 
@@ -36,12 +39,12 @@ class _AddProductState extends State<AddProduct> {
   DateTime _lastUpdateDate = DateTime.now();
 
   ProductCondition _condition = ProductCondition.newWithTag;
-  ProductAvailability _availability = ProductAvailability.available;
   ProductCategory _category = ProductCategory.other;
 
   @override
   void initState() {
     super.initState();
+    myCommunities = context.read<UserProvider>().myCommunities;
     if (widget.isEdit) {
       Product product = context.read<ProductProvider>().productVisualized;
       _titleController.text = product.title;
@@ -49,7 +52,6 @@ class _AddProductState extends State<AddProduct> {
       _locationController.text = product.locationProduct;
       _urlImage = product.urlImages;
       _condition = product.condition;
-      _availability = product.availability;
       _category = product.productCategory;
     }
   }
@@ -80,9 +82,10 @@ class _AddProductState extends State<AddProduct> {
         uploadDate: _uploadDate,
         lastUpdateDate: _lastUpdateDate,
         condition: _condition,
-        availability: _availability,
+        availability: ProductAvailability.available,
         productCategory: _category,
-        giver: context.read<UserProvider>().getUserBasic()
+        giver: context.read<UserProvider>().getUserBasic(),
+      publishedOn: _selectedCommunities
 
     );
 
@@ -151,25 +154,7 @@ class _AddProductState extends State<AddProduct> {
                   ),
                 ],
               ),
-              Row(
-                children: <Widget>[
-                  Text('Availability: '),
-                  DropdownButton<ProductAvailability>(
-                    value: _availability,
-                    onChanged: (newValue) {
-                      setState(() {
-                        _availability = newValue!;
-                      });
-                    },
-                    items: ProductAvailability.values.map((availability) {
-                      return DropdownMenuItem<ProductAvailability>(
-                        value: availability,
-                        child: Text(availability.toString().split('.')[1]),
-                      );
-                    }).toList(),
-                  ),
-                ],
-              ),
+
               Row(
                 children: <Widget>[
                   Text('Category: '),
@@ -189,6 +174,10 @@ class _AddProductState extends State<AddProduct> {
                   ),
                 ],
               ),
+              ElevatedButton(
+                onPressed: _selectCommunities,
+                child: Text('Select the communities where to publish it'),
+              ),
               SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: _saveProduct,
@@ -199,6 +188,58 @@ class _AddProductState extends State<AddProduct> {
         ),
       ),
     );
+  }
+
+  Future<void> _selectCommunities() async {
+    List<Community>? selectedCommunities = await showDialog<List<Community>>(
+      context: context,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: Text('Select Communities'),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: ListView(
+              children: myCommunities.map((community) {
+                bool isSelected = _selectedCommunities.contains(community);
+                return CheckboxListTile(
+                  title: Text(community.name),
+                  value: isSelected,
+                  onChanged: (value) {
+                    setState(() {
+                      if (value!) {
+                        _selectedCommunities.add(community);
+                      } else {
+                        _selectedCommunities.remove(community);
+                      }
+                    });
+                  },
+                );
+              }).toList(),
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop(_selectedCommunities);
+              },
+              child: Text('Done'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (selectedCommunities != null && selectedCommunities.isNotEmpty) {
+      setState(() {
+        _selectedCommunities = selectedCommunities;
+      });
+    }
   }
 
   

@@ -7,8 +7,8 @@ import 'package:provider/provider.dart';
 
 class UserService{
   final UserRepository userRepository = UserRepository();
-  final UserProvider _userProvider;
-  UserService(this._userProvider);
+  //final UserProvider _userProvider;
+  //UserService(this._userProvider);
 
   void initializeUser(BuildContext context) async{
     UserDetails userDetails = await userRepository.getUserDetails(context);
