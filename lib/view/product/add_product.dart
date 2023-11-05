@@ -1,6 +1,7 @@
 import 'package:community_share/model/enum/product_category.dart';
 import 'package:community_share/providers/UserProvider.dart';
 import 'package:community_share/providers/product_provider.dart';
+import 'package:community_share/utils/id_generator.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
@@ -71,6 +72,7 @@ class _AddProductState extends State<AddProduct> {
   // Metodo per salvare il prodotto nel database
   void _saveProduct() async {
     Product product = Product(
+        id: widget.isEdit ? context.read<ProductProvider>().productVisualized.id : IdGenerator.generateUniqueId(),
         title: _titleController.text,
         description: _descriptionController.text,
         urlImages: _urlImage,
@@ -83,15 +85,15 @@ class _AddProductState extends State<AddProduct> {
         giver: context.read<UserProvider>().getUserBasic());
 
     if(!widget.isEdit){
-      String productID = await _productService.createProduct(context, product);
-      if (productID != '') {
-        product.id = productID;
+      String docRef = await _productService.createProduct(context, product);
+      if (docRef != '') {
+        product.docRef = docRef;
         context.read<ProductProvider>().setProductVisualized(context, product);
-        context.go('/product/details/${productID}');
+        context.go('/product/details/${product.id}');
       }
     }
     else{
-      product.id = context.read<ProductProvider>().productVisualized.id;
+      //product.id = context.read<ProductProvider>().productVisualized.id;
       await _productService.updateProduct(context, product);
       context.read<ProductProvider>().setProductVisualized(context, product);
       Navigator.of(context).pop();

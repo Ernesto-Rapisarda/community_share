@@ -17,8 +17,8 @@ class ProductRepository{
   Future<String> createProduct(BuildContext context, Product product) async{
     try{
       DocumentReference documentReference = await _db.collection('products').add(product.toJson());
-      String productId = documentReference.id;
-      return productId;
+      String docRef = documentReference.id;
+      return docRef;
     }
     catch (error){
       ScaffoldMessenger.of(context).showSnackBar(
@@ -41,7 +41,7 @@ class ProductRepository{
 
       snapshot.docs.forEach((DocumentSnapshot<Map<String, dynamic>> document) {
         Product product = Product.fromJson(document.data()!);
-        product.id = document.id;
+        product.docRef = document.id;
         products.add(product);
       });
 
@@ -93,20 +93,20 @@ class ProductRepository{
     try{
       await _db
           .collection('products')
-          .doc(tmpProduct.id)
+          .doc(tmpProduct.docRef)
           .update(tmpProduct.toJson());
 
       if(adding){
         await _db
             .collection('products')
-            .doc(tmpProduct.id)
+            .doc(tmpProduct.docRef)
             .collection('likes')
             .add(tmp.toJson());
       }
       else{
         QuerySnapshot<Map<String, dynamic>> querySnapshot = await _db
             .collection('products')
-            .doc(tmpProduct.id)
+            .doc(tmpProduct.docRef)
             .collection('likes')
             .where('Id', isEqualTo: tmp.id)
             .get();
@@ -114,7 +114,7 @@ class ProductRepository{
         if (querySnapshot.docs.isNotEmpty) {
           await _db
               .collection('products')
-              .doc(tmpProduct.id)
+              .doc(tmpProduct.docRef)
               .collection('likes')
               .doc(querySnapshot.docs.first.id)
               .delete();
@@ -141,7 +141,7 @@ class ProductRepository{
       print(product.id);
       await _db
           .collection("products")
-          .doc(product.id)
+          .doc(product.docRef)
           .update(product.toJson());
 
       /*DocumentReference userDocRef = _db.collection('Users').doc(Auth().currentUser?.uid).collection('given_products').where(document.id);

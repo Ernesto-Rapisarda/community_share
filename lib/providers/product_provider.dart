@@ -55,7 +55,7 @@ class ProductProvider with ChangeNotifier {
 
   void setProductVisualized(BuildContext context, Product product) async{
     _productVisualized = product;
-    _productLiked = await _productService.getProductLikes(context,product.id);
+    _productLiked = await _productService.getProductLikes(context,product.docRef);
     notifyListeners();
   }
 

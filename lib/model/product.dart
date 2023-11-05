@@ -7,11 +7,12 @@ import 'package:community_share/model/user_details.dart';
 
 class Product {
   //le info basic
-  String? id;
+  String id;
   String title;
   String description;
   String urlImages;
   String locationProduct;
+  String? docRef;
 
   //date
   DateTime uploadDate;
@@ -27,7 +28,7 @@ class Product {
   UserDetailsBasic giver;
 
   Product({
-    this.id,
+    required this.id,
     required this.title,
     required this.description,
     required this.urlImages,
@@ -43,6 +44,7 @@ class Product {
 
   toJson() {
     return {
+      'id': id,
       'title': title,
       'description': description,
       'urlImages': urlImages,
@@ -59,7 +61,7 @@ class Product {
 
   factory Product.fromJson(Map<String, dynamic> json){
     return Product(
-        //id: json['id'],
+        id: json['id'],
         title: json['title'],
         description: json['description'],
         urlImages: json['urlImages'],
