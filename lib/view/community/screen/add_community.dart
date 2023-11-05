@@ -1,5 +1,6 @@
 import 'package:community_share/providers/UserProvider.dart';
 import 'package:community_share/service/community_service.dart';
+import 'package:community_share/utils/id_generator.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -38,6 +39,7 @@ class _AddCommunity extends State<AddCommunity>{
 
   void _saveCommunity() {
     Community community = Community(
+      id: IdGenerator.generateUniqueCommunityId(),
       name: _nameController.text,
       description: _descriptionController.text,
       locationSite: _locationController.text,

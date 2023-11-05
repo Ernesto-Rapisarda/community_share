@@ -4,6 +4,7 @@ import 'package:community_share/model/community.dart';
 import 'package:community_share/model/event.dart';
 import 'package:community_share/providers/UserProvider.dart';
 import 'package:community_share/providers/community_provider.dart';
+import 'package:community_share/service/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,7 +14,9 @@ class CommunityRepository{
 
   Future<void> createCommunity(BuildContext context, Community community) async{
     try{
-      await _db.collection('communities').add(community.toJson());
+      DocumentReference documentReference = await _db.collection('communities').add(community.toJson());
+      community.docRef = documentReference.id;
+      await _db.collection('Users').doc(Auth().currentUser?.uid).collection('myCommunities').add(community.toJson());
     }
     catch (error){
       ScaffoldMessenger.of(context).showSnackBar(
@@ -28,17 +31,16 @@ class CommunityRepository{
 
   Future<List<Community>> getMyCommunities(BuildContext context) async{
     List<Community> myCommunities = [];
-    //todo non va bene
     try{
       QuerySnapshot<Map<String, dynamic>> snapshot = await _db
-          .collection('communities')
-          .where('members.Id',isEqualTo: context.read<UserProvider>().userDetails.id)
-          .get();
+          .collection('Users').doc(Auth().currentUser?.uid)
+      .collection('myCommunities')
+      .get();
 
 
       snapshot.docs.forEach((DocumentSnapshot<Map<String, dynamic>> document) {
         Community community = Community.fromJson(document.data()!);
-        community.id = document.id;
+        community.docRef = document.id;
         myCommunities.add(community);
       });
 
@@ -59,9 +61,11 @@ class CommunityRepository{
 
   Future<void> joinCommunity(BuildContext context, Community community) async{
     try{
+      await _db.collection('communities').doc(community.docRef).update(community.toJson());
+
       await _db
           .collection('communities')
-          .doc(community.id)
+          .doc(community.docRef)
           .collection('members')
           .add(context.read<UserProvider>().getUserBasic().toJson());
       await _db
@@ -155,7 +159,7 @@ class CommunityRepository{
 
       snapshot.docs.forEach((DocumentSnapshot<Map<String, dynamic>> document) {
         Community community = Community.fromJson(document.data()!);
-        community.id = document.id;
+        community.docRef = document.id;
         if(!context.read<UserProvider>().myCommunities.contains(community)){
           myCommunities.add(community);
 

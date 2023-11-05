@@ -10,4 +10,11 @@ class IdGenerator {
     String uniqueId = 'ID_$userId$milliseconds';
     return uniqueId;
   }
+
+  static String generateUniqueCommunityId(){
+    DateTime now = DateTime.now();
+    int milliseconds = now.microsecondsSinceEpoch;
+    String communityId = 'ID_Community$milliseconds';
+    return communityId;
+  }
 }

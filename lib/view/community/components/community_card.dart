@@ -24,9 +24,12 @@ class _CommunityCardState extends State<CommunityCard> {
   final CommunityService _communityService = CommunityService();
 
   void joinCommunity() async{
-    await _communityService.joinCommunity(context,widget.community);
-    context.read<CommunityProvider>().community = widget.community;
-    context.go('/communities/home/${widget.community.name}');
+    Community community = widget.community;
+    community.members = community.members +1;
+    await _communityService.joinCommunity(context,community);
+
+    context.read<CommunityProvider>().community = community;
+    context.go('/communities/home/${community.id}');
   }
 
   @override
