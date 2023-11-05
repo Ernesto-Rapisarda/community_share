@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:community_share/providers/UserProvider.dart';
+import 'package:community_share/providers/product_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,11 +15,13 @@ import '../service/auth.dart';
 class ProductRepository{
   final _db = FirebaseFirestore.instance;
 
-  Future<String> createProduct(BuildContext context, Product product) async{
+  Future<void> createProduct(BuildContext context, Product product) async{
     try{
       DocumentReference documentReference = await _db.collection('products').add(product.toJson());
       String docRef = documentReference.id;
-      return docRef;
+      product.docRef=docRef;
+      context.read<ProductProvider>().setProductVisualized(context, product);
+      await _db.collection('Users').doc(Auth().currentUser?.uid).collection('given_product').add(context.read<ProductProvider>().getProductBasic().toJson());
     }
     catch (error){
       ScaffoldMessenger.of(context).showSnackBar(
@@ -28,7 +31,6 @@ class ProductRepository{
           duration: Duration(seconds: 2),
         ),
       );
-      return '';
     }
   }
 

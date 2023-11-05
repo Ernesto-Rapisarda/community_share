@@ -9,8 +9,11 @@ import 'package:provider/provider.dart';
 class ProductService {
   final ProductRepository _productRepository = ProductRepository();
 
-  Future<String> createProduct(BuildContext context, Product product) async {
+  Future<void> createProduct(BuildContext context, Product product) async {
     return await _productRepository.createProduct(context,product);
+    /*product.docRef= docRef;
+    context.read<ProductProvider>().setProductVisualized(context, product);
+*/
   }
 
   Future<List<Product>> getProducts(BuildContext context) async {

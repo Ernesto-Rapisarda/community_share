@@ -1,3 +1,4 @@
+import 'package:community_share/model/basic/product_basic.dart';
 import 'package:community_share/model/basic/user_details_basic.dart';
 import 'package:community_share/service/product_service.dart';
 import 'package:flutter/material.dart';
@@ -11,11 +12,12 @@ class ProductProvider with ChangeNotifier {
   late List<UserDetailsBasic> _productLiked;
   final ProductService _productService = ProductService();
 
-  ProductProvider(){
+  ProductProvider() {
     _productLiked = [];
   }
 
   Product get productVisualized => _productVisualized;
+
   List<UserDetailsBasic> get productLiked => _productLiked;
 
   void updateProductVisualized({
@@ -25,8 +27,8 @@ class ProductProvider with ChangeNotifier {
     String? locationProduct,
     ProductCondition? condition,
     ProductAvailability? availability,
-  }){
-    if(title != null && _productVisualized.title != title){
+  }) {
+    if (title != null && _productVisualized.title != title) {
       _productVisualized.title = title;
     }
 
@@ -38,7 +40,8 @@ class ProductProvider with ChangeNotifier {
       _productVisualized.urlImages = urlImages;
     }
 
-    if (locationProduct != null && _productVisualized.locationProduct != locationProduct) {
+    if (locationProduct != null &&
+        _productVisualized.locationProduct != locationProduct) {
       _productVisualized.locationProduct = locationProduct;
     }
 
@@ -46,29 +49,39 @@ class ProductProvider with ChangeNotifier {
       _productVisualized.condition = condition;
     }
 
-    if (availability != null && _productVisualized.availability != availability) {
+    if (availability != null &&
+        _productVisualized.availability != availability) {
       _productVisualized.availability = availability;
     }
     notifyListeners();
-
   }
 
-  void setProductVisualized(BuildContext context, Product product) async{
+  void setProductVisualized(BuildContext context, Product product) async {
     _productVisualized = product;
-    _productLiked = await _productService.getProductLikes(context,product.docRef);
+    _productLiked =
+        await _productService.getProductLikes(context, product.docRef);
     notifyListeners();
   }
 
-
-  void setOrRemoveLikes(BuildContext context,bool adding, UserDetailsBasic tmp){
-    if(adding){
+  void setOrRemoveLikes(
+      BuildContext context, bool adding, UserDetailsBasic tmp) {
+    if (adding) {
       _productVisualized.likesNumber = _productVisualized.likesNumber + 1;
       _productLiked.add(tmp);
-    }
-    else{
+    } else {
       _productVisualized.likesNumber = _productVisualized.likesNumber - 1;
-      _productLiked.removeWhere((user)=> user.id == tmp.id);
+      _productLiked.removeWhere((user) => user.id == tmp.id);
     }
     notifyListeners();
+  }
+
+  ProductBasic getProductBasic() {
+    return ProductBasic(
+        id: _productVisualized.id,
+        title: _productVisualized.title,
+        urlImages: _productVisualized.urlImages,
+        uploadDate: _productVisualized.uploadDate,
+        availability: _productVisualized.availability,
+        docRefCompleteProduct: _productVisualized.docRef!);
   }
 }

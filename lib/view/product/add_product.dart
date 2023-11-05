@@ -85,17 +85,13 @@ class _AddProductState extends State<AddProduct> {
         giver: context.read<UserProvider>().getUserBasic());
 
     if(!widget.isEdit){
-      String docRef = await _productService.createProduct(context, product);
-      if (docRef != '') {
-        product.docRef = docRef;
-        context.read<ProductProvider>().setProductVisualized(context, product);
+      await _productService.createProduct(context, product);
+      if (context.read<ProductProvider>().productVisualized.docRef != '') {
         context.go('/product/details/${product.id}');
       }
     }
     else{
-      //product.id = context.read<ProductProvider>().productVisualized.id;
       await _productService.updateProduct(context, product);
-      context.read<ProductProvider>().setProductVisualized(context, product);
       Navigator.of(context).pop();
     }
 
