@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:community_share/model/basic/community_basic.dart';
 import 'package:community_share/model/basic/user_details_basic.dart';
 import 'package:community_share/model/community.dart';
 import 'package:community_share/model/event.dart';
@@ -38,11 +39,16 @@ class CommunityRepository{
       .get();
 
 
-      snapshot.docs.forEach((DocumentSnapshot<Map<String, dynamic>> document) {
-        Community community = Community.fromJson(document.data()!);
-        community.docRef = document.id;
-        myCommunities.add(community);
-      });
+      for (QueryDocumentSnapshot<Map<String, dynamic>> document in snapshot.docs) {
+        CommunityBasic communityBasic = CommunityBasic.fromJson(document.data()!);
+        DocumentSnapshot<Map<String, dynamic>> communitySnapshot = await _db.collection('communities').doc(communityBasic.docRef).get();
+        if (communitySnapshot.exists) {
+          Community community = Community.fromJson(communitySnapshot.data()!);
+          myCommunities.add(community);
+        } else {
+          print('Community not found: ${communityBasic.docRef}');
+        }
+      }
 
       return myCommunities;
     }catch (error){
@@ -120,16 +126,17 @@ class CommunityRepository{
   Future<List<UserDetailsBasic>> getMembers(BuildContext context) async{
     List<UserDetailsBasic> members=[];
     try{
+      print(context.read<CommunityProvider>().community.docRef);
       QuerySnapshot<Map<String, dynamic>> snapshot = await _db
           .collection('communities')
-          .doc(context.read<CommunityProvider>().community.id)
+          .doc(context.read<CommunityProvider>().community.docRef)
           .collection('members')
           .get();
 
 
       snapshot.docs.forEach((DocumentSnapshot<Map<String, dynamic>> document) {
         UserDetailsBasic member = UserDetailsBasic.fromJson(document.data()!);
-        member.id = document.id;
+        //member = document.id;
         members.add(member);
       });
 

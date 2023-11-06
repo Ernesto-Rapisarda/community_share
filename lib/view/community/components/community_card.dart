@@ -11,10 +11,12 @@ import 'package:provider/provider.dart';
 
 import '../../../providers/UserProvider.dart';
 
-class CommunityCard extends StatefulWidget{
-  late Community community;
+class CommunityCard extends StatefulWidget {
+  final Community community;
+  final bool myCommunities;
 
-  CommunityCard(this.community, {super.key});
+  CommunityCard(
+      {super.key, required this.community, required this.myCommunities});
 
   @override
   State<CommunityCard> createState() => _CommunityCardState();
@@ -23,10 +25,10 @@ class CommunityCard extends StatefulWidget{
 class _CommunityCardState extends State<CommunityCard> {
   final CommunityService _communityService = CommunityService();
 
-  void joinCommunity() async{
+  void joinCommunity() async {
     Community community = widget.community;
-    community.members = community.members +1;
-    await _communityService.joinCommunity(context,community);
+    community.members = community.members + 1;
+    await _communityService.joinCommunity(context, community);
 
     context.read<CommunityProvider>().community = community;
     context.go('/communities/home/${community.id}');
@@ -35,57 +37,83 @@ class _CommunityCardState extends State<CommunityCard> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){
+      onTap: () {
+        print(widget.community);
         context.read<CommunityProvider>().community = widget.community;
         context.go('/communities/home/${widget.community.name}');
       },
       child: Card(
-          elevation: 3,
-          margin: EdgeInsets.all(10),
-          child: IntrinsicHeight(
-            child: Padding(
-              padding: EdgeInsets.all(8),
-              child: Row(
+        elevation: 3,
+        margin: EdgeInsets.all(10),
+        child: Stack(children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Image.asset('assets/images/chiesa_nocera.jpg',fit: BoxFit.cover,),
-                  Column(
+                  SizedBox(
+                    width: 200,
+                    child: Text(
+                      '${widget.community.name}',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Theme.of(context).colorScheme.primary),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  SizedBox(height: 8,),
+                  Container(
+                      width: 200,
+                      height: 200,
+                      child: Image.network(
+                        widget.community.urlLogo,
+                        fit: BoxFit.cover,
+                      )),
+                  SizedBox(height: 8,),
+
+                  Row(
                     children: [
-                      Text('${widget.community.name}', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
-                      Row(
-                        children: [
-                          FaIcon(FontAwesomeIcons.locationPin, size: 16,),
-                          Text('${widget.community.locationSite}'),
-                        ],
+                      FaIcon(
+                        FontAwesomeIcons.locationDot,
+                        size: 16,
                       ),
-                      Row(
-                        children: [
-                          FaIcon(FontAwesomeIcons.typo3, size: 16,),
-                          Text('${widget.community.type}'),
-                        ],
+                      SizedBox(
+                        width: 8,
                       ),
-                      Row(
-                        children: [
-                          FaIcon(FontAwesomeIcons.users, size: 16,),
-                          Text(' members'),
-                        ],
-                      ),
-                      Auth().currentUser?.uid != widget.community.founder.id && !context.read<UserProvider>().myCommunities.contains(widget.community)
-                          ? OutlinedButton(
-                            onPressed: (){
-                              joinCommunity();
-                            }, child: Text('Join'))
-                      : Center()
-
-
+                      Text('${widget.community.locationSite}'),
                     ],
                   ),
+                  SizedBox(height: 8,),
 
+                  Row(
+                    children: [
+                      FaIcon(
+                        FontAwesomeIcons.user,
+                        size: 16,
+                      ),
+                      SizedBox(
+                        width: 8,
+                      ),
+                      Text('${widget.community.members} members'),
+                    ],
+                  ),
                 ],
               ),
             ),
-          )
+            Positioned(
+                bottom: 8,
+                right: 8,
+                child: !widget.myCommunities
+                    ? OutlinedButton(
+                        onPressed: () {
+                          joinCommunity();
+                        },
+                        child: Text('Join'))
+                    : Center())
+          ]),
+        ),
 
-      ),
     );
   }
 }

@@ -14,6 +14,7 @@ class CommunityUsersList extends StatefulWidget {
 }
 
 class _CommunityUsersListState extends State<CommunityUsersList> {
+
   @override
   void initState() {
     super.initState();
@@ -25,6 +26,7 @@ class _CommunityUsersListState extends State<CommunityUsersList> {
       List<UserDetailsBasic> members = await CommunityService().getMembers(context);
 
       context.read<CommunityProvider>().members = members;
+
     } catch (error) {
       print('Errore durante il recupero dei membri: $error');
     }
@@ -33,6 +35,7 @@ class _CommunityUsersListState extends State<CommunityUsersList> {
   @override
   Widget build(BuildContext context) {
     var members = context.watch<CommunityProvider>().members;
+
 
     return Center(
       child: Padding(
@@ -43,7 +46,7 @@ class _CommunityUsersListState extends State<CommunityUsersList> {
             Text('Founder:', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
             MemberRow(userDetailsBasic: context.read<CommunityProvider>().community.founder),
             SizedBox(height: 20,),
-            Text('Members: ${context.read<CommunityProvider>().community.members}', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+            Text('Members: ${context.read<CommunityProvider>().community.members -1}', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
             ...members.map((tmp) => MemberRow(userDetailsBasic: tmp)).toList(),
           ],
         ),

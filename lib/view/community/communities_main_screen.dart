@@ -19,9 +19,8 @@ class _CommunitiesMainScreenState extends State<CommunitiesMainScreen> {
     return Scaffold(
 
 
-      body: Center(
-        child: CommunitiesList(),
-      ),
+      body: CommunitiesList(),
+
       floatingActionButton: FloatingActionButton(
         onPressed: (){
           context.go('/communities/add');

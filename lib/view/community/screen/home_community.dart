@@ -26,7 +26,7 @@ class _HomeCommunityState extends State<HomeCommunity> {
       await CommunityService().getEventsForCommunity(context);
 
     } catch (error) {
-      // Gestisci l'errore in modo appropriato (ad esempio, mostra un messaggio di errore)
+      // todo
       print('Errore durante il recupero degli eventi: $error');
     }
   }

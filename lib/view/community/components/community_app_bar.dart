@@ -18,7 +18,7 @@ class CommunityAppBar extends StatelessWidget implements PreferredSizeWidget {
 
         child: AppBar(
           toolbarHeight: 80,
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).primaryColor,
           title: Text(
             context.watch<CommunityProvider>().community.name,
             overflow: TextOverflow.ellipsis,
@@ -26,6 +26,7 @@ class CommunityAppBar extends StatelessWidget implements PreferredSizeWidget {
             style: TextStyle(color: Theme.of(context).colorScheme.primary),
           ),
           automaticallyImplyLeading: true,
+          iconTheme: IconThemeData(color: Theme.of(context).colorScheme.primary),
 
           actions: [
             PopupMenuButton<String>(
@@ -49,6 +50,11 @@ class CommunityAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ],
           bottom: TabBar(
+            labelColor: Theme.of(context).colorScheme.primary,
+              unselectedLabelColor: Colors.white,
+              //indicatorColor: Theme.of(context).colorScheme.onPrimary,
+              indicatorColor: Theme.of(context).colorScheme.primary,
+
               controller: tabController,
               tabs: [
             Tab(

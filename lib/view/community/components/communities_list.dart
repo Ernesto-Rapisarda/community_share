@@ -1,6 +1,7 @@
 import 'package:community_share/model/enum/community_type.dart';
 import 'package:community_share/service/community_service.dart';
 import 'package:community_share/service/product_service.dart';
+import 'package:community_share/utils/circular_load_indicator.dart';
 import 'package:community_share/view/community/components/community_app_bar.dart';
 import 'package:community_share/view/community/components/community_card.dart';
 import 'package:flutter/material.dart';
@@ -27,8 +28,10 @@ class _CommunitiesListState extends State<CommunitiesList> {
   }
 
   void fetchCommunitiesData() async {
-    List<Community> communities = await _communityService.getMyCommunities(context);
-    List<Community> allCommunities = await _communityService.getAllCommunities(context);
+    List<Community> communities =
+        await _communityService.getMyCommunities(context);
+    List<Community> allCommunities =
+        await _communityService.getAllCommunities(context);
     setState(() {
       myCommunities = communities;
       nearCommunities = allCommunities;
@@ -39,41 +42,62 @@ class _CommunitiesListState extends State<CommunitiesList> {
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return CircularProgressIndicator(); // Visualizza un indicatore di caricamento finché i dati non sono pronti
+      return CircularLoadingIndicator.circularInd(context);
     }
-    return Column(
-      children: [
-        Text(
-          'Le tue communities',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        ),
-        Container(
-          height: 200,
-          //color: Theme.of(context).colorScheme.secondary,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: [
-              for (Community community in myCommunities)
-                CommunityCard(community)
-            ],
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Text(
+            'Le tue communities',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color: Theme.of(context).colorScheme.primary),
           ),
-        ),
-        Text(
-          'Le communities vicino a te',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        ),
-        Container(
-          height: 200,
-          //color: Theme.of(context).colorScheme.secondary,
-          child: ListView(
-            scrollDirection: Axis.horizontal,
-            children: [
-              for (Community community in nearCommunities)
-                CommunityCard(community)
-            ],
+          myCommunities.length > 0
+              ? Container(
+                  height: 330,
+                  //width: 300,
+                  //color: Theme.of(context).colorScheme.secondary,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      for (Community community in myCommunities)
+                        CommunityCard(
+                          community: community,
+                          myCommunities: true,
+                        )
+                    ],
+                  ),
+                )
+              : Container(
+            height: 80,
+                child: Center(
+                  child: Text(
+                      'Nothing to show ... please join a community',
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                    ),
+                ),
+              ),
+          Text(
+            'Le communities vicino a te',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color: Theme.of(context).colorScheme.primary),
           ),
-        ),
-      ],
+          Container(
+            height: 370,
+            //color: Theme.of(context).colorScheme.secondary,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: [
+                for (Community community in nearCommunities)
+                  CommunityCard(
+                    community: community,
+                    myCommunities: false,
+                  )
+              ],
+            ),
+          ),
+          SizedBox(height: 80,)
+        ],
+      ),
     );
   }
 }
