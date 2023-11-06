@@ -10,9 +10,6 @@ class ProductService {
   final ProductRepository _productRepository = ProductRepository();
 
   Future<void> createProduct(BuildContext context, Product product) async {
-    print('2');
-    print(product.toString());
-    print(product.toJson());
     return await _productRepository.createProduct(context,product);
     //context.read<ProductProvider>().setProductVisualized(context, product);
 

@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:community_share/model/basic/community_basic.dart';
 import 'package:community_share/model/basic/product_basic.dart';
+import 'package:community_share/model/community.dart';
 import 'package:community_share/providers/UserProvider.dart';
 import 'package:community_share/providers/product_provider.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,16 +20,11 @@ class ProductRepository {
 
   Future<void> createProduct(BuildContext context, Product product) async {
     try {
-      //print(product.toString());
-      //print(product.toJson());
-
       DocumentReference documentReference =
       await _db.collection('products').add(product.toJson());
       String docRef = documentReference.id;
       product.docRef = docRef;
-      print('2.5');
       context.read<ProductProvider>().setProductVisualized(context, product);
-      print('3');
       ProductBasic productBasic = ProductBasic(id: product.id,
           title: product.title,
           urlImages: product.urlImages,
@@ -39,7 +36,10 @@ class ProductRepository {
           .doc(Auth().currentUser?.uid)
           .collection('given_products')
           .add(productBasic.toJson());
-      print('4');
+      for (var community in product.publishedOn) {
+        await _db.collection('communities').doc(community.docRef).collection(
+            'product_published').add(productBasic.toJson());
+      }
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -171,11 +171,19 @@ class ProductRepository {
 
   Future<void> updateProduct(BuildContext context, Product product) async {
     try {
-      print(product.toString());
 
       await _db.collection('products').doc(product.docRef).update(
           product.toJson());
       context.read<ProductProvider>().setProductVisualized(context, product);
+
+      ProductBasic productBasic = ProductBasic(
+          id: product.id,
+          title: product.title,
+          urlImages: product.urlImages,
+          uploadDate: product.uploadDate,
+          availability: product.availability,
+          docRefCompleteProduct: product.docRef!);
+
 
       QuerySnapshot<Map<String, dynamic>> querySnapshot = await _db
           .collection('Users')
@@ -185,19 +193,34 @@ class ProductRepository {
           .limit(1)
           .get();
 
-      print('size ${querySnapshot.size}');
 
       if (querySnapshot.docs.isNotEmpty) {
         DocumentReference documentReference =
             querySnapshot.docs.first.reference;
 
-        print(documentReference.id);
         await _db
             .collection('Users')
             .doc(Auth().currentUser?.uid)
             .collection('given_products')
             .doc(documentReference.id)
-            .update(context.read<ProductProvider>().getProductBasic().toJson());
+            .update(productBasic.toJson());
+      }
+
+      for (CommunityBasic community in product.publishedOn) {
+        QuerySnapshot<Map<String, dynamic>> querySnapshot = await _db
+            .collection('communities')
+            .doc(community.docRef)
+            .collection('product_published')
+            .where('id', isEqualTo: product.id)
+            .limit(1)
+            .get();
+
+
+        if (querySnapshot.docs.isNotEmpty) {
+          DocumentReference documentReference = querySnapshot.docs.first
+              .reference;
+          await documentReference.update(productBasic.toJson());
+        }
       }
     } catch (error) {
       print(error.toString());

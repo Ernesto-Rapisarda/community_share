@@ -54,6 +54,7 @@ class _AddProductState extends State<AddProduct> {
       _urlImage = product.urlImages;
       _condition = product.condition;
       _category = product.productCategory;
+      _selectedCommunities = product.publishedOn;
     }
   }
 
@@ -89,9 +90,9 @@ class _AddProductState extends State<AddProduct> {
         productCategory: _category,
         giver: context.read<UserProvider>().getUserBasic(),
         publishedOn: _selectedCommunities);
-    print(product.publishedOn);
 
-    print('1');
+    print(product.toString());
+
     if (!widget.isEdit) {
       await _productService.createProduct(context, product);
       if (context.read<ProductProvider>().productVisualized.docRef != '') {

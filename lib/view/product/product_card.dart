@@ -16,6 +16,7 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(product.toString());
     double imageSize =
         boxSize - 16; // Sottrai il padding dalla dimensione della card
 

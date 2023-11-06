@@ -86,6 +86,7 @@ class ProductProvider with ChangeNotifier {
         productCategory: product.productCategory,
         publishedOn: product.publishedOn
     );
+    _productVisualized.docRef = product.docRef;
     _productLiked =
     await _productService.getProductLikes(context, product.docRef);
     notifyListeners();
