@@ -41,4 +41,5 @@ class UserDetailsBasic {
 
   @override
   int get hashCode => id.hashCode ^ fullName.hashCode;
+
 }

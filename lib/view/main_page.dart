@@ -63,6 +63,8 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     _isLoading = context.watch<UserProvider>().isLoading;
     if (!_isLoading) {
+      print(context.read<UserProvider>().userDetails);
+
       return SafeArea(
           child: Scaffold(
 /*      appBar: AppBar(

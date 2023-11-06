@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
+import '../../model/basic/community_basic.dart';
 import '../../model/community.dart';
 import '../../model/enum/product_availability.dart';
 import '../../model/enum/product_condition.dart';
@@ -30,8 +31,8 @@ class _AddProductState extends State<AddProduct> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
-  late List<Community> myCommunities = [];
-  List<Community> _selectedCommunities = [];
+  late List<CommunityBasic> myCommunities = [];
+  List<CommunityBasic> _selectedCommunities = [];
   String _urlImage =
       'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/digital_camera_photo-1080x675.jpg';
 
@@ -44,7 +45,7 @@ class _AddProductState extends State<AddProduct> {
   @override
   void initState() {
     super.initState();
-    myCommunities = context.read<UserProvider>().myCommunities;
+    myCommunities = context.read<UserProvider>().getListCommunityBasic();
     if (widget.isEdit) {
       Product product = context.read<ProductProvider>().productVisualized;
       _titleController.text = product.title;
@@ -74,7 +75,9 @@ class _AddProductState extends State<AddProduct> {
   // Metodo per salvare il prodotto nel database
   void _saveProduct() async {
     Product product = Product(
-        id: widget.isEdit ? context.read<ProductProvider>().productVisualized.id : IdGenerator.generateUniqueId(),
+        id: widget.isEdit
+            ? context.read<ProductProvider>().productVisualized.id
+            : IdGenerator.generateUniqueId(),
         title: _titleController.text,
         description: _descriptionController.text,
         urlImages: _urlImage,
@@ -85,23 +88,20 @@ class _AddProductState extends State<AddProduct> {
         availability: ProductAvailability.available,
         productCategory: _category,
         giver: context.read<UserProvider>().getUserBasic(),
-      publishedOn: _selectedCommunities
+        publishedOn: _selectedCommunities);
+    print(product.publishedOn);
 
-    );
-
-
-    if(!widget.isEdit){
+    print('1');
+    if (!widget.isEdit) {
       await _productService.createProduct(context, product);
       if (context.read<ProductProvider>().productVisualized.docRef != '') {
         context.go('/product/details/${product.id}');
       }
-    }
-    else{
+    } else {
       product.docRef = context.read<ProductProvider>().productVisualized.docRef;
       await _productService.updateProduct(context, product);
       Navigator.of(context).pop();
     }
-
   }
 
   @override
@@ -110,137 +110,116 @@ class _AddProductState extends State<AddProduct> {
       appBar: AppBar(
         title: widget.isEdit ? Text('Edit Product') : Text('Add Product'),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                child: Image.network(_urlImage),
-              ),
-              ElevatedButton(
-                onPressed: _selectImages,
-                child: Text('Select Images'),
-              ),
-              TextField(
-                controller: _titleController,
-                decoration: InputDecoration(labelText: 'Title'),
-              ),
-              TextField(
-                controller: _descriptionController,
-                decoration: InputDecoration(labelText: 'Description'),
-              ),
-              TextField(
-                controller: _locationController,
-                decoration: InputDecoration(labelText: 'Location'),
-              ),
-              Row(
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text('Condition: '),
-                  DropdownButton<ProductCondition>(
-                    value: _condition,
-                    onChanged: (newValue) {
-                      setState(() {
-                        _condition = newValue!;
-                      });
-                    },
-                    items: ProductCondition.values.map((condition) {
-                      return DropdownMenuItem<ProductCondition>(
-                        value: condition,
-                        child: Text(condition.toString().split('.')[1]),
+                  Container(
+                    child: Image.network(_urlImage),
+                  ),
+                  ElevatedButton(
+                    onPressed: _selectImages,
+                    child: Text('Select Images'),
+                  ),
+                  TextField(
+                    controller: _titleController,
+                    decoration: InputDecoration(labelText: 'Title'),
+                  ),
+                  TextField(
+                    controller: _descriptionController,
+                    decoration: InputDecoration(labelText: 'Description'),
+                  ),
+                  TextField(
+                    controller: _locationController,
+                    decoration: InputDecoration(labelText: 'Location'),
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Text('Condition: '),
+                      DropdownButton<ProductCondition>(
+                        value: _condition,
+                        onChanged: (newValue) {
+                          setState(() {
+                            _condition = newValue!;
+                          });
+                        },
+                        items: ProductCondition.values.map((condition) {
+                          return DropdownMenuItem<ProductCondition>(
+                            value: condition,
+                            child: Text(condition.toString().split('.')[1]),
+                          );
+                        }).toList(),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Text('Category: '),
+                      DropdownButton<ProductCategory>(
+                        value: _category,
+                        onChanged: (newValue) {
+                          setState(() {
+                            _category = newValue!;
+                          });
+                        },
+                        items: ProductCategory.values.map((category) {
+                          return DropdownMenuItem<ProductCategory>(
+                            value: category,
+                            child: Text(category.toString().split('.')[1]),
+                          );
+                        }).toList(),
+                      ),
+                    ],
+                  ),
+                  Text('Select the communities:'),
+                  ListView(
+                    shrinkWrap: true,
+                    children: myCommunities.map((community) {
+                      bool isSelected = _selectedCommunities.contains(community);
+                      return CheckboxListTile(
+                        controlAffinity: ListTileControlAffinity.leading,
+                        title: Text(community.name),
+                        value: isSelected,
+                        onChanged: (value) {
+                          setState(() {
+                            if (value!) {
+                              _selectedCommunities.add(community);
+                            } else {
+                              _selectedCommunities.remove(community);
+                            }
+                          });
+                        },
                       );
                     }).toList(),
                   ),
+                  /*SizedBox(height: 16.0),
+                  ElevatedButton(
+                    onPressed: _saveProduct,
+                    child: Text('Save Product'),
+                  ),*/
                 ],
               ),
-
-              Row(
-                children: <Widget>[
-                  Text('Category: '),
-                  DropdownButton<ProductCategory>(
-                    value: _category,
-                    onChanged: (newValue) {
-                      setState(() {
-                        _category = newValue!;
-                      });
-                    },
-                    items: ProductCategory.values.map((category) {
-                      return DropdownMenuItem<ProductCategory>(
-                        value: category,
-                        child: Text(category.toString().split('.')[1]),
-                      );
-                    }).toList(),
-                  ),
-                ],
-              ),
-              ElevatedButton(
-                onPressed: _selectCommunities,
-                child: Text('Select the communities where to publish it'),
-              ),
-              SizedBox(height: 16.0),
-              ElevatedButton(
+            ),
+          ),
+          Positioned(
+            bottom: 16.0,
+            right: 16.0,
+            child: Container(
+              margin: EdgeInsets.all(0),
+              child: FloatingActionButton.extended(
                 onPressed: _saveProduct,
-                child: Text('Save Product'),
+                icon: Icon(Icons.save),
+                label: Text('Save Product'),
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
+
     );
   }
-
-  Future<void> _selectCommunities() async {
-    List<Community>? selectedCommunities = await showDialog<List<Community>>(
-      context: context,
-      builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          title: Text('Select Communities'),
-          content: SizedBox(
-            width: double.maxFinite,
-            child: ListView(
-              children: myCommunities.map((community) {
-                bool isSelected = _selectedCommunities.contains(community);
-                return CheckboxListTile(
-                  title: Text(community.name),
-                  value: isSelected,
-                  onChanged: (value) {
-                    setState(() {
-                      if (value!) {
-                        _selectedCommunities.add(community);
-                      } else {
-                        _selectedCommunities.remove(community);
-                      }
-                    });
-                  },
-                );
-              }).toList(),
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(dialogContext).pop();
-              },
-              child: Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(dialogContext).pop(_selectedCommunities);
-              },
-              child: Text('Done'),
-            ),
-          ],
-        );
-      },
-    );
-
-    if (selectedCommunities != null && selectedCommunities.isNotEmpty) {
-      setState(() {
-        _selectedCommunities = selectedCommunities;
-      });
-    }
-  }
-
-  
 }

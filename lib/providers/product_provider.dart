@@ -4,11 +4,27 @@ import 'package:community_share/service/product_service.dart';
 import 'package:flutter/material.dart';
 
 import '../model/enum/product_availability.dart';
+import '../model/enum/product_category.dart';
 import '../model/enum/product_condition.dart';
 import '../model/product.dart';
 
 class ProductProvider with ChangeNotifier {
-  late Product _productVisualized;
+  Product _productVisualized = Product(
+      id: '',
+      title: '',
+      description: '',
+      urlImages: '',
+      locationProduct: '',
+      uploadDate: DateTime.now(),
+      lastUpdateDate: DateTime.now(),
+      condition: ProductCondition.unknown,
+      availability: ProductAvailability.pending,
+      productCategory: ProductCategory.other,
+      likesNumber: 0,
+      giver: UserDetailsBasic(id: '', fullName: '', location: '', urlPhotoProfile: ''),
+      publishedOn: []
+  );
+
   late List<UserDetailsBasic> _productLiked;
   final ProductService _productService = ProductService();
 
@@ -57,14 +73,26 @@ class ProductProvider with ChangeNotifier {
   }
 
   void setProductVisualized(BuildContext context, Product product) async {
-    _productVisualized = product;
+    _productVisualized = Product(id: product.id,
+        title: product.title,
+        description: product.description,
+        urlImages: product.urlImages,
+        locationProduct: product.locationProduct,
+        uploadDate: product.uploadDate,
+        lastUpdateDate: product.lastUpdateDate,
+        condition: product.condition,
+        availability: product.availability,
+        giver: product.giver,
+        productCategory: product.productCategory,
+        publishedOn: product.publishedOn
+    );
     _productLiked =
-        await _productService.getProductLikes(context, product.docRef);
+    await _productService.getProductLikes(context, product.docRef);
     notifyListeners();
   }
 
-  void setOrRemoveLikes(
-      BuildContext context, bool adding, UserDetailsBasic tmp) {
+  void setOrRemoveLikes(BuildContext context, bool adding,
+      UserDetailsBasic tmp) {
     if (adding) {
       _productVisualized.likesNumber = _productVisualized.likesNumber + 1;
       _productLiked.add(tmp);

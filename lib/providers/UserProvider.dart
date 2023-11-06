@@ -4,6 +4,7 @@ import 'package:community_share/model/user_details.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../model/basic/community_basic.dart';
 import '../model/community.dart';
 
 class UserProvider with ChangeNotifier{
@@ -78,8 +79,6 @@ class UserProvider with ChangeNotifier{
   }
 
   void setData(UserDetails userDetails, List<Community> communities) {
-    print(communities);
-    print(communities.length);
     _userDetails=userDetails;
     //print(_userDetails.toString());
     _myCommunities = communities;
@@ -101,6 +100,15 @@ class UserProvider with ChangeNotifier{
   void addCommunity(Community community){
     _myCommunities.add(community);
     notifyListeners();
+  }
+
+  List<CommunityBasic> getListCommunityBasic(){
+    List<CommunityBasic> myList = [];
+    for(var value in _myCommunities){
+      CommunityBasic communityBasic = CommunityBasic(id: value.id, name: value.name, docRef: value.docRef!);
+      myList.add(communityBasic);
+    }
+    return myList;
   }
 
 

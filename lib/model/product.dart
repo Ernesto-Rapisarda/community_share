@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:community_share/model/basic/community_basic.dart';
 import 'package:community_share/model/basic/user_details_basic.dart';
 import 'package:community_share/model/enum/product_availability.dart';
 import 'package:community_share/model/enum/product_category.dart';
@@ -29,7 +30,7 @@ class Product {
   int likesNumber;
   UserDetailsBasic giver;
 
-  List<Community> publishedOn;
+  List<CommunityBasic> publishedOn;
 
   Product({
     required this.id,
@@ -48,6 +49,21 @@ class Product {
   });
 
   toJson() {
+/*    print('Converting Product to JSON:');
+    print('id: $id');
+    print('title: $title');
+    print('description: $description');
+    print('urlImages: $urlImages');
+    print('locationProduct: $locationProduct');
+    print('uploadDate: $uploadDate');
+    print('lastUpdateDate: $lastUpdateDate');
+    print('condition: ${condition.name}');
+    print('availability: ${availability.name}');
+    print('category: ${productCategory.name}');
+    print('likesNumber: $likesNumber');
+    print('giver: ${giver.toJson()}');
+    print('publishedOn: ${publishedOn.map((community) => community.toJson()).toList()}');*/
+
     return {
       'id': id,
       'title': title,
@@ -61,7 +77,8 @@ class Product {
       'category': productCategory.name,
       'likesNumber': likesNumber,
       'giver': giver.toJson(),
-      'publishedOn': publishedOn,
+      'publishedOn': publishedOn.map((community) => community.toJson()).toList(),
+
     };
   }
 
@@ -83,7 +100,9 @@ class Product {
         productCategory: json['category'] !=null
             ? productCategoryFromString(json['category'])
             : ProductCategory.other,
-        publishedOn: json['publishedOn'],
+        publishedOn: (json['publishedOn'] as List<dynamic>)
+            .map((communityJson) => CommunityBasic.fromJson(communityJson))
+            .toList(),
 
 
         giver: UserDetailsBasic.fromJson(json['giver']),);
@@ -91,6 +110,6 @@ class Product {
 
   @override
   String toString() {
-    return 'Product{id: $id, title: $title, description: $description, urlImages: $urlImages, locationProduct: $locationProduct, docRef: $docRef, uploadDate: $uploadDate, lastUpdateDate: $lastUpdateDate, condition: $condition, availability: $availability, productCategory: $productCategory, likesNumber: $likesNumber, giver: $giver}';
+    return 'Product{id: $id, title: $title, description: $description, urlImages: $urlImages, locationProduct: $locationProduct, docRef: $docRef, uploadDate: $uploadDate, lastUpdateDate: $lastUpdateDate, condition: $condition, availability: $availability, productCategory: $productCategory, likesNumber: $likesNumber, giver: $giver, publishedOn: $publishedOn}';
   }
 }
