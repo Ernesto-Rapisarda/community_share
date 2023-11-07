@@ -3,6 +3,7 @@ import 'package:community_share/model/community.dart';
 import 'package:community_share/providers/community_provider.dart';
 import 'package:community_share/service/auth.dart';
 import 'package:community_share/service/community_service.dart';
+import 'package:community_share/utils/show_snack_bar.dart';
 import 'package:community_share/view/community/screen/community_main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -38,9 +39,14 @@ class _CommunityCardState extends State<CommunityCard> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        print(widget.community);
-        context.read<CommunityProvider>().community = widget.community;
-        context.go('/communities/home/${widget.community.name}');
+        if(context.read<UserProvider>().myCommunities.contains(widget.community)){
+          context.read<CommunityProvider>().community = widget.community;
+          context.go('/communities/home/${widget.community.name}');
+        }
+        else{
+          showSnackBar(context, 'You aren\'t member of the community. \nPlease, join the community for visualize his contents');
+        }
+
       },
       child: Card(
         elevation: 3,

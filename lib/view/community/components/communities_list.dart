@@ -1,10 +1,12 @@
 import 'package:community_share/model/enum/community_type.dart';
+import 'package:community_share/providers/UserProvider.dart';
 import 'package:community_share/service/community_service.dart';
 import 'package:community_share/service/product_service.dart';
 import 'package:community_share/utils/circular_load_indicator.dart';
 import 'package:community_share/view/community/components/community_app_bar.dart';
 import 'package:community_share/view/community/components/community_card.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../model/community.dart';
 
@@ -28,8 +30,7 @@ class _CommunitiesListState extends State<CommunitiesList> {
   }
 
   void fetchCommunitiesData() async {
-    List<Community> communities =
-        await _communityService.getMyCommunities(context);
+    List<Community> communities = context.watch<UserProvider>().myCommunities;
     List<Community> allCommunities =
         await _communityService.getAllCommunities(context);
     setState(() {

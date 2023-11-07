@@ -87,7 +87,7 @@ class UserRepository {
       snapshot.docs.forEach((DocumentSnapshot<Map<String, dynamic>> document) {
         Community community = Community.fromJson(document.data()!);
         //todo check perchè questa assegnazione potrebbe essere sbagliata
-        community.id = document.id;
+        //community.id = document.id;
         myCommunities.add(community);
       });
 
