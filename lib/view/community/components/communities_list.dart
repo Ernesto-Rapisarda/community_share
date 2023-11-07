@@ -88,10 +88,14 @@ class _CommunitiesListState extends State<CommunitiesList> {
               scrollDirection: Axis.horizontal,
               children: [
                 for (Community community in nearCommunities)
-                  CommunityCard(
-                    community: community,
-                    myCommunities: false,
-                  )
+                  !myCommunities.contains(community)
+                    ?CommunityCard(
+                      community: community,
+                      myCommunities: false,
+                    )
+                      :Center()
+
+
               ],
             ),
           ),

@@ -1,6 +1,7 @@
 
 
 import 'package:community_share/model/basic/user_details_basic.dart';
+import 'package:community_share/model/product.dart';
 import 'package:community_share/providers/community_provider.dart';
 import 'package:community_share/service/auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -44,6 +45,10 @@ class CommunityService{
 
   Future<List<Community>> getAllCommunities(BuildContext context) async{
     return await _communityRepository.getAllCommunities(context);
+  }
+
+  Future<List<Product>> getCommunitysProducts(BuildContext context) async{
+    return await _communityRepository.getCommunitysProducts(context);
   }
 
 }

@@ -1,13 +1,40 @@
+import 'package:community_share/service/community_service.dart';
+import 'package:community_share/view/generic_components/product_grid.dart';
 import 'package:flutter/material.dart';
 
-class OffersTab extends StatelessWidget{
+import '../../../model/basic/product_basic.dart';
+import '../../../model/product.dart';
+
+class OffersTab extends StatefulWidget{
   const OffersTab({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text('Offers'),
-    );
+  State<OffersTab> createState() => _OffersTabState();
+}
+
+class _OffersTabState extends State<OffersTab> {
+  List<Product> _communityProducts = [];
+  final CommunityService _communityService = CommunityService();
+
+  @override
+  void initState() {
+    super.initState();
+    loadProducts();
+
   }
 
+  void loadProducts()async{
+    List<Product> products = await _communityService.getCommunitysProducts(context);
+    setState(() {
+      _communityProducts = products;
+    });
+  }
+
+
+
+  @override
+  Widget build(BuildContext context) {
+    return ProductGrid(_communityProducts);
+  }
 }
+
