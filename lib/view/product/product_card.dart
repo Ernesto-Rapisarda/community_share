@@ -96,24 +96,7 @@ class _ProductCardState extends State<ProductCard> {
                         child: SizedBox(
                       width: double.infinity,
                     )),
-                    InkWell(
-                        onTap: () {
-                          if (Auth().currentUser?.uid !=
-                              widget.product.giver.id) {
-                            _productService.setLike(context, widget.product,true);
-                          }
-                        },
-                        child: _isProductLiked
-                            ? FaIcon(
-                                FontAwesomeIcons.solidHeart,
-                                size: 20,
-                                color: Colors.red,
-                              )
-                            : FaIcon(
-                                FontAwesomeIcons.heart,
-                                size: 20,
-                                color: Colors.white,
-                              )),
+
                   ],
                 ),
               ),
@@ -132,17 +115,28 @@ class _ProductCardState extends State<ProductCard> {
                       width: 8,
                     ),
                     Text(
-                      'Details ',
+                      '${widget.product.likesNumber} ',
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                     ),
-                    SizedBox(
-                      width: 8,
-                    ),
-                    FaIcon(
-                      FontAwesomeIcons.arrowRight,
-                      size: 16,
-                    ),
+                    InkWell(
+                        onTap: () {
+                          if (Auth().currentUser?.uid !=
+                              widget.product.giver.id) {
+                            _productService.setLike(context, widget.product,true);
+                          }
+                        },
+                        child: _isProductLiked
+                            ? FaIcon(
+                          FontAwesomeIcons.solidHeart,
+                          size: 20,
+                          color: Colors.red,
+                        )
+                            : FaIcon(
+                          FontAwesomeIcons.heart,
+                          size: 20,
+                          color: Colors.white,
+                        )),
                     SizedBox(
                       width: 8,
                     ),

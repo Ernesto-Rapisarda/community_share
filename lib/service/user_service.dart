@@ -14,7 +14,7 @@ class UserService{
   //final UserProvider _userProvider;
   //UserService(this._userProvider);
 
-  void initializeUser(BuildContext context) async{
+  Future<void> initializeUser(BuildContext context) async{
     UserDetails userDetails = await _userRepository.getUserDetails(context);
     List<Community> myCommunities = await _userRepository.getMyCommunities(context);
     List<Product> productsLiked = await _userRepository.getProductsLiked(context);

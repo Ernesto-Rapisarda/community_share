@@ -48,9 +48,7 @@ class UserDetails {
       location: json['Location'] ?? '',
       phoneNumber: json['PhoneNumber'] ?? '',
       email: json['Email'] ?? '',
-      provider: ProviderName.values.contains(json['Provider'])
-          ? ProviderName.values.firstWhere((element) => element.toString() == 'ProviderName.${json['Provider']}', orElse: () => ProviderName.undefined)
-          : ProviderName.undefined,
+      provider: providerNameFromString(json['Provider']),
       urlPhotoProfile: json['PhotoProfile'] ?? '',
       lastTimeOnline: (json['LastTimeOnline'] as Timestamp).toDate(),
       lastUpdate: (json['LastUpdate'] as Timestamp).toDate(),

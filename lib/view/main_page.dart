@@ -27,15 +27,20 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  //final UserProvider _userProvider = UserProvider();
   late bool _isLoading ;
   int _selectedIndex = 0;
   List<Widget> _children = [Home()];
 
   @override
-  void initState() {
+  void initState(){
     super.initState();
-    UserService().initializeUser(context);
-    print(context.read<UserProvider>().userDetails);
+    fetchUserData();
+
+  }
+
+  void fetchUserData() async{
+    await UserService().initializeUser(context);
   }
 
 /*  Future<void> signOut() async{
@@ -63,8 +68,6 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     _isLoading = context.watch<UserProvider>().isLoading;
     if (!_isLoading) {
-      print(context.read<UserProvider>().userDetails);
-
       return SafeArea(
           child: Scaffold(
 /*      appBar: AppBar(
