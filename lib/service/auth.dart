@@ -47,7 +47,7 @@ class Auth {
             urlPhotoProfile: '',
             lastTimeOnline: DateTime.now(),
             lastUpdate: DateTime.now())
-          ,[]);
+          ,[],[]);
       context.go('/complete_registration');
     } on FirebaseAuthException catch (e) {
       showSnackBar(context, e.message!);

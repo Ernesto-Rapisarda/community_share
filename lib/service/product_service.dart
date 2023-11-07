@@ -21,12 +21,12 @@ class ProductService {
     return await _productRepository.getProducts(context);
   }
 
-  void setLike(BuildContext context) async{
+  void setLike(BuildContext context, Product product, bool calledFromCard) async{
     UserDetailsBasic tmp = context.read<UserProvider>().getUserBasic();
     bool adding = false;
-    Product tmpProduct = context.read<ProductProvider>().productVisualized;
+    Product tmpProduct = product;
 
-    if(!context.read<ProductProvider>().productLiked.contains(tmp)){
+    if(!context.read<UserProvider>().productLiked.contains(product)){
       adding = true;
       tmpProduct.likesNumber =tmpProduct.likesNumber + 1;
     }
@@ -34,7 +34,13 @@ class ProductService {
       tmpProduct.likesNumber = tmpProduct.likesNumber -1;
     }
     await _productRepository.setLikes(context, tmpProduct, tmp,adding);
-    context.read<ProductProvider>().setOrRemoveLikes(context, adding, tmp);
+    if(!calledFromCard){
+      context.read<ProductProvider>().setOrRemoveLikes(context, adding, tmp);
+      context.read<UserProvider>().setOrRemoveLikes(context, tmpProduct);
+    }
+    else{
+      context.read<UserProvider>().setOrRemoveLikes(context, tmpProduct);
+    }
 
   }
 

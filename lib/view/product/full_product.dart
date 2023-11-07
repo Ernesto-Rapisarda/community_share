@@ -91,13 +91,13 @@ class _FullProductState extends State<FullProduct> {
                           .productVisualized
                           .giver
                           .id) {
-                    _productService.setLike(context);
+                    _productService.setLike(context,context.read<ProductProvider>().productVisualized,false);
                   }
                 },
                 child: context
-                        .watch<ProductProvider>()
+                        .watch<UserProvider>()
                         .productLiked
-                        .contains(context.read<UserProvider>().getUserBasic())
+                        .contains(context.read<ProductProvider>().productVisualized)
                     ? FaIcon(
                         FontAwesomeIcons.solidHeart,
                         size: 20,

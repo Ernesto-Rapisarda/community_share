@@ -1,4 +1,6 @@
+import 'package:community_share/providers/UserProvider.dart';
 import 'package:community_share/providers/product_provider.dart';
+import 'package:community_share/service/product_service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
@@ -6,8 +8,9 @@ import 'package:provider/provider.dart';
 
 import '../../model/enum/product_condition.dart';
 import '../../model/product.dart';
+import '../../service/auth.dart';
 
-class ProductCard extends StatelessWidget {
+class ProductCard extends StatefulWidget {
   final Product product;
   final double boxSize;
 
@@ -15,19 +18,31 @@ class ProductCard extends StatelessWidget {
       : super(key: key);
 
   @override
+  State<ProductCard> createState() => _ProductCardState();
+}
+
+class _ProductCardState extends State<ProductCard> {
+  final ProductService _productService = ProductService();
+  bool _isProductLiked = false;
+
+  @override
   Widget build(BuildContext context) {
-    print(product.toString());
+    _isProductLiked =  context
+        .watch<UserProvider>()
+        .productLiked
+        .contains(widget.product);
     double imageSize =
-        boxSize - 16; // Sottrai il padding dalla dimensione della card
+        widget.boxSize - 16; // Sottrai il padding dalla dimensione della card
 
     return SizedBox(
-      width: boxSize,
+      width: widget.boxSize,
       child: InkWell(
         onTap: () {
           context
               .read<ProductProvider>()
-              .setProductVisualized(context, product);
-          context.go('/product/details/${product.id}' /*, extra: product*/);
+              .setProductVisualized(context, widget.product);
+          context
+              .go('/product/details/${widget.product.id}' /*, extra: product*/);
         },
         child: Card(
           color: Theme.of(context).cardTheme.color,
@@ -39,7 +54,7 @@ class ProductCard extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  product.title,
+                  widget.product.title,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 18,
@@ -51,13 +66,13 @@ class ProductCard extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 8.0,right: 8),
+                padding: const EdgeInsets.only(left: 8.0, right: 8),
                 child: ClipRect(
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8),
                     // Puoi regolare il raggio del bordo se necessario
                     child: Image.network(
-                      product.urlImages,
+                      widget.product.urlImages,
                       width: imageSize, // Fissa la larghezza dell'immagine
                       height: imageSize, // Fissa l'altezza dell'immagine
                       fit: BoxFit
@@ -68,23 +83,37 @@ class ProductCard extends StatelessWidget {
               ),
               //SizedBox(height: 8),
               Padding(
-                padding: const EdgeInsets.only(top: 8.0,left: 8,right: 8),
+                padding: const EdgeInsets.only(top: 8.0, left: 8, right: 8),
                 child: Row(
                   children: [
                     FaIcon(FontAwesomeIcons.locationDot, size: 16),
                     SizedBox(
                       width: 6,
                     ),
-                    Text(product.locationProduct, style: TextStyle(fontSize: 16)),
+                    Text(widget.product.locationProduct,
+                        style: TextStyle(fontSize: 16)),
                     Expanded(
                         child: SizedBox(
                       width: double.infinity,
                     )),
                     InkWell(
-                      onTap: () {},
-                      child: FaIcon(FontAwesomeIcons.heart,
-                          size: 18, color: Theme.of(context).colorScheme.primary),
-                    )
+                        onTap: () {
+                          if (Auth().currentUser?.uid !=
+                              widget.product.giver.id) {
+                            _productService.setLike(context, widget.product,true);
+                          }
+                        },
+                        child: _isProductLiked
+                            ? FaIcon(
+                                FontAwesomeIcons.solidHeart,
+                                size: 20,
+                                color: Colors.red,
+                              )
+                            : FaIcon(
+                                FontAwesomeIcons.heart,
+                                size: 20,
+                                color: Colors.white,
+                              )),
                   ],
                 ),
               ),
@@ -99,12 +128,21 @@ class ProductCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    SizedBox(width: 8,),
-                    Text('Details ',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w400),),
                     SizedBox(
                       width: 8,
                     ),
-                    FaIcon(FontAwesomeIcons.arrowRight,size: 16,),
+                    Text(
+                      'Details ',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                    ),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    FaIcon(
+                      FontAwesomeIcons.arrowRight,
+                      size: 16,
+                    ),
                     SizedBox(
                       width: 8,
                     ),

@@ -83,7 +83,7 @@ class _HomeCommunityState extends State<HomeCommunity> {
                         Row(children: [
                           FaIcon(FontAwesomeIcons.users, size: 16,),
                           SizedBox(width: 8,),
-                          Text('${context.read<CommunityProvider>().community.locationSite} members', style: TextStyle(fontSize: 16),)
+                          Text('${context.read<CommunityProvider>().community.members} members', style: TextStyle(fontSize: 16),)
                         ],),
 
 

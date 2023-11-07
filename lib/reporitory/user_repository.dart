@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../model/community.dart';
+import '../model/product.dart';
 import '../service/auth.dart';
 
 class UserRepository {
@@ -85,6 +86,7 @@ class UserRepository {
 
       snapshot.docs.forEach((DocumentSnapshot<Map<String, dynamic>> document) {
         Community community = Community.fromJson(document.data()!);
+        //todo check perchè questa assegnazione potrebbe essere sbagliata
         community.id = document.id;
         myCommunities.add(community);
       });
@@ -104,5 +106,32 @@ class UserRepository {
       return [];
     }
 
+  }
+
+  Future<List<Product>> getProductsLiked(BuildContext context) async{
+    List<Product> productsLiked = [];
+    try
+    {
+      QuerySnapshot<Map<String, dynamic>> snapshot = await _db.collection('Users').doc(Auth().currentUser?.uid).collection('products_liked').get();
+
+      snapshot.docs.forEach((DocumentSnapshot<Map<String, dynamic>> document) {
+        Product product = Product.fromJson(document.data()!);
+        productsLiked.add(product);
+      });
+
+      return productsLiked;
+
+    }catch (error)
+    {
+      print(error.toString());
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(error.toString()),
+          backgroundColor: Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return productsLiked;
+    }
   }
 }

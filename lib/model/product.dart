@@ -112,4 +112,15 @@ class Product {
   String toString() {
     return 'Product{id: $id, title: $title, description: $description, urlImages: $urlImages, locationProduct: $locationProduct, docRef: $docRef, uploadDate: $uploadDate, lastUpdateDate: $lastUpdateDate, condition: $condition, availability: $availability, productCategory: $productCategory, likesNumber: $likesNumber, giver: $giver, publishedOn: $publishedOn}';
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Product &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          docRef == other.docRef;
+
+  @override
+  int get hashCode => id.hashCode ^ docRef.hashCode;
 }

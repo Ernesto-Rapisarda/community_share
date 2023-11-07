@@ -1,3 +1,4 @@
+import 'package:community_share/model/basic/product_basic.dart';
 import 'package:community_share/model/basic/user_details_basic.dart';
 import 'package:community_share/model/enum/provider.dart';
 import 'package:community_share/model/user_details.dart';
@@ -6,6 +7,7 @@ import 'package:flutter/material.dart';
 
 import '../model/basic/community_basic.dart';
 import '../model/community.dart';
+import '../model/product.dart';
 
 class UserProvider with ChangeNotifier{
   bool _firstSignIn = false;
@@ -21,6 +23,7 @@ class UserProvider with ChangeNotifier{
     lastUpdate: DateTime.now(),
   );
   List<Community> _myCommunities = [];
+  List<Product> _productsLiked = [];
 
    //UserDetails(fullName: '', location: '', phoneNumber: '', email: '', provider: ProviderName.undefined, urlPhotoProfile: '', lastTimeOnline: null,lastUpdate: null);
 
@@ -30,6 +33,7 @@ class UserProvider with ChangeNotifier{
   UserDetails get userDetails => _userDetails;
   bool get firstSignIn => _firstSignIn;
   List<Community> get myCommunities => _myCommunities;
+  List<Product> get productLiked => _productsLiked;
 
 
   bool get isLoading => _isLoading;
@@ -78,7 +82,8 @@ class UserProvider with ChangeNotifier{
     _firstSignIn=!_firstSignIn;
   }
 
-  void setData(UserDetails userDetails, List<Community> communities) {
+  void setData(UserDetails userDetails, List<Community> communities, List<Product> productLiked) {
+    _productsLiked = productLiked;
     _userDetails=userDetails;
     //print(_userDetails.toString());
     _myCommunities = communities;
@@ -109,6 +114,16 @@ class UserProvider with ChangeNotifier{
       myList.add(communityBasic);
     }
     return myList;
+  }
+
+  void setOrRemoveLikes(BuildContext context,
+      Product product) {
+    if (_productsLiked.contains(product)) {
+      _productsLiked.removeWhere((element) => element.id == product.id);
+    } else {
+      _productsLiked.add((product));
+    }
+    notifyListeners();
   }
 
 
