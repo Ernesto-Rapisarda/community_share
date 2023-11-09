@@ -69,4 +69,9 @@ class ProductBasic {
       docRefCompleteProduct.hashCode ^
       uploadDate.hashCode ^
       availability.hashCode;
+
+  @override
+  String toString() {
+    return 'ProductBasic{id: $id, title: $title, urlImages: $urlImages, docRef: $docRef, docRefCompleteProduct: $docRefCompleteProduct, uploadDate: $uploadDate, availability: $availability}';
+  }
 }

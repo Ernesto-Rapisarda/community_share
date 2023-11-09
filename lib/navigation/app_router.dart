@@ -25,6 +25,7 @@ import 'package:go_router/go_router.dart';
 import '../service/auth.dart';
 import '../model/community.dart';
 import '../model/product.dart';
+import '../view/product/checkout_product.dart';
 import '../view/profile/profile.dart';
 
 class AppRouter {
@@ -70,9 +71,12 @@ class AppRouter {
                   GoRoute(path: 'edit',
                     pageBuilder: (context, state){
                     return MaterialPage(child: AddProduct(isEdit: true,));
-                    }
-
-                  )
+                    },),
+                  GoRoute(
+                      path: 'checkout',
+                      pageBuilder: (context, state){
+                        return MaterialPage(child: CheckoutProduct());
+                      } )
                 ]
                   ),
 

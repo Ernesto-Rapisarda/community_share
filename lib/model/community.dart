@@ -2,6 +2,7 @@ import 'package:community_share/model/enum/community_type.dart';
 import 'package:community_share/model/product.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'address.dart';
 import 'basic/user_details_basic.dart';
 import 'event.dart';
 
@@ -23,6 +24,8 @@ class Community {
 
   UserDetailsBasic founder;
 
+  Address hotSpotAddress;
+
   //todo aggiungere la chat
 
   Community(
@@ -33,7 +36,7 @@ class Community {
       required this.description,
       required this.name,
         required this.members,
-      required this.founder, this.docRef,
+      required this.founder, this.docRef,required this.hotSpotAddress
       });
 
   toJson() {
@@ -46,7 +49,8 @@ class Community {
       'locationSite': locationSite,
       'founder': founder.toJson(),
       'members_number': members,
-      if(docRef != null) 'docRef': docRef
+      if(docRef != null) 'docRef': docRef,
+      'hotSpotAddress': hotSpotAddress.toJson()
 
 
     };
@@ -64,7 +68,8 @@ class Community {
         locationSite: json['locationSite'],
       founder: UserDetailsBasic.fromJson(json['founder']),
       members: json['members_number'],
-      docRef: json['docRef']
+      docRef: json['docRef'],
+      hotSpotAddress: Address.fromJson(json['hotSpotAddress'])
 
     );
   }

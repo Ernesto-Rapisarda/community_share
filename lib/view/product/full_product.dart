@@ -46,7 +46,10 @@ class _FullProductState extends State<FullProduct> {
                   color: Theme.of(context).colorScheme.primary,
                   child: FloatingActionButton(
                     backgroundColor: Theme.of(context).colorScheme.primary,
-                    onPressed: () {},
+                    onPressed: () {
+                      context.go(
+                          '/product/details/${context.read<ProductProvider>().productVisualized.id}/checkout');
+                    },
                     child: Text(
                       'Get as a GIFT',
                       style: TextStyle(
@@ -91,13 +94,14 @@ class _FullProductState extends State<FullProduct> {
                           .productVisualized
                           .giver
                           .id) {
-                    _productService.setLike(context,context.read<ProductProvider>().productVisualized,false);
+                    _productService.setLike(
+                        context,
+                        context.read<ProductProvider>().productVisualized,
+                        false);
                   }
                 },
-                child: context
-                        .watch<UserProvider>()
-                        .productLiked
-                        .contains(context.read<ProductProvider>().productVisualized)
+                child: context.watch<UserProvider>().productLiked.contains(
+                        context.read<ProductProvider>().productVisualized)
                     ? FaIcon(
                         FontAwesomeIcons.solidHeart,
                         size: 20,
@@ -164,7 +168,8 @@ class _FullProductState extends State<FullProduct> {
                         ),
                         child: InkWell(
                           onTap: () {
-                            context.go('/product/details/${context.read<ProductProvider>().productVisualized.id}/edit');
+                            context.go(
+                                '/product/details/${context.read<ProductProvider>().productVisualized.id}/edit');
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),

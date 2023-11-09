@@ -60,15 +60,17 @@ class ProductRepository {
     List<Product> products = [];
 
     try {
-      QuerySnapshot<Map<String, dynamic>> snapshot =
-          await _db.collection('products').get();
-
-      snapshot.docs.forEach((DocumentSnapshot<Map<String, dynamic>> document) {
-        Product product = Product.fromJson(document.data()!);
-        product.docRef = document.id;
-        products.add(product);
-      });
-
+      for(Community community in context.read<UserProvider>().myCommunities){
+        QuerySnapshot<Map<String, dynamic>> snapshot = await _db.collection('communities').doc(community.docRef).collection('product_published').get();
+        await Future.forEach(snapshot.docs, (DocumentSnapshot<Map<String, dynamic>> document) async {
+          ProductBasic productBasic = ProductBasic.fromJson(document.data()!);
+          DocumentSnapshot productSnapshot = await _db.collection('products').doc(productBasic.docRefCompleteProduct).get();
+          Product product = Product.fromJson(productSnapshot.data() as Map<String, dynamic>);
+          product.docRef = productSnapshot.id;
+          products.add(product);
+        });
+      }
+      products.sort((a, b) => b.uploadDate.compareTo(a.uploadDate));
       return products;
     } catch (error) {
       print(error.toString());
