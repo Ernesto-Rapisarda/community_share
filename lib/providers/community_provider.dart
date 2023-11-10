@@ -30,9 +30,7 @@ class CommunityProvider with ChangeNotifier {
       String? name,
       String? description})
   {
-    if(locationSite != null && _community.locationSite != locationSite){
-      _community.locationSite = locationSite;
-    }
+
     if (type != null && _community.type != type) {
       _community.type = type;
     }

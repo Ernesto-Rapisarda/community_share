@@ -33,14 +33,18 @@ class CommunityAppBar extends StatelessWidget implements PreferredSizeWidget {
               onSelected: (value) {
                 //todo
                 // Handle menu item selection here
-                if (value == 'settings') {
+                if (value == 'fast edit'){
+                  context.go('/communities/home/${context.read<CommunityProvider>().community.name}/edit');
+
+                }
+                else if(value == 'settings') {
                   // Handle settings action
                 } else if (value == 'logout') {
                   // Handle logout action
                 }
               },
               itemBuilder: (BuildContext context) {
-                return ['Settings', 'Logout'].map((String choice) {
+                return ['Fast edit','Settings', 'Logout'].map((String choice) {
                   return PopupMenuItem<String>(
                     value: choice.toLowerCase(),
                     child: Text(choice),

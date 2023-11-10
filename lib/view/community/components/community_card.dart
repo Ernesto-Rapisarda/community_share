@@ -87,7 +87,7 @@ class _CommunityCardState extends State<CommunityCard> {
                       SizedBox(
                         width: 8,
                       ),
-                      Text('${widget.community.locationSite}'),
+                      Text('${widget.community.hotSpotAddress.city}'),
                     ],
                   ),
                   SizedBox(height: 8,),

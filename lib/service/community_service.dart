@@ -51,4 +51,8 @@ class CommunityService{
     return await _communityRepository.getCommunitysProducts(context);
   }
 
+  Future<void> updateCommunity(BuildContext context, Community community) async{
+    return await _communityRepository.updateCommunity(context, community);
+  }
+
 }

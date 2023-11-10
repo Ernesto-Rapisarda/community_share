@@ -58,7 +58,16 @@ class AppRouter {
                         state.pathParameters['communityName'];
                     //Community community = state.extra as Community;
                     return MaterialPage(child: CommunityMainScreen());
-                  }),
+                  },
+                  routes: <RouteBase>[
+                    GoRoute(
+                        path: 'edit',
+                        pageBuilder: (context, state) {
+                          return MaterialPage(child: AddCommunity(isEdit: true,));
+                        }),
+                  ]
+
+                  ),
               GoRoute(
                   path: 'product/details/:productId',
                   pageBuilder: (context, state) {
@@ -133,7 +142,7 @@ class AppRouter {
               GoRoute(
                   path: 'communities/add',
                   pageBuilder: (context, state) {
-                    return MaterialPage(child: AddCommunity());
+                    return MaterialPage(child: AddCommunity(isEdit: false,));
                   }),
 /*              GoRoute(
                   path: 'product/edit/:productId',

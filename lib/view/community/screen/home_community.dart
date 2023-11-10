@@ -78,7 +78,7 @@ class _HomeCommunityState extends State<HomeCommunity> {
                         Row(children: [
                           FaIcon(FontAwesomeIcons.locationDot, size: 16,),
                           SizedBox(width: 16,),
-                          Text(context.read<CommunityProvider>().community.locationSite, style: TextStyle(fontSize: 16),)
+                          Text(context.read<CommunityProvider>().community.hotSpotAddress.city, style: TextStyle(fontSize: 16),)
                         ],),
                         Row(children: [
                           FaIcon(FontAwesomeIcons.users, size: 16,),

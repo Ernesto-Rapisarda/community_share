@@ -55,7 +55,7 @@ class _CommunitiesListState extends State<CommunitiesList> {
           ),
           myCommunities.length > 0
               ? Container(
-                  height: 330,
+                  height: 350,
                   //width: 300,
                   //color: Theme.of(context).colorScheme.secondary,
                   child: ListView(

@@ -252,4 +252,62 @@ class CommunityRepository {
       return [];
     }
   }
+
+  Future<void> updateCommunity(BuildContext context, Community community) async{
+    try
+    {
+      await _db.collection('communities').doc(community.docRef).update(community.toJson());
+
+      QuerySnapshot querySnapshot = await _db
+          .collection('Users').doc(community.founder.id).collection('myCommunities')
+          .where('id', isEqualTo: community.id)
+          .limit(1)
+          .get();
+
+      if(querySnapshot.docs.isNotEmpty){
+        DocumentReference documentReference = _db.collection('Users').doc(community.founder.id).collection('myCommunities').doc(querySnapshot.docs.first.id);
+        await documentReference.update(community.toJson());
+      }
+      else{
+        throw Exception('Community not found, can\'t update');
+      }
+      
+      QuerySnapshot querySnapshotAllMembers = await _db.collection('communities').doc(community.docRef).collection('members').get();
+      List<UserDetailsBasic> tmpMembers = [];
+
+      querySnapshotAllMembers.docs.forEach((DocumentSnapshot document) {
+        UserDetailsBasic userDetailsBasic =
+        UserDetailsBasic.fromJson(document.data() as Map<String, dynamic>);
+        tmpMembers.add(userDetailsBasic);
+      });
+
+      for (UserDetailsBasic userDetailsBasic in tmpMembers) {QuerySnapshot querySnapshot = await _db
+          .collection('Users').doc(userDetailsBasic.id).collection('myCommunities')
+          .where('id', isEqualTo: community.id)
+          .limit(1)
+          .get();
+
+      if(querySnapshot.docs.isNotEmpty){
+        DocumentReference documentReference = _db.collection('Users').doc(userDetailsBasic.id).collection('myCommunities').doc(querySnapshot.docs.first.id);
+        await documentReference.update(community.toJson());
+      }
+      else{
+        throw Exception('Community not found, can\'t update');
+      }
+      }
+
+    }catch (error)
+    {
+      print(error.toString());
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(error.toString()),
+          backgroundColor:
+          Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
+          duration: Duration(seconds: 2),
+        ),
+      );
+
+    }
+  }
 }
