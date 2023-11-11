@@ -88,10 +88,12 @@ class Product {
         publishedOn: (json['publishedOn'] as List<dynamic>)
             .map((communityJson) => CommunityBasic.fromJson(communityJson))
             .toList(),
+        likesNumber: json['likesNumber'],
 
 
         giver: UserDetailsBasic.fromJson(json['giver']),);
   }
+
 
   @override
   String toString() {

@@ -28,6 +28,7 @@ class ProductService {
     bool adding = false;
     Product tmpProduct = product;
 
+    print(context.read<UserProvider>().productLiked.contains(product));
     if(!context.read<UserProvider>().productLiked.contains(product)){
       adding = true;
       tmpProduct.likesNumber =tmpProduct.likesNumber + 1;
