@@ -24,4 +24,14 @@ class IdGenerator {
     return '$productId$milliseconds';
 
   }
+
+  static String generateUniqueConversationId(String userOne, String userTwo, String productId){
+    return '$userOne$userTwo$productId';
+  }
+
+  static String generateUniqueMessageId(String userOne, String userTwo){
+    DateTime now = DateTime.now();
+    int milliseconds = now.microsecondsSinceEpoch;
+    return '$userOne$userTwo$milliseconds';
+  }
 }
