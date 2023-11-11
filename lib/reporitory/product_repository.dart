@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:community_share/model/basic/community_basic.dart';
 import 'package:community_share/model/basic/product_basic.dart';
 import 'package:community_share/model/community.dart';
+import 'package:community_share/model/product_order.dart';
 import 'package:community_share/providers/UserProvider.dart';
 import 'package:community_share/providers/product_provider.dart';
 import 'package:flutter/cupertino.dart';
@@ -67,7 +68,10 @@ class ProductRepository {
           DocumentSnapshot productSnapshot = await _db.collection('products').doc(productBasic.docRefCompleteProduct).get();
           Product product = Product.fromJson(productSnapshot.data() as Map<String, dynamic>);
           product.docRef = productSnapshot.id;
-          products.add(product);
+          if(!products.contains(product)){
+            products.add(product);
+
+          }
         });
       }
       products.sort((a, b) => b.uploadDate.compareTo(a.uploadDate));
@@ -248,6 +252,61 @@ class ProductRepository {
           duration: Duration(seconds: 2),
         ),
       );
+    }
+  }
+
+  Future<bool> createOrder(BuildContext context, ProductOrder productOrder) async{
+    try{
+      DocumentSnapshot documentSnapshot = await _db.collection('products').doc(productOrder.product.docRef).get();
+      if (documentSnapshot.exists) {
+        Map<String, dynamic>? data = documentSnapshot.data() as Map<
+            String,
+            dynamic>?;
+
+        if (data != null) {
+          Product product = Product.fromJson(data);
+          product.docRef = productOrder.product.docRef;
+          if (product.id == productOrder.product.id) {
+            product.availability = ProductAvailability.pending;
+            await _db.collection('products')
+                .doc(productOrder.product.docRef)
+                .update(product.toJson());
+            productOrder.product = product;
+            await _db.collection('products')
+                .doc(productOrder.product.docRef)
+                .collection('order')
+                .add(productOrder.toJson());
+            await _db.collection('Users')
+                .doc(productOrder.product.giver.id)
+                .collection('outcoming_orders')
+                .add(productOrder.toJson());
+            await _db.collection('Users')
+                .doc(productOrder.receiver.id)
+                .collection('incoming_orders')
+                .add(productOrder.toJson());
+            await _db.collection('communities')
+                .doc(productOrder.hotSpot.docRef)
+                .collection('order')
+                .add(productOrder.toJson());
+            return true;
+          }
+        }
+
+      }
+      return false;
+
+    }catch (error)
+    {
+      print(error.toString());
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(error.toString()),
+          backgroundColor:
+          Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return false;
     }
   }
 

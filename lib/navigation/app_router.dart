@@ -9,6 +9,7 @@ import 'package:community_share/view/product/add_product.dart';
 import 'package:community_share/view/product/full_product.dart';
 import 'package:community_share/view/main_page.dart';
 import 'package:community_share/view/login/login.dart';
+import 'package:community_share/view/profile/screen/orders_list.dart';
 import 'package:community_share/view/profile/screen/paletta_colori.dart';
 import 'package:community_share/view/temp/addresses.dart';
 import 'package:community_share/view/temp/donated_products.dart';
@@ -110,9 +111,9 @@ class AppRouter {
                     return MaterialPage(child: NeededProducts());
                   }),
               GoRoute(
-                  path: 'profile/donations_done',
+                  path: 'profile/orders',
                   pageBuilder: (context, state) {
-                    return MaterialPage(child: DonationsDone());
+                    return MaterialPage(child: MyOrders());
                   }),
               GoRoute(
                   path: 'profile/notifications',

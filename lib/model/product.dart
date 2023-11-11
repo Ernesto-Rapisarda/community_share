@@ -49,21 +49,6 @@ class Product {
   });
 
   toJson() {
-/*    print('Converting Product to JSON:');
-    print('id: $id');
-    print('title: $title');
-    print('description: $description');
-    print('urlImages: $urlImages');
-    print('locationProduct: $locationProduct');
-    print('uploadDate: $uploadDate');
-    print('lastUpdateDate: $lastUpdateDate');
-    print('condition: ${condition.name}');
-    print('availability: ${availability.name}');
-    print('category: ${productCategory.name}');
-    print('likesNumber: $likesNumber');
-    print('giver: ${giver.toJson()}');
-    print('publishedOn: ${publishedOn.map((community) => community.toJson()).toList()}');*/
-
     return {
       'id': id,
       'title': title,

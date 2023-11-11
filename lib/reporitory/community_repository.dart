@@ -10,6 +10,7 @@ import 'package:community_share/service/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../model/address.dart';
 import '../model/basic/product_basic.dart';
 
 class CommunityRepository {
@@ -37,6 +38,7 @@ class CommunityRepository {
       );
     }
   }
+
 
   Future<List<Community>> getMyCommunities(BuildContext context) async {
     List<Community> myCommunities = [];
@@ -308,6 +310,37 @@ class CommunityRepository {
         ),
       );
 
+    }
+  }
+
+  Future<Address?> retrieveCommunityAddress(BuildContext context, CommunityBasic communityBasic) async{
+    try
+    {
+      DocumentSnapshot<Map<String, dynamic>> snapshot = await _db
+          .collection('communities')
+          .doc(communityBasic.docRef)
+          .get();
+
+      if (snapshot.exists){
+        Community community = Community.fromJson(snapshot.data()!);
+        Address communityAddress = community.hotSpotAddress;
+        return communityAddress;
+      }
+      return null;
+
+    }
+    catch (error)
+    {
+      print(error.toString());
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(error.toString()),
+          backgroundColor:
+          Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return null;
     }
   }
 }

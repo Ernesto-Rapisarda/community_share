@@ -17,4 +17,11 @@ class IdGenerator {
     String communityId = 'ID_Community$milliseconds';
     return communityId;
   }
+
+  static String generateUniqueOrderId(String productId){
+    DateTime now = DateTime.now();
+    int milliseconds = now.microsecondsSinceEpoch;
+    return '$productId$milliseconds';
+
+  }
 }

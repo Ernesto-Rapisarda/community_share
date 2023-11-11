@@ -36,12 +36,12 @@ class _ProfileState extends State<Profile> {
           RowMenusProfile(
             label: 'Oggetti donati',
             route: '/profile/donated_products',
-            icon: FontAwesomeIcons.list,
+            icon: FontAwesomeIcons.handHoldingHeart,
           ),
           RowMenusProfile(
             label: 'Oggetti ricevuti',
             route: '/profile/received_products',
-            icon: FontAwesomeIcons.listCheck,
+            icon: FontAwesomeIcons.heartPulse,
           ),
           RowMenusProfile(
             label: 'Lista Necessità',
@@ -49,9 +49,9 @@ class _ProfileState extends State<Profile> {
             icon: FontAwesomeIcons.magnifyingGlass,
           ),
           RowMenusProfile(
-            label: 'Donazioni',
-            route: '/profile/donations_done',
-            icon: FontAwesomeIcons.handHoldingHeart,
+            label: 'Orders',
+            route: '/profile/orders',
+            icon: FontAwesomeIcons.list,
           ),
           Container(
               padding: EdgeInsets.only(top: 10),

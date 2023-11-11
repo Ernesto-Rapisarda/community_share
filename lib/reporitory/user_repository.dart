@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:community_share/model/product_order.dart';
 import 'package:community_share/model/user_details.dart';
 import 'package:community_share/providers/UserProvider.dart';
 import 'package:flutter/material.dart';
@@ -13,13 +14,17 @@ class UserRepository {
 
   Future<void> createUserDetails(BuildContext context) async {
     try {
-      await _db.collection("Users").doc(Auth().currentUser?.uid).set(context.read<UserProvider>().userDetails.toJson());
+      await _db
+          .collection("Users")
+          .doc(Auth().currentUser?.uid)
+          .set(context.read<UserProvider>().userDetails.toJson());
       context.read<UserProvider>().userDetails.id = Auth().currentUser?.uid;
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Your account has been created"),
-          backgroundColor: Theme.of(context).colorScheme.tertiaryContainer.withOpacity(0.1),
+          backgroundColor:
+              Theme.of(context).colorScheme.tertiaryContainer.withOpacity(0.1),
           duration: Duration(seconds: 2),
         ),
       );
@@ -27,7 +32,8 @@ class UserRepository {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Something went wrong. Try again"),
-          backgroundColor: Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
+          backgroundColor:
+              Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
           duration: Duration(seconds: 2),
         ),
       );
@@ -44,7 +50,8 @@ class UserRepository {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Your account has been updated"),
-          backgroundColor: Theme.of(context).colorScheme.tertiaryContainer.withOpacity(0.1),
+          backgroundColor:
+              Theme.of(context).colorScheme.tertiaryContainer.withOpacity(0.1),
           duration: Duration(seconds: 2),
         ),
       );
@@ -52,7 +59,8 @@ class UserRepository {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Something went wrong. Try again"),
-          backgroundColor: Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
+          backgroundColor:
+              Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
           duration: Duration(seconds: 2),
         ),
       );
@@ -62,10 +70,12 @@ class UserRepository {
 
   Future<UserDetails> getUserDetails(BuildContext context) async {
     try {
-      DocumentSnapshot userDocument = await _db.collection("Users").doc(Auth().currentUser?.uid).get();
+      DocumentSnapshot userDocument =
+          await _db.collection("Users").doc(Auth().currentUser?.uid).get();
 
       if (userDocument.exists) {
-        UserDetails userDetails = UserDetails.fromJson(userDocument.data() as Map<String, dynamic>);
+        UserDetails userDetails =
+            UserDetails.fromJson(userDocument.data() as Map<String, dynamic>);
         userDetails.id = userDocument.id;
         //context.read<UserProvider>().setData(userDetails,[]);
         return userDetails;
@@ -78,11 +88,14 @@ class UserRepository {
     }
   }
 
-  Future<List<Community>> getMyCommunities(BuildContext context) async{
-    List<Community> myCommunities =[];
+  Future<List<Community>> getMyCommunities(BuildContext context) async {
+    List<Community> myCommunities = [];
     try {
-      QuerySnapshot<Map<String, dynamic>> snapshot = await _db.collection("Users").doc(Auth().currentUser?.uid).collection('myCommunities').get();
-
+      QuerySnapshot<Map<String, dynamic>> snapshot = await _db
+          .collection("Users")
+          .doc(Auth().currentUser?.uid)
+          .collection('myCommunities')
+          .get();
 
       snapshot.docs.forEach((DocumentSnapshot<Map<String, dynamic>> document) {
         Community community = Community.fromJson(document.data()!);
@@ -97,7 +110,8 @@ class UserRepository {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(error.toString()),
-          backgroundColor: Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
+          backgroundColor:
+              Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
           duration: Duration(seconds: 2),
         ),
       );
@@ -105,14 +119,16 @@ class UserRepository {
 
       return [];
     }
-
   }
 
-  Future<List<Product>> getProductsLiked(BuildContext context) async{
+  Future<List<Product>> getProductsLiked(BuildContext context) async {
     List<Product> productsLiked = [];
-    try
-    {
-      QuerySnapshot<Map<String, dynamic>> snapshot = await _db.collection('Users').doc(Auth().currentUser?.uid).collection('products_liked').get();
+    try {
+      QuerySnapshot<Map<String, dynamic>> snapshot = await _db
+          .collection('Users')
+          .doc(Auth().currentUser?.uid)
+          .collection('products_liked')
+          .get();
 
       snapshot.docs.forEach((DocumentSnapshot<Map<String, dynamic>> document) {
         Product product = Product.fromJson(document.data()!);
@@ -120,18 +136,60 @@ class UserRepository {
       });
 
       return productsLiked;
-
-    }catch (error)
-    {
+    } catch (error) {
       print(error.toString());
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(error.toString()),
-          backgroundColor: Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
+          backgroundColor:
+              Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
           duration: Duration(seconds: 2),
         ),
       );
       return productsLiked;
+    }
+  }
+
+  Future<List<ProductOrder>> getMyOrders(
+      BuildContext context, bool outcoming) async {
+    List<ProductOrder> myOrders = [];
+
+    try {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot;
+      if (outcoming) {
+        querySnapshot = await _db
+            .collection('Users')
+            .doc(Auth().currentUser?.uid)
+            .collection('outcoming_orders')
+            .get();
+      } else {
+        querySnapshot = await _db
+            .collection('Users')
+            .doc(Auth().currentUser?.uid)
+            .collection('incoming_orders')
+            .get();
+      }
+
+
+      querySnapshot.docs
+          .forEach((DocumentSnapshot<Map<String, dynamic>> document) {
+        ProductOrder productOrder = ProductOrder.fromJson(document.data()!);
+        myOrders.add(productOrder);
+      });
+
+
+      return myOrders;
+    } catch (error) {
+      print(error.toString());
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(error.toString()),
+          backgroundColor:
+              Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return myOrders;
     }
   }
 }

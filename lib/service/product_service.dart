@@ -1,5 +1,7 @@
+import 'package:community_share/model/basic/community_basic.dart';
 import 'package:community_share/model/basic/user_details_basic.dart';
 import 'package:community_share/model/product.dart';
+import 'package:community_share/model/product_order.dart';
 import 'package:community_share/providers/UserProvider.dart';
 import 'package:community_share/providers/product_provider.dart';
 import 'package:community_share/reporitory/product_repository.dart';
@@ -51,6 +53,10 @@ class ProductService {
   Future<void> updateProduct(BuildContext context, Product product) async{
     return await _productRepository.updateProduct(context, product);
 
+  }
+
+  Future<bool> createOrder(BuildContext context,ProductOrder productOrder) async{
+    return await _productRepository.createOrder(context,productOrder);
   }
 
 }

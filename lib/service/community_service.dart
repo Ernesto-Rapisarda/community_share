@@ -1,5 +1,6 @@
 
 
+import 'package:community_share/model/basic/community_basic.dart';
 import 'package:community_share/model/basic/user_details_basic.dart';
 import 'package:community_share/model/product.dart';
 import 'package:community_share/providers/community_provider.dart';
@@ -7,6 +8,7 @@ import 'package:community_share/service/auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
+import '../model/address.dart';
 import '../model/community.dart';
 import '../providers/UserProvider.dart';
 import '../reporitory/community_repository.dart';
@@ -53,6 +55,10 @@ class CommunityService{
 
   Future<void> updateCommunity(BuildContext context, Community community) async{
     return await _communityRepository.updateCommunity(context, community);
+  }
+
+  Future<Address?> retrieveCommunityAddress(BuildContext context, CommunityBasic communityBasic) async{
+    return await _communityRepository.retrieveCommunityAddress(context,communityBasic);
   }
 
 }

@@ -1,11 +1,18 @@
 import 'package:community_share/model/basic/community_basic.dart';
 import 'package:community_share/model/community.dart';
+import 'package:community_share/model/enum/order_status.dart';
+import 'package:community_share/model/product_order.dart';
 import 'package:community_share/providers/UserProvider.dart';
 import 'package:community_share/providers/product_provider.dart';
+import 'package:community_share/service/community_service.dart';
+import 'package:community_share/service/product_service.dart';
+import 'package:community_share/utils/id_generator.dart';
 import 'package:community_share/utils/show_snack_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../../model/address.dart';
 import '../../model/product.dart';
 
 class CheckoutProduct extends StatefulWidget {
@@ -17,7 +24,42 @@ class CheckoutProduct extends StatefulWidget {
 
 class _CheckoutProductState extends State<CheckoutProduct> {
   CommunityBasic? selectedCommunity;
+  Address? communityAddress;
   late double maxWidth;
+
+  void createOrder() async{
+    if (selectedCommunity != null) {
+      ProductOrder productOrder = ProductOrder(
+          id: IdGenerator.generateUniqueOrderId(context.read<ProductProvider>().productVisualized.id),
+          orderDate: DateTime.now(),
+          product: context.read<ProductProvider>().productVisualized,
+          receiver: context.read<UserProvider>().getUserBasic(),
+          hotSpot: selectedCommunity!,
+          orderStatus: OrderStatus.pending);
+
+      bool orderState = await ProductService().createOrder(context, productOrder);
+
+      if(orderState){
+        Navigator.of(context).pop();
+        context.go('/profile/orders');
+
+      }
+      else{
+        showSnackBar(context, 'Something goes wrong, impossible to create order');
+
+      }
+    }
+  }
+
+  void retrieveCommunityAddress() async{
+    if(selectedCommunity != null){
+      Address? tmpAddress = await CommunityService().retrieveCommunityAddress(context,selectedCommunity!);
+      setState(() {
+        communityAddress = tmpAddress;
+      });
+
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +139,8 @@ class _CheckoutProductState extends State<CheckoutProduct> {
                                   ),
                                   Flexible(
                                     child: Container(
-                                      constraints: BoxConstraints(maxWidth: 170),
+                                      constraints:
+                                          BoxConstraints(maxWidth: 170),
                                       child: Text(
                                         context
                                             .read<ProductProvider>()
@@ -177,10 +220,11 @@ class _CheckoutProductState extends State<CheckoutProduct> {
                               child: Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(12),
-                                  color: Theme.of(context).colorScheme.background,
+                                  color:
+                                      Theme.of(context).colorScheme.background,
                                 ),
                                 child: DropdownButton<CommunityBasic>(
-                                  padding: EdgeInsets.only(left: 6,right: 6),
+                                  padding: EdgeInsets.only(left: 6, right: 6),
                                   dropdownColor: Theme.of(context)
                                       .colorScheme
                                       .primaryContainer,
@@ -188,6 +232,7 @@ class _CheckoutProductState extends State<CheckoutProduct> {
                                   onChanged: (CommunityBasic? newValue) {
                                     setState(() {
                                       selectedCommunity = newValue;
+                                      retrieveCommunityAddress();
                                     });
                                   },
                                   items: _product.publishedOn.map((community) {
@@ -212,9 +257,9 @@ class _CheckoutProductState extends State<CheckoutProduct> {
                                   fontSize: 16, fontWeight: FontWeight.w500),
                             )
                           : Container(),
-                      selectedCommunity != null
+                      communityAddress != null
                           ? communityAddressSpace()
-                          : Container()
+                          : Container(child: Text('Something goes wrong, impossible retrive community\'s address',style: TextStyle(fontSize: 16),),)
                     ],
                   ),
                 ),
@@ -225,36 +270,32 @@ class _CheckoutProductState extends State<CheckoutProduct> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-
                   ElevatedButton(
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.resolveWith<Color?>(
-                        (Set<MaterialState> states) {
-                          if (states.contains(MaterialState.pressed)) {
+                        backgroundColor:
+                            MaterialStateProperty.resolveWith<Color?>(
+                          (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.pressed)) {
+                              return Theme.of(context).colorScheme.primary;
+                            }
                             return Theme.of(context)
                                 .colorScheme
-                                .primary;
-                          }
-                          return Theme.of(context)
-                              .colorScheme
-                              .primaryContainer;
-                        },
-                      ),
-                      textStyle: MaterialStateProperty.all<TextStyle>(
-                        TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.onPrimaryContainer
-                        )
-
-                      )
-                    ),
+                                .primaryContainer;
+                          },
+                        ),
+                        textStyle: MaterialStateProperty.all<TextStyle>(
+                            TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onPrimaryContainer))),
                     onPressed: () {
                       if (selectedCommunity != null) {
-                        // Qui puoi gestire la logica per confermare l'ordine
-                        // Utilizza selectedCommunity e widget.product per eseguire l'operazione di checkout
+                        createOrder();
                       } else {
-                        showSnackBar(context, 'Please select a community for the delivery');
+                        showSnackBar(context,
+                            'Please select a community for the delivery');
                       }
                     },
                     child: Text('Conferma Ordine'),
@@ -279,17 +320,14 @@ class _CheckoutProductState extends State<CheckoutProduct> {
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
           ),
           Text(
-            'Via cucuzza, 155',
+            '${communityAddress!.streetName}, n° ${communityAddress!.streetNumber}',
             style: TextStyle(fontSize: 16),
           ),
           Text(
-            '88070, Nocera Terinese (CZ)',
+            '${communityAddress!.postalCode}, ${communityAddress!.city}',
             style: TextStyle(fontSize: 16),
           ),
-          Text(
-            'Tel. 0968/965865',
-            style: TextStyle(fontSize: 16),
-          )
+
         ],
       ),
     ));

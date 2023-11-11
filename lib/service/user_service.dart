@@ -1,4 +1,5 @@
 import 'package:community_share/model/community.dart';
+import 'package:community_share/model/product_order.dart';
 import 'package:community_share/model/user_details.dart';
 import 'package:community_share/providers/UserProvider.dart';
 import 'package:community_share/reporitory/community_repository.dart';
@@ -21,6 +22,10 @@ class UserService{
     //print(productsLiked.length);
     //_userProvider.setData(userDetails,myCommunities);
     context.read<UserProvider>().setData(userDetails, myCommunities, productsLiked);
+  }
+
+  Future<List<ProductOrder>> getMyOrders(BuildContext context, bool outcoming) async{
+    return await _userRepository.getMyOrders(context,outcoming);
   }
 
 }
