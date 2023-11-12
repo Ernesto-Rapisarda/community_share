@@ -9,32 +9,37 @@ class Conversation {
   String id;
   ProductBasic productBasic;
   List<UserDetailsBasic> members;
+  String subject;
   int indexOfLastSender;
   DateTime startDate;
   DateTime lastUpdate;
   int unreadMessage;
   List<Message> messages;
+  bool order;
 
   Conversation(
       {required this.id,
       required this.productBasic,
       required this.members,
+        required this.subject,
       required this.indexOfLastSender,
       required this.startDate,
       required this.lastUpdate,
       required this.unreadMessage,
-      required this.messages});
+      required this.messages,required this.order});
 
   toJson() {
     return {
       'id': id,
       'productBasic': productBasic.toJson(),
       'members': members.map((member) => member.toJson()).toList(),
+      'subject':subject,
       'indexOfLastSender': indexOfLastSender,
       'startDate': startDate,
       'lastUpdate': lastUpdate,
       'unreadMessage': unreadMessage,
-      'messages': messages.map((e) => e.toJson()).toList()
+      'messages': messages.map((e) => e.toJson()).toList(),
+      'order':order
     };
   }
 
@@ -45,6 +50,7 @@ class Conversation {
       members: (json['members'] as List<dynamic>)
           .map((e) => UserDetailsBasic.fromJson(e))
           .toList(),
+      subject: json['subject'],
       indexOfLastSender: json['indexOfLastSender'],
       startDate: (json['startDate'] as Timestamp).toDate(),
       lastUpdate: (json['lastUpdate'] as Timestamp).toDate(),
@@ -52,6 +58,7 @@ class Conversation {
       messages: (json['messages'] as List<dynamic>)
           .map((e) => Message.fromJson(e))
           .toList(),
+      order: json['order']
     );
 
   }

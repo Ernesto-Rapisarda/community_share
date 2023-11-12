@@ -8,7 +8,7 @@ import 'package:community_share/view/product/add_product.dart';
 import 'package:community_share/view/community/communities_main_screen.dart';
 import 'package:community_share/view/community/components/communities_list.dart';
 import 'package:community_share/view/community/components/community_app_bar.dart';
-import 'package:community_share/view/mail_box.dart';
+import 'package:community_share/view/message/mail_box.dart';
 import 'package:community_share/view/home.dart';
 import 'package:community_share/view/profile/profile.dart';
 import 'package:flutter/cupertino.dart';

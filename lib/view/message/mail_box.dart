@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 
-import '../model/conversation.dart';
+import '../../model/conversation.dart';
 
 class MailBox extends StatefulWidget {
   const MailBox({super.key});
@@ -72,7 +72,7 @@ class _MailBoxState extends State<MailBox> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Info about ${conversation.productBasic.title}',
+                  conversation.subject,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),

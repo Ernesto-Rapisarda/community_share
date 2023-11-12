@@ -15,17 +15,20 @@ class ConversationService {
       ConversationRepository();
 
   Future<bool> createNewConversation(
-      BuildContext context, ProductBasic productBasic, Message message) async {
+      BuildContext context, ProductBasic productBasic, Message message, String subject, bool order) async {
     Conversation conversation = Conversation(
         id: IdGenerator.generateUniqueConversationId(
             message.sender.id, message.receiver.id, productBasic.id),
         productBasic: productBasic,
         members: [message.sender, message.receiver],
+        subject: subject,
         indexOfLastSender: 0,
         startDate: DateTime.now(),
         lastUpdate: DateTime.now(),
         unreadMessage: 1,
-        messages: [message]);
+        messages: [message],
+        order: order
+    );
 
     bool conversationAlreadyExists = await _conversationRepository
         .conversationAlreadyExists(context, conversation);

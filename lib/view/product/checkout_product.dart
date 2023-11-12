@@ -235,7 +235,7 @@ class _CheckoutProductState extends State<CheckoutProduct> {
                                       retrieveCommunityAddress();
                                     });
                                   },
-                                  items: _product.publishedOn.map((community) {
+                                  items: filterCommunityListAvailable(_product.publishedOn).map((community) {
                                     return DropdownMenuItem<CommunityBasic>(
                                       value: community,
                                       child: Text(community.name),
@@ -307,6 +307,22 @@ class _CheckoutProductState extends State<CheckoutProduct> {
         ),
       ),
     );
+  }
+  
+  List<CommunityBasic> filterCommunityListAvailable(List<CommunityBasic> publishedOn){
+    List<CommunityBasic> commonCommunity = [];
+    for(CommunityBasic communityBasic in publishedOn){
+      bool isPresent = false;
+      for(Community community in context.read<UserProvider>().myCommunities){
+        if(communityBasic.id == community.id){
+          isPresent = true;
+        }
+      }
+      if(isPresent){
+        commonCommunity.add(communityBasic);
+      }
+    }
+    return commonCommunity;
   }
 
   communityAddressSpace() {

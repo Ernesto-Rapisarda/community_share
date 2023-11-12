@@ -12,7 +12,9 @@ class ConversationRepository{
   Future<bool> createNewConversation(BuildContext context, Conversation conversation) async{
     try
     {
-      await _db.collection('Users').doc(Auth().currentUser?.uid).collection('conversations').add(conversation.toJson());
+      if(!conversation.order){
+        await _db.collection('Users').doc(Auth().currentUser?.uid).collection('conversations').add(conversation.toJson());
+      }
       await _db.collection('Users').doc(conversation.members[1].id).collection('conversations').add(conversation.toJson());
 
       return true;
@@ -103,13 +105,23 @@ class ConversationRepository{
 
   Future<void> setMessagesReaded(BuildContext context, Conversation conversation) async{
     try{
-      for(UserDetailsBasic userDetailsBasic in conversation.members){
-        QuerySnapshot<Map<String, dynamic>> snapshot = await _db.collection('Users').doc(userDetailsBasic.id).collection('conversations').where('id', isEqualTo: conversation.id).limit(1).get();
-        if(snapshot.docs.isNotEmpty){
-          String documentId = snapshot.docs[0].id;
-          await _db.collection('Users').doc(userDetailsBasic.id).collection('conversations').doc(documentId).update(conversation.toJson());
+      if(!conversation.order){
+        for(UserDetailsBasic userDetailsBasic in conversation.members){
+          QuerySnapshot<Map<String, dynamic>> snapshot = await _db.collection('Users').doc(userDetailsBasic.id).collection('conversations').where('id', isEqualTo: conversation.id).limit(1).get();
+          if(snapshot.docs.isNotEmpty){
+            String documentId = snapshot.docs[0].id;
+            await _db.collection('Users').doc(userDetailsBasic.id).collection('conversations').doc(documentId).update(conversation.toJson());
+          }
         }
       }
+      else{
+        QuerySnapshot<Map<String, dynamic>> snapshot = await _db.collection('Users').doc(Auth().currentUser?.uid).collection('conversations').where('id', isEqualTo: conversation.id).limit(1).get();
+        if(snapshot.docs.isNotEmpty){
+          String documentId = snapshot.docs[0].id;
+          await _db.collection('Users').doc(Auth().currentUser?.uid).collection('conversations').doc(documentId).update(conversation.toJson());
+        }
+      }
+
     }
     catch (error){
       print(error.toString());

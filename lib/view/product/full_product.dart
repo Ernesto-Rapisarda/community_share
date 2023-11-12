@@ -48,7 +48,7 @@ class _FullProductState extends State<FullProduct> {
         date: DateTime.now());
 
     bool sended = await _conversationService.createNewConversation(
-        context, context.read<ProductProvider>().getProductBasic(), message);
+        context, context.read<ProductProvider>().getProductBasic(), message, 'Info about ${productBasic.title}',false);
     if(sended){
       showSnackBar(context, 'Message sended!');
 
