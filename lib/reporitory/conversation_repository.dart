@@ -1,5 +1,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:community_share/model/basic/user_details_basic.dart';
 import 'package:community_share/model/conversation.dart';
 import 'package:community_share/service/auth.dart';
 import 'package:flutter/material.dart';
@@ -97,6 +98,62 @@ class ConversationRepository{
       );
 
       return myConversations;
+    }
+  }
+
+  Future<void> setMessagesReaded(BuildContext context, Conversation conversation) async{
+    try{
+      for(UserDetailsBasic userDetailsBasic in conversation.members){
+        QuerySnapshot<Map<String, dynamic>> snapshot = await _db.collection('Users').doc(userDetailsBasic.id).collection('conversations').where('id', isEqualTo: conversation.id).limit(1).get();
+        if(snapshot.docs.isNotEmpty){
+          String documentId = snapshot.docs[0].id;
+          await _db.collection('Users').doc(userDetailsBasic.id).collection('conversations').doc(documentId).update(conversation.toJson());
+        }
+      }
+    }
+    catch (error){
+      print(error.toString());
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(error.toString()),
+          backgroundColor:
+          Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
+  }
+
+  Future<bool> sendReply(BuildContext context, Conversation conversation) async{
+    try{
+      int updated = 0;
+      for(UserDetailsBasic userDetailsBasic in conversation.members){
+        QuerySnapshot<Map<String, dynamic>> snapshot = await _db.collection('Users').doc(userDetailsBasic.id).collection('conversations').where('id', isEqualTo: conversation.id).limit(1).get();
+        if(snapshot.docs.isNotEmpty){
+          String documentId = snapshot.docs[0].id;
+          await _db.collection('Users').doc(userDetailsBasic.id).collection('conversations').doc(documentId).update(conversation.toJson());
+          updated= updated +1;
+        }
+
+      }
+      if(updated==2){
+        return true;
+      }
+      else{
+        return false;
+      }
+    }
+    catch (error){
+      print(error.toString());
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(error.toString()),
+          backgroundColor:
+          Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return false;
     }
   }
 }

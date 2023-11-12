@@ -1,10 +1,13 @@
 
 
+
+import 'package:community_share/model/conversation.dart';
 import 'package:community_share/providers/UserProvider.dart';
 import 'package:community_share/providers/product_provider.dart';
 import 'package:community_share/view/community/screen/add_community.dart';
 import 'package:community_share/view/community/screen/community_main_screen.dart';
 import 'package:community_share/view/login/complete_profile.dart';
+import 'package:community_share/view/message/chat_screen.dart';
 import 'package:community_share/view/product/add_product.dart';
 import 'package:community_share/view/product/full_product.dart';
 import 'package:community_share/view/main_page.dart';
@@ -89,6 +92,13 @@ class AppRouter {
                       } )
                 ]
                   ),
+              GoRoute(path: 'message_box/:conversationId',
+                pageBuilder: (context,state){
+                Conversation conversation = state.extra as Conversation;
+                return MaterialPage(child: ChatScreen(conversation: conversation,));
+                }
+
+              ),
 
               GoRoute(
                   path: 'profile/paletta_colori',
