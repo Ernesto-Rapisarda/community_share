@@ -71,7 +71,7 @@ class _ChatScreenState extends State<ChatScreen> {
               },
             ),
           ),
-          MessageComposer(messageController: _messageController, onSendPressed: onSendPressed, onClose: onClose),
+          !widget._conversation.order? MessageComposer(messageController: _messageController, onSendPressed: onSendPressed, onClose: onClose):Center(),
         ],
       ),
     );
