@@ -2,8 +2,10 @@
 
 
 import 'package:community_share/model/conversation.dart';
+import 'package:community_share/model/product_order.dart';
 import 'package:community_share/providers/UserProvider.dart';
 import 'package:community_share/providers/product_provider.dart';
+import 'package:community_share/view/community/components/full_order.dart';
 import 'package:community_share/view/community/screen/add_community.dart';
 import 'package:community_share/view/community/screen/community_main_screen.dart';
 import 'package:community_share/view/login/complete_profile.dart';
@@ -69,6 +71,13 @@ class AppRouter {
                         pageBuilder: (context, state) {
                           return MaterialPage(child: AddCommunity(isEdit: true,));
                         }),
+                    GoRoute(
+                      path: 'order/:orderId',
+                      pageBuilder: (context, state){
+                        ProductOrder productOrder = state.extra as ProductOrder;
+                        return MaterialPage(child: FullOrder(productOrder: productOrder,));
+                      }
+                    )
                   ]
 
                   ),
@@ -124,7 +133,17 @@ class AppRouter {
                   path: 'profile/orders',
                   pageBuilder: (context, state) {
                     return MaterialPage(child: MyOrders());
-                  }),
+                  },
+                  routes: <RouteBase>[
+                    GoRoute(
+                        path: ':orderId',
+                        pageBuilder: (context, state){
+                          ProductOrder productOrder = state.extra as ProductOrder;
+                          return MaterialPage(child: FullOrder(productOrder: productOrder,));
+                        }
+                    )
+                  ]
+                  ),
               GoRoute(
                   path: 'profile/notifications',
                   pageBuilder: (context, state) {

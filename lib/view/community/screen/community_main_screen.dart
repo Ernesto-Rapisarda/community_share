@@ -3,7 +3,7 @@ import 'package:community_share/view/community/components/community_app_bar.dart
 import 'package:community_share/view/community/screen/chat_tab.dart';
 import 'package:community_share/view/community/screen/home_community.dart';
 import 'package:community_share/view/community/screen/offers_tab.dart';
-import 'package:community_share/view/community/screen/search_tab.dart';
+import 'package:community_share/view/community/screen/admin_tab.dart';
 import 'package:community_share/view/community/screen/user_list_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -42,7 +42,7 @@ class _CommunityMainScreenState extends State<CommunityMainScreen> with TickerPr
           children: [
             HomeCommunity(),
             OffersTab(),
-            SearchTab(),
+            AdminTab(),
             ChatTab(),
             CommunityUsersList()
 

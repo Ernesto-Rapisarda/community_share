@@ -4,6 +4,7 @@ import 'package:community_share/utils/circular_load_indicator.dart';
 import 'package:flutter/material.dart';
 
 import '../../../model/enum/order_status.dart';
+import '../../community/components/order_card.dart';
 
 class MyOrders extends StatefulWidget {
   const MyOrders({super.key});
@@ -58,30 +59,12 @@ class _MyOrdersState extends State<MyOrders> {
               itemCount: _outcomingOrders.length,
               itemBuilder: (context, index) {
                 ProductOrder order = _outcomingOrders[index];
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Card(
-                    elevation: 3,
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        backgroundImage: NetworkImage(order.product.urlImages),
-                      ),
-                      title: Text(order.product.title),
-                      subtitle: Text(
-                        'Data Ordine: ${order.orderDate.day}/${order.orderDate.month}/${order.orderDate.year}',
-                      ),
-                      trailing: Text(
-                        'Stato: ${order.orderStatus.name}',
-                        style: TextStyle(
-                          color: getStatusColor(order.orderStatus),
-                        ),
-                      ),
-                    ),
-                  ),
-                );
+                return OrderCard(order: order,isAdministrator: false,);
               },
             )
-            :Center(child: Text('Nothing to show',style: TextStyle(fontSize: 18),),),
+                : Center(
+              child: Text('Nothing to show', style: TextStyle(fontSize: 18)),
+            ),
             SizedBox(height: 20),
             Text(
               'Orders of your receiving products',
@@ -94,30 +77,12 @@ class _MyOrdersState extends State<MyOrders> {
               itemCount: _incomingOrders.length,
               itemBuilder: (context, index) {
                 ProductOrder order = _incomingOrders[index];
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Card(
-                    elevation: 3,
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        backgroundImage: NetworkImage(order.product.urlImages),
-                      ),
-                      title: Text(order.product.title),
-                      subtitle: Text(
-                        'Data Ordine: ${order.orderDate.day}/${order.orderDate.month}/${order.orderDate.year}',
-                      ),
-                      trailing: Text(
-                        'Stato: ${order.orderStatus.name}',
-                        style: TextStyle(
-                          color: getStatusColor(order.orderStatus),
-                        ),
-                      ),
-                    ),
-                  ),
-                );
+                return OrderCard(order: order, isAdministrator: false,);
               },
             )
-                :Center(child: Text('Nothing to show',style: TextStyle(fontSize: 18),),),
+                : Center(
+              child: Text('Nothing to show', style: TextStyle(fontSize: 18)),
+            ),
           ],
         ),
       ),

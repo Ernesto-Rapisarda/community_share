@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 
 import '../model/address.dart';
 import '../model/basic/product_basic.dart';
+import '../model/product_order.dart';
 
 class CommunityRepository {
   final _db = FirebaseFirestore.instance;
@@ -341,6 +342,35 @@ class CommunityRepository {
         ),
       );
       return null;
+    }
+  }
+
+  Future<List<ProductOrder>> getCommunityOrders(BuildContext context, String docRef) async{
+    List<ProductOrder> communityOrders = [];
+    try
+    {
+      QuerySnapshot<Map<String, dynamic>> snapshot = await _db.collection('communities').doc(docRef).collection('order').orderBy('orderDate', descending: true).get();
+      
+      if(snapshot.size>0){
+        snapshot.docs.forEach((DocumentSnapshot<Map<String, dynamic>> document) {
+          ProductOrder productOrder = ProductOrder.fromJson(document.data()!);
+          communityOrders.add(productOrder);
+        });
+      }
+      
+      return communityOrders;
+      
+    }catch (error){
+      print(error.toString());
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(error.toString()),
+          backgroundColor:
+          Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return [];
     }
   }
 }

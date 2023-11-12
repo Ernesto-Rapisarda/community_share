@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 
 import '../model/address.dart';
 import '../model/community.dart';
+import '../model/product_order.dart';
 import '../providers/UserProvider.dart';
 import '../reporitory/community_repository.dart';
 
@@ -59,6 +60,10 @@ class CommunityService{
 
   Future<Address?> retrieveCommunityAddress(BuildContext context, CommunityBasic communityBasic) async{
     return await _communityRepository.retrieveCommunityAddress(context,communityBasic);
+  }
+
+  Future<List<ProductOrder>> getCommunityOrders(BuildContext context, String docRef) async{
+    return await _communityRepository.getCommunityOrders(context,docRef);
   }
 
 }
