@@ -42,9 +42,10 @@ class _CommunityMainScreenState extends State<CommunityMainScreen> with TickerPr
           children: [
             HomeCommunity(),
             OffersTab(),
-            AdminTab(),
             ChatTab(),
-            CommunityUsersList()
+            CommunityUsersList(),
+            AdminTab(),
+
 
 
           ],

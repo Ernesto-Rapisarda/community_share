@@ -2,6 +2,8 @@ import 'package:community_share/model/basic/community_basic.dart';
 import 'package:community_share/model/basic/product_basic.dart';
 import 'package:community_share/model/basic/user_details_basic.dart';
 import 'package:community_share/model/conversation.dart';
+import 'package:community_share/model/enum/order_status.dart';
+import 'package:community_share/model/enum/product_availability.dart';
 import 'package:community_share/model/message.dart';
 import 'package:community_share/model/product.dart';
 import 'package:community_share/model/product_order.dart';
@@ -80,6 +82,27 @@ class ProductService {
     else{
       return false;
     }
+  }
+
+  Future<ProductOrder> updateOrderStatus(BuildContext context, ProductOrder productOrder, OrderStatus orderStatus) async{
+
+    if(productOrder.orderStatus == OrderStatus.pending || productOrder.orderStatus == OrderStatus.productDeliveredToHotSpot){
+      ProductOrder tmp = productOrder;
+      tmp.orderStatus = orderStatus;
+      if(tmp.orderStatus == OrderStatus.completed){
+        tmp.product.availability = ProductAvailability.donated;
+
+      }
+      bool updated = await _productRepository.updateOrderStatus(context, tmp);
+      if(updated){
+        //todo add notifica pronto al ritiro
+        return tmp;
+      }
+      else{
+        return productOrder;
+      }
+    }
+    return productOrder;
   }
 
 }

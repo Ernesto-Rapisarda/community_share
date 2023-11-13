@@ -46,6 +46,7 @@ class Product {
     required this.productCategory,
     required this.publishedOn,
     this.likesNumber = 0,
+    this.docRef
   });
 
   toJson() {
@@ -58,6 +59,7 @@ class Product {
       'uploadDate': uploadDate,
       'lastUpdateDate': lastUpdateDate,
       'condition': condition.name,
+      'docRef': docRef ?? '',
       'availability': availability.name,
       'category': productCategory.name,
       'likesNumber': likesNumber,
@@ -89,6 +91,8 @@ class Product {
             .map((communityJson) => CommunityBasic.fromJson(communityJson))
             .toList(),
         likesNumber: json['likesNumber'],
+        docRef: json['docRef'],
+
 
 
         giver: UserDetailsBasic.fromJson(json['giver']),);

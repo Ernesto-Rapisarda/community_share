@@ -5,6 +5,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../../../service/auth.dart';
+
 class CommunityAppBar extends StatelessWidget implements PreferredSizeWidget {
   final TabController tabController;
 
@@ -13,6 +15,34 @@ class CommunityAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isFounder = Auth().currentUser?.uid == context.read<CommunityProvider>().community.founder.id;
+
+    List<Tab> tabs = [
+      Tab(
+        icon: FaIcon(FontAwesomeIcons.calendar),
+        text: 'Home',
+      ),
+      Tab(
+        icon: FaIcon(FontAwesomeIcons.handHoldingHeart),
+        text: 'Offerti',
+      ),
+      Tab(
+        icon: FaIcon(FontAwesomeIcons.comments),
+        text: 'Chat',
+      ),
+      Tab(
+        icon: FaIcon(FontAwesomeIcons.users),
+        text: 'Users',
+      ),
+    ];
+
+    if(isFounder){
+      tabs.add( Tab(
+        icon: FaIcon(FontAwesomeIcons.gears),
+        text: 'Admin',
+      ));
+    }
+
     return DefaultTabController(
         length: 5,
 
@@ -60,18 +90,19 @@ class CommunityAppBar extends StatelessWidget implements PreferredSizeWidget {
               indicatorColor: Theme.of(context).colorScheme.primary,
 
               controller: tabController,
-              tabs: [
+              tabs:tabs
+            /* [
             Tab(
               icon: FaIcon(FontAwesomeIcons.calendar),
               text: 'Home',
             ),
             Tab(
-              icon: FaIcon(FontAwesomeIcons.list),
+              icon: FaIcon(FontAwesomeIcons.handHoldingHeart),
               text: 'Offerti',
             ),
             Tab(
-              icon: FaIcon(FontAwesomeIcons.magnifyingGlass),
-              text: 'Cerco',
+              icon: FaIcon(FontAwesomeIcons.gears),
+              text: 'Admin',
             ),
             Tab(
               icon: FaIcon(FontAwesomeIcons.comments),
@@ -81,7 +112,7 @@ class CommunityAppBar extends StatelessWidget implements PreferredSizeWidget {
               icon: FaIcon(FontAwesomeIcons.users),
               text: 'Users',
             ),
-          ]),
+          ]*/),
         ));
   }
 

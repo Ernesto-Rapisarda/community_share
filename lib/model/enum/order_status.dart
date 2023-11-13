@@ -1,14 +1,14 @@
 enum OrderStatus {
   pending,
-  productDelivered,
+  productDeliveredToHotSpot,
   completed
 }
 
 OrderStatus orderStatusFromString(String value) {
   print('value $value');
   switch (value) {
-    case 'productDelivered':
-      return OrderStatus.productDelivered;
+    case 'productDeliveredToHotSpot':
+      return OrderStatus.productDeliveredToHotSpot;
     case 'completed':
       return OrderStatus.completed;
     default:

@@ -1,21 +1,35 @@
 import 'package:community_share/model/product_order.dart';
+import 'package:community_share/service/product_service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../model/enum/order_status.dart';
 
-class FullOrder extends StatefulWidget{
-  final ProductOrder _productOrder;
+class FullOrder extends StatefulWidget {
+  late ProductOrder _productOrder;
 
-  FullOrder({Key? key, required ProductOrder productOrder}) : _productOrder = productOrder, super(key: key);
+  FullOrder({Key? key, required ProductOrder productOrder})
+      : _productOrder = productOrder,
+        super(key: key);
 
   @override
   State<FullOrder> createState() => _FullOrderState();
 }
 
 class _FullOrderState extends State<FullOrder> {
+  final ProductService _productService = ProductService();
+
+  void updateStatus(OrderStatus orderStatus)async{
+    ProductOrder productOrder = await _productService.updateOrderStatus (context,widget._productOrder, orderStatus);
+    setState(() {
+      widget._productOrder = productOrder;
+    });
+
+  }
+
   @override
   Widget build(BuildContext context) {
+    print(widget._productOrder.product);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -51,7 +65,9 @@ class _FullOrderState extends State<FullOrder> {
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
-                              color: Theme.of(context).colorScheme.onPrimaryContainer,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onPrimaryContainer,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -65,8 +81,7 @@ class _FullOrderState extends State<FullOrder> {
                               // Puoi regolare il raggio del bordo se necessario
                               child: Image.network(
                                 widget._productOrder.product.urlImages,
-                                fit: BoxFit
-                                    .cover,
+                                fit: BoxFit.cover,
                               ),
                             ),
                           ),
@@ -79,10 +94,13 @@ class _FullOrderState extends State<FullOrder> {
                   children: [
                     Text(
                       'Order Date: ',
-                      style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
-                    Text('${widget._productOrder.orderDate.day}/${widget._productOrder.orderDate.month}/${widget._productOrder.orderDate.year}',
-                      style: TextStyle(fontSize: 16),)
+                    Text(
+                      '${widget._productOrder.orderDate.day}/${widget._productOrder.orderDate.month}/${widget._productOrder.orderDate.year}',
+                      style: TextStyle(fontSize: 16),
+                    )
                   ],
                 ),
                 SizedBox(height: 10),
@@ -90,7 +108,8 @@ class _FullOrderState extends State<FullOrder> {
                   children: [
                     Text(
                       'Receiver: ',
-                      style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     Text(
                       widget._productOrder.receiver.fullName,
@@ -103,7 +122,8 @@ class _FullOrderState extends State<FullOrder> {
                   children: [
                     Text(
                       'HotSpot: ',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     Text(
                       widget._productOrder.hotSpot.name,
@@ -131,16 +151,31 @@ class _FullOrderState extends State<FullOrder> {
                     ),
                   ],
                 ),
-                SizedBox(height: 16,),
+                SizedBox(
+                  height: 16,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    OutlinedButton(onPressed: (){}, child: Text('Community')),
-                    SizedBox(width: 8,),
-                    OutlinedButton(onPressed: (){}, child: Text('To Receiver'))
+                    widget._productOrder.orderStatus == OrderStatus.pending
+                        ? OutlinedButton(
+                            onPressed: () {
+                              updateStatus(OrderStatus.productDeliveredToHotSpot);
+                            },
+                            child: Text('Arrived to Community'))
+                        : Container(),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    widget._productOrder.orderStatus ==
+                            OrderStatus.productDeliveredToHotSpot
+                        ? OutlinedButton(
+                            onPressed: () {                              updateStatus(OrderStatus.completed);
+                            },
+                            child: Text('Delivered to final user'))
+                        : Container()
                   ],
                 ),
-
               ],
             ),
           ),

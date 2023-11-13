@@ -262,10 +262,12 @@ class ProductRepository {
         Map<String, dynamic>? data = documentSnapshot.data() as Map<
             String,
             dynamic>?;
+        String docRef = documentSnapshot.id;
+        print(docRef);
 
         if (data != null) {
           Product product = Product.fromJson(data);
-          product.docRef = productOrder.product.docRef;
+          product.docRef = docRef;
           if (product.id == productOrder.product.id) {
             product.availability = ProductAvailability.pending;
             await _db.collection('products')
@@ -303,6 +305,82 @@ class ProductRepository {
           content: Text(error.toString()),
           backgroundColor:
           Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return false;
+    }
+  }
+
+  Future<bool> updateOrderStatus(BuildContext context, ProductOrder tmp) async{
+    try {
+      // Esegui una query per trovare il documento corrispondente nella collezione 'order' della community
+      QuerySnapshot communityOrderQuery = await _db
+          .collection('communities')
+          .doc(tmp.hotSpot.docRef)
+          .collection('order')
+          .where('id', isEqualTo: tmp.id)
+          .get();
+
+      if (communityOrderQuery.docs.isNotEmpty) {
+        await _db.collection('communities').doc(tmp.hotSpot.docRef).collection('order').doc(communityOrderQuery.docs.first.reference.id).update (tmp.toJson());
+      }
+
+      // Esegui una query per trovare il documento corrispondente nella collezione 'order' del prodotto
+      QuerySnapshot productOrderQuery = await _db
+          .collection('products')
+          .doc(tmp.product.docRef)
+          .collection('order')
+          .where('id', isEqualTo: tmp.id)
+          .get();
+
+      if (productOrderQuery.docs.isNotEmpty) {
+        print('doc ${tmp.product.docRef} order ${productOrderQuery.docs.first.reference.id}');
+        await _db.collection('products').doc(tmp.product.docRef).collection('order').doc(productOrderQuery.docs.first.reference.id).update (tmp.toJson());
+      }
+
+      // Esegui una query per trovare il documento corrispondente nella collezione 'incoming_orders' del ricevente
+      QuerySnapshot incomingOrderQuery = await _db
+          .collection('Users')
+          .doc(tmp.receiver.id)
+          .collection('incoming_orders')
+          .where('id', isEqualTo: tmp.id)
+          .get();
+
+      if (incomingOrderQuery.docs.isNotEmpty) {
+        await _db.collection('Users').doc(tmp.receiver.id).collection('incoming_orders').doc(incomingOrderQuery.docs.first.reference.id).update (tmp.toJson());
+      }
+
+      // Esegui una query per trovare il documento corrispondente nella collezione 'outcoming_orders' del donatore
+      QuerySnapshot outcomingOrderQuery = await _db
+          .collection('Users')
+          .doc(tmp.product.giver.id)
+          .collection('outcoming_orders')
+          .where('id', isEqualTo: tmp.id)
+          .get();
+
+      if (outcomingOrderQuery.docs.isNotEmpty) {
+        await _db.collection('Users').doc(tmp.product.giver.id).collection('outcoming_orders').doc(outcomingOrderQuery.docs.first.reference.id).update (tmp.toJson());
+      }
+
+      // Esegui una query per trovare il documento corrispondente nella collezione 'products' del prodotto
+
+      if(tmp.product.availability == ProductAvailability.donated){
+        await _db.collection('products').doc(tmp.product.docRef).update(tmp.product.toJson());
+      }
+
+
+      // Restituisci true per indicare che l'aggiornamento è avvenuto con successo
+      return true;
+    } catch (error) {
+      print(error.toString());
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(error.toString()),
+          backgroundColor: Theme.of(context)
+              .colorScheme
+              .errorContainer
+              .withOpacity(0.1),
           duration: Duration(seconds: 2),
         ),
       );

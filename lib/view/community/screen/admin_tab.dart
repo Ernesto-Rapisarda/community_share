@@ -14,13 +14,17 @@ class AdminTab extends StatefulWidget{
 
 }
 
-class _AdminTabState extends State<AdminTab> {
+class _AdminTabState extends State<AdminTab> with SingleTickerProviderStateMixin{
+  late TabController _innerTabController;
+
   List<ProductOrder> _productsOrder = [];
   final CommunityService _communityService = CommunityService();
 
   @override
   void initState() {
     super.initState();
+    _innerTabController = TabController(length: 3, vsync: this);
+
     fetchData();
   }
   void fetchData() async{
@@ -32,15 +36,48 @@ class _AdminTabState extends State<AdminTab> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: _productsOrder.length,
-      itemBuilder: (context, index) {
-        ProductOrder order = _productsOrder[index];
-        return OrderCard(order: order,isAdministrator: true,);
-      },
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TabBar(
+          controller: _innerTabController,
+          tabs: [
+            Tab(text: 'Orders'),
+            Tab(text: 'Events'),
+            Tab(text: 'Reports'),
+          ],
+        ),
+        Expanded(
+          child: TabBarView(
+            controller: _innerTabController,
+            children: [
+              // Il tuo elenco di ordini
+              ListView.builder(
+                shrinkWrap: true,
+                itemCount: _productsOrder.length,
+                itemBuilder: (context, index) {
+                  ProductOrder order = _productsOrder[index];
+                  return OrderCard(order: order, isAdministrator: true);
+                },
+              ),
+              // La scheda degli eventi
+              // Includi qui il codice per la scheda degli eventi
+              Container(
+                child: Center(
+                  child: Text('Events Tab Content'),
+                ),
+              ),
+              // La scheda dei report
+              // Includi qui il codice per la scheda dei report
+              Container(
+                child: Center(
+                  child: Text('Reports Tab Content'),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
-
-
 }
