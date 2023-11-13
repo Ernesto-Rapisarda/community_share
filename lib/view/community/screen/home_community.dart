@@ -14,6 +14,7 @@ class HomeCommunity extends StatefulWidget {
 }
 
 class _HomeCommunityState extends State<HomeCommunity> {
+  bool _eventsLoaded = false;
 
   @override
   void initState() {
@@ -24,7 +25,7 @@ class _HomeCommunityState extends State<HomeCommunity> {
   Future<void> _loadEvents() async {
     try {
       await CommunityService().getEventsForCommunity(context);
-
+      _eventsLoaded = true;
     } catch (error) {
       // todo
       print('Errore durante il recupero degli eventi: $error');
@@ -95,7 +96,7 @@ class _HomeCommunityState extends State<HomeCommunity> {
               Text('Description',style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),),
               Text(context.read<CommunityProvider>().community.description,style: TextStyle(fontSize: 16),),
               SizedBox(height: 12,),
-              EventsList(),
+              EventsList(loaded: _eventsLoaded),
             ],
           ),
         ),

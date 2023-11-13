@@ -2,6 +2,7 @@
 
 import 'package:community_share/model/basic/community_basic.dart';
 import 'package:community_share/model/basic/user_details_basic.dart';
+import 'package:community_share/model/event.dart';
 import 'package:community_share/model/product.dart';
 import 'package:community_share/providers/community_provider.dart';
 import 'package:community_share/service/auth.dart';
@@ -64,6 +65,31 @@ class CommunityService{
 
   Future<List<ProductOrder>> getCommunityOrders(BuildContext context, String docRef) async{
     return await _communityRepository.getCommunityOrders(context,docRef);
+  }
+
+  Future<void> addOrEditEvent(BuildContext context, Event newEvent) async{
+    String id = await _communityRepository.addOrEditEvent(context, newEvent , context.read<CommunityProvider>().community.docRef);
+    if(newEvent.id!=null && id == newEvent.id){
+      context.read<CommunityProvider>().events.removeWhere((e) => e.id == newEvent.id);
+       context.read<CommunityProvider>().events.add(newEvent);
+    }
+    else{
+      newEvent.id = id;
+      context.read<CommunityProvider>().events.add(newEvent);
+    }
+    context.read<CommunityProvider>().notifyListeners();
+  }
+
+  Future<void> deleteEvent(BuildContext context, Event event) async{
+    bool deleted =false;
+    if(event.id != null && event.id != ''){
+      deleted = await _communityRepository.deleteEvent(context, event);
+      if(deleted){
+        context.read<CommunityProvider>().events.remove(event);
+        context.read<CommunityProvider>().notifyListeners();
+      }
+
+    }
   }
 
 }

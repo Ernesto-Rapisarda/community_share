@@ -122,7 +122,7 @@ class CommunityRepository {
     try {
       QuerySnapshot<Map<String, dynamic>> snapshot = await _db
           .collection('communities')
-          .doc(context.read<CommunityProvider>().community.id)
+          .doc(context.read<CommunityProvider>().community.docRef)
           .collection('events')
           .get();
 
@@ -371,6 +371,56 @@ class CommunityRepository {
         ),
       );
       return [];
+    }
+  }
+
+  Future<String> addOrEditEvent(BuildContext context, Event newEvent, String? docRef) async{
+    print('event id ${newEvent.id}');
+    print('doc_ref $docRef');
+    try
+    {
+      if(newEvent.id!= null && newEvent.id != ''){
+        await _db.collection('communities').doc(docRef!).collection('events').doc(newEvent.id).update(newEvent.toJson());
+        return newEvent.id!;
+      }
+      else{
+        DocumentReference documentReference = await _db.collection('communities').doc(docRef!).collection('events').add(newEvent.toJson());
+        return documentReference.id??'';
+      }
+    }
+    catch(error){
+      print(error.toString());
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(error.toString()),
+          backgroundColor:
+          Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return '';
+    }
+  }
+
+  Future<bool> deleteEvent(BuildContext context, Event event) async{
+    try
+    {
+      await _db.collection('communities').doc(context.read<CommunityProvider>().community.docRef).collection('events').doc(event.id).delete();
+
+      return true;
+    }
+    catch(error)
+    {
+      print(error.toString());
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(error.toString()),
+          backgroundColor:
+          Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return false;
     }
   }
 }
