@@ -15,6 +15,8 @@ import 'package:community_share/utils/id_generator.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../model/enum/product_category.dart';
+
 class ProductService {
   final ProductRepository _productRepository = ProductRepository();
   final ConversationService _conversationService = ConversationService();
@@ -27,8 +29,8 @@ class ProductService {
 
   }
 
-  Future<List<Product>> getProducts(BuildContext context) async {
-    return await _productRepository.getProducts(context);
+  Future<List<Product>> getProducts(BuildContext context, List<ProductCategory> categories) async {
+    return await _productRepository.getProducts(context,categories);
   }
 
   void setLike(BuildContext context, Product product, bool calledFromCard) async{

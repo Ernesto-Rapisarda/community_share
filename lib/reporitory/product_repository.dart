@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:community_share/model/basic/community_basic.dart';
 import 'package:community_share/model/basic/product_basic.dart';
 import 'package:community_share/model/community.dart';
+import 'package:community_share/model/enum/product_category.dart';
 import 'package:community_share/model/product_order.dart';
 import 'package:community_share/providers/UserProvider.dart';
 import 'package:community_share/providers/product_provider.dart';
@@ -57,7 +58,7 @@ class ProductRepository {
     }
   }
 
-  Future<List<Product>> getProducts(BuildContext context) async {
+  Future<List<Product>> getProducts(BuildContext context, List<ProductCategory> categories) async {
     List<Product> products = [];
 
     try {
@@ -68,7 +69,7 @@ class ProductRepository {
           DocumentSnapshot productSnapshot = await _db.collection('products').doc(productBasic.docRefCompleteProduct).get();
           Product product = Product.fromJson(productSnapshot.data() as Map<String, dynamic>);
           product.docRef = productSnapshot.id;
-          if(!products.contains(product)){
+          if(!products.contains(product) && categories.contains(product.productCategory) ){
             products.add(product);
 
           }
