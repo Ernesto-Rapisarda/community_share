@@ -35,6 +35,20 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return ProductGrid(_products);
+    return SingleChildScrollView(
+      //physics: AlwaysScrollableScrollPhysics(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(height: 8,),
+          Text('Products from your community',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Theme.of(context).colorScheme.primary),),
+          Padding(
+            padding: const EdgeInsets.all(12),
+            child: ProductGrid(_products),
+          ),
+          //SizedBox(height: 500,)
+        ],
+      ),
+    );
   }
 }

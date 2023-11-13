@@ -12,10 +12,10 @@ import '../../service/auth.dart';
 
 class ProductCard extends StatefulWidget {
   final Product product;
-  final double boxSize;
 
-  ProductCard({Key? key, required this.boxSize, required this.product})
-      : super(key: key);
+  //final double boxSize;
+
+  ProductCard({Key? key, required this.product}) : super(key: key);
 
   @override
   State<ProductCard> createState() => _ProductCardState();
@@ -27,15 +27,10 @@ class _ProductCardState extends State<ProductCard> {
 
   @override
   Widget build(BuildContext context) {
-    _isProductLiked =  context
-        .watch<UserProvider>()
-        .productLiked
-        .contains(widget.product);
-    double imageSize =
-        widget.boxSize - 16; // Sottrai il padding dalla dimensione della card
+    _isProductLiked =
+        context.watch<UserProvider>().productLiked.contains(widget.product);
 
     return SizedBox(
-      width: widget.boxSize,
       child: InkWell(
         onTap: () {
           context
@@ -47,10 +42,24 @@ class _ProductCardState extends State<ProductCard> {
         child: Card(
           color: Theme.of(context).cardTheme.color,
           elevation: 3,
-          margin: EdgeInsets.all(8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+
+              ClipRect(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(12),
+                      topLeft: Radius.circular(12)),
+                  child: Image.network(
+                    widget.product.urlImages,
+                    height: 170,
+                    width: double.infinity,
+                    fit: BoxFit
+                        .cover, // Adatta l'immagine alla dimensione specificata senza distorsioni
+                  ),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
@@ -65,111 +74,38 @@ class _ProductCardState extends State<ProductCard> {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0, right: 8),
-                child: ClipRect(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    // Puoi regolare il raggio del bordo se necessario
-                    child: Image.network(
-                      widget.product.urlImages,
-                      width: imageSize, // Fissa la larghezza dell'immagine
-                      height: imageSize, // Fissa l'altezza dell'immagine
-                      fit: BoxFit
-                          .cover, // Adatta l'immagine alla dimensione specificata senza distorsioni
-                    ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    '${widget.product.likesNumber} ',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                   ),
-                ),
+                  InkWell(
+                      onTap: () {
+                        if (Auth().currentUser?.uid !=
+                            widget.product.giver.id) {
+                          _productService.setLike(
+                              context, widget.product, true);
+                        }
+                      },
+                      child: _isProductLiked
+                          ? FaIcon(
+                              FontAwesomeIcons.solidHeart,
+                              size: 20,
+                              color: Colors.red,
+                            )
+                          : FaIcon(
+                              FontAwesomeIcons.heart,
+                              size: 20,
+                              color: Colors.white,
+                            )),
+                  SizedBox(
+                    width: 8,
+                  ),
+                ],
               ),
-              //SizedBox(height: 8),
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0, left: 8, right: 8),
-                child: Row(
-                  children: [
-                    FaIcon(FontAwesomeIcons.locationDot, size: 16),
-                    SizedBox(
-                      width: 6,
-                    ),
-                    Text(widget.product.locationProduct,
-                        style: TextStyle(fontSize: 16)),
-                    Expanded(
-                        child: SizedBox(
-                      width: double.infinity,
-                    )),
-
-                  ],
-                ),
-              ),
-              Container(
-                height: 25,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(8),
-                        bottomRight: Radius.circular(8)),
-                    color: Theme.of(context).colorScheme.secondaryContainer),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    SizedBox(
-                      width: 8,
-                    ),
-                    Text(
-                      '${widget.product.likesNumber} ',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                    ),
-                    InkWell(
-                        onTap: () {
-                          if (Auth().currentUser?.uid !=
-                              widget.product.giver.id) {
-                            _productService.setLike(context, widget.product,true);
-                          }
-                        },
-                        child: _isProductLiked
-                            ? FaIcon(
-                          FontAwesomeIcons.solidHeart,
-                          size: 20,
-                          color: Colors.red,
-                        )
-                            : FaIcon(
-                          FontAwesomeIcons.heart,
-                          size: 20,
-                          color: Colors.white,
-                        )),
-                    SizedBox(
-                      width: 8,
-                    ),
-                  ],
-                ),
-              ),
-              /*Container(
-                height: 25,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(8),
-                        bottomRight: Radius.circular(8)),
-                    color: Theme.of(context).colorScheme.secondaryContainer),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(width: 8,),
-                    CircleAvatar(
-                      backgroundImage:
-                      NetworkImage(product.giver.urlPhotoProfile),
-                      radius: 11,
-                    ),
-                    SizedBox(
-                      width: 8,
-                    ),
-                    Text(
-                      product.giver.fullName,
-                      style:
-                      TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                    ),
-                  ],
-                ),
-              )*/
             ],
           ),
         ),

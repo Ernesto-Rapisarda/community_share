@@ -77,7 +77,7 @@ class _MainPageState extends State<MainPage> {
         ],
         automaticallyImplyLeading: true,
       ),*/
-        body: Container(child: _children.elementAt(_selectedIndex)),
+        body: /*Container(child:*/ _children.elementAt(_selectedIndex),
         bottomNavigationBar: Container(
           color: Theme.of(context).colorScheme.primary,
           child: Padding(

@@ -40,50 +40,55 @@ class _MyOrdersState extends State<MyOrders> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Text('Orders List',),
         automaticallyImplyLeading: true,
       ),
       body: !dataFetched
           ? CircularLoadingIndicator.circularInd(context)
           : SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(height: 20),
-            Text(
-              'Orders of your giving products',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 20),
-            _outcomingOrders.length>0
-            ?ListView.builder(
-              shrinkWrap: true,
-              itemCount: _outcomingOrders.length,
-              itemBuilder: (context, index) {
-                ProductOrder order = _outcomingOrders[index];
-                return OrderCard(order: order,isAdministrator: false,);
-              },
-            )
-                : Center(
-              child: Text('Nothing to show', style: TextStyle(fontSize: 18)),
-            ),
-            SizedBox(height: 20),
-            Text(
-              'Orders of your receiving products',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 20),
-            _incomingOrders.length>0
-            ?ListView.builder(
-              shrinkWrap: true,
-              itemCount: _incomingOrders.length,
-              itemBuilder: (context, index) {
-                ProductOrder order = _incomingOrders[index];
-                return OrderCard(order: order, isAdministrator: false,);
-              },
-            )
-                : Center(
-              child: Text('Nothing to show', style: TextStyle(fontSize: 18)),
-            ),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 20),
+              Text(
+                'Donating products',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 20),
+              _outcomingOrders.length>0
+              ?ListView.builder(
+                shrinkWrap: true,
+                itemCount: _outcomingOrders.length,
+                itemBuilder: (context, index) {
+                  ProductOrder order = _outcomingOrders[index];
+                  return OrderCard(order: order,isAdministrator: false,);
+                },
+              )
+                  : Center(
+                child: Text('Nothing to show', style: TextStyle(fontSize: 18)),
+              ),
+              SizedBox(height: 20),
+              Text(
+                'Receiving products',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 20),
+              _incomingOrders.length>0
+              ?ListView.builder(
+                shrinkWrap: true,
+                itemCount: _incomingOrders.length,
+                itemBuilder: (context, index) {
+                  ProductOrder order = _incomingOrders[index];
+                  return OrderCard(order: order, isAdministrator: false,);
+                },
+              )
+                  : Center(
+                child: Text('Nothing to show', style: TextStyle(fontSize: 18)),
+              ),
+            ],
+          ),
         ),
       ),
     );
