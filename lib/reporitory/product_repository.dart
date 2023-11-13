@@ -270,9 +270,10 @@ class ProductRepository {
           product.docRef = docRef;
           if (product.id == productOrder.product.id) {
             product.availability = ProductAvailability.pending;
-            await _db.collection('products')
+            await updateProduct(context, product);
+            /*await _db.collection('products')
                 .doc(productOrder.product.docRef)
-                .update(product.toJson());
+                .update(product.toJson());*/
             productOrder.product = product;
             await _db.collection('products')
                 .doc(productOrder.product.docRef)
@@ -314,7 +315,6 @@ class ProductRepository {
 
   Future<bool> updateOrderStatus(BuildContext context, ProductOrder tmp) async{
     try {
-      // Esegui una query per trovare il documento corrispondente nella collezione 'order' della community
       QuerySnapshot communityOrderQuery = await _db
           .collection('communities')
           .doc(tmp.hotSpot.docRef)
@@ -326,7 +326,6 @@ class ProductRepository {
         await _db.collection('communities').doc(tmp.hotSpot.docRef).collection('order').doc(communityOrderQuery.docs.first.reference.id).update (tmp.toJson());
       }
 
-      // Esegui una query per trovare il documento corrispondente nella collezione 'order' del prodotto
       QuerySnapshot productOrderQuery = await _db
           .collection('products')
           .doc(tmp.product.docRef)
@@ -339,7 +338,6 @@ class ProductRepository {
         await _db.collection('products').doc(tmp.product.docRef).collection('order').doc(productOrderQuery.docs.first.reference.id).update (tmp.toJson());
       }
 
-      // Esegui una query per trovare il documento corrispondente nella collezione 'incoming_orders' del ricevente
       QuerySnapshot incomingOrderQuery = await _db
           .collection('Users')
           .doc(tmp.receiver.id)
@@ -351,7 +349,6 @@ class ProductRepository {
         await _db.collection('Users').doc(tmp.receiver.id).collection('incoming_orders').doc(incomingOrderQuery.docs.first.reference.id).update (tmp.toJson());
       }
 
-      // Esegui una query per trovare il documento corrispondente nella collezione 'outcoming_orders' del donatore
       QuerySnapshot outcomingOrderQuery = await _db
           .collection('Users')
           .doc(tmp.product.giver.id)
@@ -363,10 +360,10 @@ class ProductRepository {
         await _db.collection('Users').doc(tmp.product.giver.id).collection('outcoming_orders').doc(outcomingOrderQuery.docs.first.reference.id).update (tmp.toJson());
       }
 
-      // Esegui una query per trovare il documento corrispondente nella collezione 'products' del prodotto
-
+      //todo forse conviene prendere il prodotto per intero dal db
       if(tmp.product.availability == ProductAvailability.donated){
-        await _db.collection('products').doc(tmp.product.docRef).update(tmp.product.toJson());
+        await updateProduct(context, tmp.product);
+
       }
 
 
