@@ -375,8 +375,6 @@ class CommunityRepository {
   }
 
   Future<String> addOrEditEvent(BuildContext context, Event newEvent, String? docRef) async{
-    print('event id ${newEvent.id}');
-    print('doc_ref $docRef');
     try
     {
       if(newEvent.id!= null && newEvent.id != ''){
@@ -421,6 +419,47 @@ class CommunityRepository {
         ),
       );
       return false;
+    }
+  }
+
+  Future<List<Event>> getIncomingEventsFromMyCommunities(BuildContext context) async{
+    List<Event> incomingEvents = [];
+    try
+    {
+      for(Community community in context.read<UserProvider>().myCommunities){
+        QuerySnapshot<Map<String, dynamic>> snapshot = await _db.collection('communities').doc(community.docRef).collection('events').orderBy('eventDate',descending: false).limit(5).get();
+        snapshot.docs.forEach((DocumentSnapshot<Map<String, dynamic>> document)async {
+          Event event = Event.fromJson(document.data()!);
+          event.docRefCommunity = community.docRef;
+          event.docRefCommunityName = community.name;
+          incomingEvents.add(event);
+        });
+/*        List<Event> tmp = snapshot.docs
+            .map((doc) => Event.fromJson(doc.data()!))
+            .toList();
+        incomingEvents.addAll(tmp);*/
+      }
+
+      incomingEvents.sort((a, b) => a.eventDate.compareTo(b.eventDate));
+
+      if(incomingEvents.length>5){
+        incomingEvents = incomingEvents.sublist(0,5);
+      }
+
+      return incomingEvents;
+    }
+    catch (error)
+    {
+      print(error.toString());
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(error.toString()),
+          backgroundColor:
+          Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return incomingEvents;
     }
   }
 }

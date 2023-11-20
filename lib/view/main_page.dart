@@ -31,6 +31,7 @@ class _MainPageState extends State<MainPage> {
   late bool _isLoading ;
   int _selectedIndex = 0;
   List<Widget> _children = [Home()];
+  String appBarTitle = 'HOME';
 
   @override
   void initState(){
@@ -61,6 +62,25 @@ class _MainPageState extends State<MainPage> {
         _children.add(Profile());
       }
       _selectedIndex = index;
+
+      switch (index) {
+        case 0:
+          appBarTitle = 'HOME';
+          break;
+        case 1:
+          appBarTitle = 'ADD PRODUCT';
+          break;
+        case 2:
+          appBarTitle = 'COMMUNITIES HUB';
+          break;
+        case 3:
+          appBarTitle = 'MESSAGE BOX';
+          break;
+        case 4:
+          appBarTitle = 'PROFILE';
+          break;
+        default:
+          appBarTitle = 'HOME';}
     });
   }
 
@@ -69,14 +89,13 @@ class _MainPageState extends State<MainPage> {
     _isLoading = context.watch<UserProvider>().isLoading;
     if (!_isLoading) {
       return SafeArea(
-          child: Scaffold(
-/*      appBar: AppBar(
-        title: Text('todo'),
-        actions: [
+          child: Scaffold(appBar: AppBar(
+        title: Text(appBarTitle),
+/*        actions: [
           IconButton(onPressed: (){signOut();}, icon: Icon(Icons.logout))
         ],
-        automaticallyImplyLeading: true,
-      ),*/
+        automaticallyImplyLeading: true,*/
+      ),
         body: /*Container(child:*/ _children.elementAt(_selectedIndex),
         bottomNavigationBar: Container(
           color: Theme.of(context).colorScheme.primary,
@@ -170,4 +189,6 @@ class _MainPageState extends State<MainPage> {
       return CircularLoadingIndicator.circularInd(context);
     }
   }
+
+
 }

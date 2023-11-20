@@ -50,11 +50,15 @@ class _FullProductState extends State<FullProduct> {
     bool sended = await _conversationService.createNewConversation(
         context, context.read<ProductProvider>().getProductBasic(), message, 'Info about ${productBasic.title}',false);
     if(sended){
-      showSnackBar(context, 'Message sended!');
+      //todo
+      print('todo');
+      //showSnackBar(context, 'Message sended!');
 
     }
     else{
-      showSnackBar(context, 'Something goes wrong, message not sended');
+      //todo
+      print('todo');
+      //showSnackBar(context, 'Something goes wrong, message not sended');
     }
   }
 

@@ -25,7 +25,8 @@ class Auth {
       await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
     }on FirebaseAuthException catch (e){
-      showSnackBar(context, e.message!);
+      rethrow;
+
     }
   }
 

@@ -92,4 +92,8 @@ class CommunityService{
     }
   }
 
+  Future<List<Event>> getIncomingEventsFromMyCommunities(BuildContext context) async{
+    return await _communityRepository.getIncomingEventsFromMyCommunities(context);
+  }
+
 }

@@ -6,13 +6,17 @@ class Event {
   String title;
   String eventLocation;
   String description;
+  String? docRefCommunity;
+  String? docRefCommunityName;
 
   Event(
       {this.id,
       required this.eventDate,
       required this.title,
       required this.eventLocation,
-        required this.description
+        required this.description,
+        this.docRefCommunity,
+        this.docRefCommunityName
       });
 
   toJson() {

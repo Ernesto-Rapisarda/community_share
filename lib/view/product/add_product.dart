@@ -108,9 +108,9 @@ class _AddProductState extends State<AddProduct> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+/*      appBar: AppBar(
         title: widget.isEdit ? Text('Edit Product') : Text('Add Product'),
-      ),
+      ),*/
       body: Stack(
         children: [
           SingleChildScrollView(
