@@ -17,9 +17,9 @@ class WelcomeWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
 
               children: [
-            Text('C', style: LogoTextStyle.textStyle,),
-            Image.asset('assets/images/logo_community_share.png', width: 40,height: 40,),
-            Text('MMUNITY SHARE', style: LogoTextStyle.textStyle,)
+            /*Text('C', style: LogoTextStyle.textStyle,),
+            Image.asset('assets/images/logo_community_share.png', width: 40,height: 40,),*/
+            Text('COMMUNITY SHARE', style: LogoTextStyle.textStyle,)
           ])
         ],
       ),
@@ -42,7 +42,7 @@ class LogoTextStyle {
         ],
         begin: Alignment.centerLeft,
         end: Alignment.centerRight,
-      ).createShader(Rect.fromLTWH(0, 0, 200, 70)),
+      ).createShader(const Rect.fromLTWH(0, 0, 200, 70)),
   );
 }
 
@@ -50,7 +50,7 @@ class WelcomeTextStyle {
   static const double fontSize = 20.0;
   static const FontWeight fontWeight = FontWeight.bold;
 
-  static final TextStyle textStyle = TextStyle(
+  static const TextStyle textStyle = TextStyle(
     fontSize: fontSize,
     fontWeight: fontWeight
   );

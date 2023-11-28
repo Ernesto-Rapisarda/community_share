@@ -12,6 +12,8 @@ class UserDetails {
   String urlPhotoProfile;
   DateTime lastTimeOnline;
   DateTime lastUpdate;
+  String language;
+  String theme;
 
 
 
@@ -24,7 +26,9 @@ class UserDetails {
     required this.provider,
     required this.urlPhotoProfile,
     required this.lastTimeOnline,
-    required this.lastUpdate
+    required this.lastUpdate,
+    required this.language,
+    required this.theme
 
 });
 
@@ -37,7 +41,9 @@ class UserDetails {
       "Provider": provider.name,
       "PhotoProfile": urlPhotoProfile,
       "LastTimeOnline": lastTimeOnline,
-      "LastUpdate": lastUpdate
+      "LastUpdate": lastUpdate,
+      "language": language,
+      "theme":theme
     };
   }
 
@@ -52,6 +58,8 @@ class UserDetails {
       urlPhotoProfile: json['PhotoProfile'] ?? '',
       lastTimeOnline: (json['LastTimeOnline'] as Timestamp).toDate(),
       lastUpdate: (json['LastUpdate'] as Timestamp).toDate(),
+      language: json['language'],
+      theme: json['theme']
 
 
     );

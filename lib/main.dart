@@ -34,18 +34,54 @@ void main() async {
   ));
 }
 
-class MyApp extends StatelessWidget {
-  final GoRouter _router = AppRouter().router;
+class MyApp extends StatefulWidget {
 
   MyApp({super.key});
 
+  static void setLocale(BuildContext context, Locale newLocale) {
+    _MyAppState state = context.findAncestorStateOfType<_MyAppState>()!;
+    state.setLocale(newLocale);
+  }
 
+  static void setTheme(BuildContext context, ThemeData theme){
+    _MyAppState state = context.findAncestorStateOfType<_MyAppState>()!;
+    state.setTheme(theme);
+  }
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  late Locale _locale;
+  late ThemeData _theme;
+
+  @override
+  void initState() {
+    super.initState();
+    _locale = Locale('en');
+    _theme = ThemeData.dark(useMaterial3: true);
+  }
+
+  void setLocale(Locale newLocale) {
+    setState(() {
+      _locale = newLocale;
+    });
+  }
+
+  void setTheme(ThemeData newTheme) {
+    setState(() {
+      _theme = newTheme;
+    });
+  }
+
+  final GoRouter _router = AppRouter().router;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'Community Share',
-      theme: ThemeData.dark(useMaterial3: true),
+      theme: _theme,
       //lightTheme: ThemeData.light(useMaterial3: true),
       themeMode: ThemeMode.system,
       /*theme: ThemeData(
@@ -58,7 +94,7 @@ class MyApp extends StatelessWidget {
 
       //internationalization
       supportedLocales: L10n.all,
-      locale: const Locale('en'),
+      locale: _locale,
 
       localizationsDelegates: const [
         AppLocalizations.delegate,

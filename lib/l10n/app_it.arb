@@ -7,11 +7,37 @@
   "haveAnAccount": "Hai un account?ACCEDI",
   "signInFacebook": "Accedi con Facebook",
   "signInGmail": "Accedi con Gmail",
-  "choiceDisplayedName": "Scegli il nome da mostrare",
-  "choiceLocation": "Scegli la tua località",
-      "addYourPhoneNumber": "Aggiungi il tuo numero di telefono",
+  "repeatPassword": "* ripeti la password",
 
-  "completeRegistration": "Completa registrazione"
+  "choiceDisplayedName": "* Inserisci il nome da mostrare",
+  "choiceLocation": "Inserisci la tua località",
+      "addYourPhoneNumber": "* Aggiungi il tuo numero di telefono",
+
+  "completeRegistration": "Completa registrazione",
+  "profileImage":" Immagine profilo:",
+  "languageUsed":"Lingua corrente:",
+  "currentTheme":"Tema corrente:",
+  "credential":"Scegli le tue credenziali: ",
+  "rightPass":"- Minimo 8 caratteri\n- almeno 1 maiuscola\n- almeno 1 minuscola\n- almeno 1 numero\n- almeno 1 carattere speciale !@#\\$\\&*~",
+  "preference":"Preferenze:",
+  "infoProfile":"Dettagli profilo: ",
+  "fillField":"Per favore, compila i campi obbligatori",
+  "needToBeFilled":"(* campi obbligatori)",
+  "accountCreated":"Account creato, controlla la tua email per la validazione",
+  "signingWithGmail":"Ti stai registrando con ",
+  "pageHome":"HOME",
+  "pageDonate":"LE TUE DONAZIONI",
+  "pageCommunities":"COMUNITA'",
+  "pageMessageBox":"MESSAGGI",
+  "pageProfile":"PROFILO",
+  "barHome":"Home",
+  "barDonate":"Donazioni",
+  "barCommunities":"Comunità",
+  "barMessageBox":"Messaggi",
+  "barProfile":"Profilo"
+
+
+
 
 
 }

@@ -21,6 +21,8 @@ class UserProvider with ChangeNotifier{
     urlPhotoProfile: '',
     lastTimeOnline: DateTime.now(),
     lastUpdate: DateTime.now(),
+    language: 'en',
+    theme: 'dark'
   );
   List<Community> _myCommunities = [];
   List<Product> _productsLiked = [];
@@ -124,6 +126,25 @@ class UserProvider with ChangeNotifier{
       _productsLiked.add((product));
     }
     notifyListeners();
+  }
+
+  void clearAll(){
+    _firstSignIn = false;
+    _isLoading = true;
+    _userDetails = UserDetails(
+        fullName: '',
+        location: '',
+        phoneNumber: '',
+        email: '',
+        provider: ProviderName.undefined,
+        urlPhotoProfile: '',
+        lastTimeOnline: DateTime.now(),
+        lastUpdate: DateTime.now(),
+        language: 'en',
+        theme: 'dark'
+    );
+    _myCommunities = [];
+    _productsLiked = [];
   }
 
 

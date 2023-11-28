@@ -1,3 +1,4 @@
+import 'package:community_share/providers/UserProvider.dart';
 import 'package:community_share/service/auth.dart';
 import 'package:community_share/utils//show_snack_bar.dart';
 import 'package:community_share/view/generic_components/SocialColors.dart';
@@ -19,54 +20,41 @@ class AuthPage extends StatefulWidget {
 class _AuthPageState extends State<AuthPage> {
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
-  bool isLogin = true;
+
   bool hidePassword = true;
 
   Future<void> signIn() async {
     try {
       await Auth().signInWithEmailAndPassword(
-          email: _email.text, password: _password.text, context: context);
-      if(Auth().currentUser != null){
-        context.go('/');
+          email: _email.text, password: _password.text);
+      if (Auth().currentUser != null) {
+        goToHome();
       }
-/*      if(Auth().currentUser!.emailVerified) {
-        context.go('/');
-      } else{
-        showSnackBar(context, 'Check your email and confirm your email adress!');
-      }*/
     } on FirebaseAuthException catch (error) {
-      print('entro nell\'error');
       callError(error.message!);
     }
   }
 
-  Future<void> createUser() async {
+  Future<void> signInWithGmail() async {
     try {
-      await Auth().createUserInWithEmailAndPassword(
-          email: _email.text, password: _password.text, context: context);
-    } on FirebaseAuthException catch (error) {
-      showSnackBar(context, error.message!);
-    }
-  }
-  
-  Future<void> signInWithGmail()async{
-    try{
       await Auth().signInWithGoogle(context);
-
-    }on FirebaseAuthException catch (e){
-      print(e.message!);
+    } on FirebaseAuthException catch (e) {
+      callError(e.message!);
     }
   }
 
-  Future<void> signInWithFacebook() async{
+  Future<void> signInWithFacebook() async {
     await Auth().signInWithFacebook(context);
   }
 
-  void callError(String error){
-    showSnackBar(context, error,isError: true);
-
+  void goToHome() {
+    context.go('/');
   }
- 
+
+  void callError(String error) {
+    showSnackBar(context, error, isError: true);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,8 +64,8 @@ class _AuthPageState extends State<AuthPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(child: WelcomeWidget()),
-            SizedBox(
+            const WelcomeWidget(),
+            const SizedBox(
               height: 30.0,
             ),
             ConstrainedBox(
@@ -89,17 +77,17 @@ class _AuthPageState extends State<AuthPage> {
               child: TextField(
                 controller: _email,
                 decoration: InputDecoration(
-                    contentPadding: EdgeInsets.only(left: 10.0),
+                    contentPadding: const EdgeInsets.only(left: 10.0),
                     enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(width: 1),
+                        borderSide: const BorderSide(width: 1),
                         borderRadius: BorderRadius.circular(10.0)),
                     focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(width: 3),
+                        borderSide: const BorderSide(width: 3),
                         borderRadius: BorderRadius.circular(10.0)),
-                    label: Text('email')),
+                    label: const Text('email')),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 8.0,
             ),
             ConstrainedBox(
@@ -112,16 +100,16 @@ class _AuthPageState extends State<AuthPage> {
                 controller: _password,
                 obscureText: hidePassword,
                 decoration: InputDecoration(
-                    contentPadding: EdgeInsets.only(left: 10.0),
+                    contentPadding: const EdgeInsets.only(left: 10.0),
                     enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(width: 1),
+                        borderSide: const BorderSide(width: 1),
                         borderRadius: BorderRadius.circular(10.0)),
                     focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(width: 3),
+                        borderSide: const BorderSide(width: 3),
                         borderRadius: BorderRadius.circular(10.0)),
-                    label: Text('password'),
+                    label: const Text('password'),
                     suffixIcon: IconButton(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.visibility,
                         color: Colors.grey,
                       ),
@@ -133,36 +121,35 @@ class _AuthPageState extends State<AuthPage> {
                     )),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 8.0,
             ),
             OutlinedButton(
                 onPressed: () {
-                  isLogin ? signIn() : createUser();
+                  signIn();
                 },
-                child: Text(isLogin
-                    ? AppLocalizations.of(context)!.signin
-                    : AppLocalizations.of(context)!.signup)),
+                child: Text(AppLocalizations.of(context)!.signin)),
             TextButton(
               onPressed: () {
                 setState(() {
-                  isLogin = !isLogin;
+                  context.go('/login/registration', extra: true);
                 });
               },
               child: Text(
-                isLogin
-                    ? AppLocalizations.of(context)!.notHaveAnAccount
-                    : AppLocalizations.of(context)!.haveAnAccount,
+                AppLocalizations.of(context)!.notHaveAnAccount,
                 textAlign: TextAlign.center,
               ),
             ),
-            SocialButtonWidgets.socialButtonRect(AppLocalizations.of(context)!.signInFacebook,
-                facebookColor, FontAwesomeIcons.facebookF, onTap: () {
+            SocialButtonWidgets.socialButtonRect(
+                AppLocalizations.of(context)!.signInFacebook,
+                facebookColor,
+                FontAwesomeIcons.facebookF, onTap: () {
               signInWithFacebook();
             }),
             SocialButtonWidgets.socialButtonRect(
-                AppLocalizations.of(context)!.signInGmail, googleColor, FontAwesomeIcons.googlePlusG,
-                onTap: () {
+                AppLocalizations.of(context)!.signInGmail,
+                googleColor,
+                FontAwesomeIcons.googlePlusG, onTap: () {
               signInWithGmail();
             }),
           ],

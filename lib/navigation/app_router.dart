@@ -8,7 +8,7 @@ import 'package:community_share/providers/product_provider.dart';
 import 'package:community_share/view/community/components/full_order.dart';
 import 'package:community_share/view/community/screen/add_community.dart';
 import 'package:community_share/view/community/screen/community_main_screen.dart';
-import 'package:community_share/view/login/complete_profile.dart';
+import 'package:community_share/view/login/registration.dart';
 import 'package:community_share/view/message/chat_screen.dart';
 import 'package:community_share/view/product/add_product.dart';
 import 'package:community_share/view/product/full_product.dart';
@@ -187,15 +187,20 @@ class AppRouter {
               child: AuthPage(),
             );
           },
+            routes: <RouteBase>[
+              GoRoute(
+                path: 'registration',
+                pageBuilder: (context, state) {
+                  bool isEmailAndPassword = state.extra as bool;
+
+                  return MaterialPage(
+                    child: Registration(isEmailAndPassword: isEmailAndPassword ),
+                  );
+                },
+              ),
+            ]
         ),
-        GoRoute(
-          path: '/complete_registration',
-          pageBuilder: (context, state) {
-            return const MaterialPage(
-              child: CompleteProfile(),
-            );
-          },
-        ),
+
       ],
     );
   }

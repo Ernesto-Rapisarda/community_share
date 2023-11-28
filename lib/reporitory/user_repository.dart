@@ -12,14 +12,13 @@ import '../service/auth.dart';
 class UserRepository {
   final _db = FirebaseFirestore.instance;
 
-  Future<void> createUserDetails(BuildContext context) async {
+  Future<void> createUserDetails(String uid,UserDetails userDetails) async {
     try {
       await _db
           .collection("Users")
-          .doc(Auth().currentUser?.uid)
-          .set(context.read<UserProvider>().userDetails.toJson());
-      context.read<UserProvider>().userDetails.id = Auth().currentUser?.uid;
-
+          .doc(uid)
+          .set(userDetails.toJson());
+      /*
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Your account has been created"),
@@ -27,9 +26,10 @@ class UserRepository {
               Theme.of(context).colorScheme.tertiaryContainer.withOpacity(0.1),
           duration: Duration(seconds: 2),
         ),
-      );
+      );*/
     } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      rethrow;/*
+       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Something went wrong. Try again"),
           backgroundColor:
@@ -37,7 +37,7 @@ class UserRepository {
           duration: Duration(seconds: 2),
         ),
       );
-      print(error.toString());
+      print(error.toString());*/
     }
   }
 

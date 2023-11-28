@@ -14,9 +14,33 @@
   "@haveAnAccount": {"description":  "An invite message for sign in"},
   "signInFacebook": "Sign in with Facebook",
   "signInGmail": "Sign in with Gmail",
-  "choiceDisplayedName": "Choice your displayed name",
-  "choiceLocation": "Choice your location",
-    "addYourPhoneNumber": "Add your phone number",
+  "repeatPassword": "* repeat password",
+  "choiceDisplayedName": "* Insert your displayed name",
+  "choiceLocation": "Insert your location",
+    "addYourPhoneNumber": "* Add your phone number",
 
-  "completeRegistration": "Complete Registration"
+  "completeRegistration": "Complete Registration",
+
+  "profileImage":" Profile Image:",
+  "languageUsed":"Current language:",
+  "currentTheme":"Current theme:",
+  "credential":"Choice your credentials: ",
+  "rightPass":"- Minimum 8 characters\n- at least 1 capital letter\n- at least 1 lowercase letter\n- at least 1 number\n- at least 1 special character !@#\\$\\&*~",
+  "preference":"Preference:",
+  "infoProfile":"Profile details: ",
+  "fillField":"Please, fill the mandatory fields",
+  "needToBeFilled":"(* mandatory fields)",
+  "accountCreated":"Account created, check your email for validation",
+  "signingWithGmail":"You are registering with ",
+  "pageHome":"HOME",
+  "pageDonate":"YOUR DONATIONS",
+  "pageCommunities":"COMMUNITIES",
+  "pageMessageBox":"MESSAGES BOX",
+  "pageProfile":"PROFILE",
+    "barHome":"Home",
+    "barDonate":"DONATIONS",
+    "barCommunities":"COMMUNITIES",
+    "barMessageBox":"MESSAGES",
+    "barProfile":"PROFILE"
+
 }

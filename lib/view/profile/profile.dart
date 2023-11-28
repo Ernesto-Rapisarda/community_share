@@ -3,8 +3,10 @@ import 'package:community_share/view/profile/components/intro_profile_with_photo
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../../service/auth.dart';
+import '../../utils/show_snack_bar.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -18,7 +20,22 @@ class _ProfileState extends State<Profile> {
 
 
   Future<void> signOut() async {
-    await Auth().signOut();
+    try{
+      await Auth().signOut();
+      completeLogout();
+    }catch (e){
+      callError(e.toString());
+    }
+
+
+  }
+
+  void callError(String error) {
+    showSnackBar(context, error, isError: true);
+  }
+
+  void completeLogout(){
+    context.read<UserProvider>().clearAll();
     context.go('/login');
   }
 

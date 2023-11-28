@@ -1,23 +1,18 @@
 import 'package:community_share/main.dart';
 import 'package:community_share/providers/UserProvider.dart';
-import 'package:community_share/reporitory/user_repository.dart';
-import 'package:community_share/service/auth.dart';
 import 'package:community_share/service/user_service.dart';
 import 'package:community_share/utils/circular_load_indicator.dart';
 import 'package:community_share/view/product/add_product.dart';
 import 'package:community_share/view/community/communities_main_screen.dart';
-import 'package:community_share/view/community/components/communities_list.dart';
-import 'package:community_share/view/community/components/community_app_bar.dart';
 import 'package:community_share/view/message/mail_box.dart';
 import 'package:community_share/view/home.dart';
 import 'package:community_share/view/profile/profile.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -30,7 +25,7 @@ class _MainPageState extends State<MainPage> {
   //final UserProvider _userProvider = UserProvider();
   late bool _isLoading ;
   int _selectedIndex = 0;
-  List<Widget> _children = [Home()];
+  final List<Widget> _children = [Home()];
   String appBarTitle = 'HOME';
 
   @override
@@ -42,42 +37,56 @@ class _MainPageState extends State<MainPage> {
 
   void fetchUserData() async{
     await UserService().initializeUser(context);
+    setPreference();
+
   }
 
-/*  Future<void> signOut() async{
-    await Auth().signOut();
-    context.go('/login');
+  void setPreference(){
+    ThemeData theme;
+    Locale locale;
+    if(context.read<UserProvider>().userDetails.theme == 'light'){
+      theme = ThemeData.light(useMaterial3: true);
+    }
+    else{
+      theme = ThemeData.dark(useMaterial3: true);
+    }
+    if(context.read<UserProvider>().userDetails.language == 'it'){
+      locale = const Locale('it');
+    }
+    else{
+      locale = const Locale('en');
+    }
+    MyApp.setTheme(context, theme);
+    MyApp.setLocale(context, locale);
+  }
 
-  }*/
-
-  //For changing the screen
   void _onItemTapped(int index) {
     setState(() {
       if (_children.length == 1) {
-        _children.add(AddProduct(
+        _children.add(const AddProduct(
           isEdit: false,
         ));
-        _children.add(CommunitiesMainScreen());
-        _children.add(MailBox());
-        _children.add(Profile());
+        _children.add(const CommunitiesMainScreen());
+        _children.add(const MailBox());
+        _children.add(const Profile());
       }
       _selectedIndex = index;
 
       switch (index) {
         case 0:
-          appBarTitle = 'HOME';
+          appBarTitle = AppLocalizations.of(context)!.pageHome;
           break;
         case 1:
-          appBarTitle = 'ADD PRODUCT';
+          appBarTitle = AppLocalizations.of(context)!.pageDonate;
           break;
         case 2:
-          appBarTitle = 'COMMUNITIES HUB';
+          appBarTitle = AppLocalizations.of(context)!.pageCommunities;
           break;
         case 3:
-          appBarTitle = 'MESSAGE BOX';
+          appBarTitle = AppLocalizations.of(context)!.pageMessageBox;
           break;
         case 4:
-          appBarTitle = 'PROFILE';
+          appBarTitle = AppLocalizations.of(context)!.pageProfile;
           break;
         default:
           appBarTitle = 'HOME';}
@@ -91,12 +100,8 @@ class _MainPageState extends State<MainPage> {
       return SafeArea(
           child: Scaffold(appBar: AppBar(
         title: Text(appBarTitle),
-/*        actions: [
-          IconButton(onPressed: (){signOut();}, icon: Icon(Icons.logout))
-        ],
-        automaticallyImplyLeading: true,*/
       ),
-        body: /*Container(child:*/ _children.elementAt(_selectedIndex),
+        body: _children.elementAt(_selectedIndex),
         bottomNavigationBar: Container(
           color: Theme.of(context).colorScheme.primary,
           child: Padding(
@@ -109,27 +114,27 @@ class _MainPageState extends State<MainPage> {
               activeColor: Theme.of(context).colorScheme.onPrimaryContainer,
               tabBackgroundColor:
                   Theme.of(context).colorScheme.primaryContainer,
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               onTabChange: _onItemTapped,
               tabs: [
                 GButton(
-                  text: "Home",
+                  text: AppLocalizations.of(context)!.barHome,
                   icon: FontAwesomeIcons.house,
                 ),
                 GButton(
-                  text: "Inserisci",
+                  text: AppLocalizations.of(context)!.barDonate,
                   icon: FontAwesomeIcons.circlePlus,
                 ),
                 GButton(
-                  text: "Comunità",
+                  text: AppLocalizations.of(context)!.barCommunities,
                   icon: FontAwesomeIcons.peopleGroup,
                 ),
                 GButton(
-                  text: "Messaggi",
+                  text: AppLocalizations.of(context)!.barMessageBox,
                   icon: FontAwesomeIcons.envelope,
                 ),
                 GButton(
-                  text: "Profilo",
+                  text: AppLocalizations.of(context)!.barProfile,
                   icon: FontAwesomeIcons.user,
                 ),
               ],
@@ -137,52 +142,6 @@ class _MainPageState extends State<MainPage> {
           ),
         ),
 
-        /* navigazione curva CurvedNavigationBar(
-          height: 60,
-          color: Theme.of(context).colorScheme.primary,
-          buttonBackgroundColor: Theme.of(context).colorScheme.primary,
-          backgroundColor: Colors.white,
-          animationDuration: Duration(milliseconds: 300),
-          items: [
-            FaIcon(FontAwesomeIcons.house, color: Theme.of(context).colorScheme.onPrimary,),
-            FaIcon(FontAwesomeIcons.circlePlus, color: Theme.of(context).colorScheme.onPrimary,),
-            FaIcon(FontAwesomeIcons.peopleGroup, color: Theme.of(context).colorScheme.onPrimary,),
-            FaIcon(FontAwesomeIcons.envelope, color: Theme.of(context).colorScheme.onPrimary,),
-            FaIcon(FontAwesomeIcons.user, color: Theme.of(context).colorScheme.onPrimary,)
-          ],
-          onTap: _onItemTapped,
-        )*/
-
-        /*my version BottomNavigationBar(
-        iconSize: 32.0,
-        showSelectedLabels: true,
-        showUnselectedLabels: true,
-        currentIndex: _selectedIndex,
-        type: BottomNavigationBarType.fixed,
-        items: [
-          BottomNavigationBarItem(
-            label: "Home",
-            icon: FaIcon(FontAwesomeIcons.house),
-          ),
-          BottomNavigationBarItem(
-              label: "Inserisci",
-              icon: FaIcon(FontAwesomeIcons.circlePlus)
-          ),
-          BottomNavigationBarItem(
-              label: "Community",
-              icon: FaIcon(FontAwesomeIcons.peopleGroup)
-          ),
-          BottomNavigationBarItem(
-              label: "InBox",
-              icon: FaIcon(FontAwesomeIcons.envelope)
-          ),
-          BottomNavigationBarItem(
-              label: "Profile",
-              icon: FaIcon(FontAwesomeIcons.user)
-          )
-        ],
-        onTap: _onItemTapped,
-      ),*/
       ));
     }
     else{
