@@ -13,7 +13,6 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
 
@@ -23,37 +22,36 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   //final UserProvider _userProvider = UserProvider();
-  late bool _isLoading ;
+  late bool _isLoading;
+
   int _selectedIndex = 0;
   final List<Widget> _children = [Home()];
   String appBarTitle = 'HOME';
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     fetchUserData();
-
   }
 
-  void fetchUserData() async{
+  void fetchUserData() async {
     await UserService().initializeUser(context);
     setPreference();
-
   }
 
-  void setPreference(){
+  void setPreference() {
     ThemeData theme;
     Locale locale;
-    if(context.read<UserProvider>().userDetails.theme == 'light'){
-      theme = ThemeData.light(useMaterial3: true);
-    }
-    else{
+    if (context.read<UserProvider>().userDetails.theme == 'light') {
+      theme = ThemeData(
+          useMaterial3: true,
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightBlue));
+    } else {
       theme = ThemeData.dark(useMaterial3: true);
     }
-    if(context.read<UserProvider>().userDetails.language == 'it'){
+    if (context.read<UserProvider>().userDetails.language == 'it') {
       locale = const Locale('it');
-    }
-    else{
+    } else {
       locale = const Locale('en');
     }
     MyApp.setTheme(context, theme);
@@ -89,7 +87,8 @@ class _MainPageState extends State<MainPage> {
           appBarTitle = AppLocalizations.of(context)!.pageProfile;
           break;
         default:
-          appBarTitle = 'HOME';}
+          appBarTitle = AppLocalizations.of(context)!.pageHome;
+      }
     });
   }
 
@@ -98,9 +97,10 @@ class _MainPageState extends State<MainPage> {
     _isLoading = context.watch<UserProvider>().isLoading;
     if (!_isLoading) {
       return SafeArea(
-          child: Scaffold(appBar: AppBar(
-        title: Text(appBarTitle),
-      ),
+          child: Scaffold(
+        appBar: AppBar(
+          title: Text(appBarTitle),
+        ),
         body: _children.elementAt(_selectedIndex),
         bottomNavigationBar: Container(
           color: Theme.of(context).colorScheme.primary,
@@ -141,13 +141,9 @@ class _MainPageState extends State<MainPage> {
             ),
           ),
         ),
-
       ));
-    }
-    else{
+    } else {
       return CircularLoadingIndicator.circularInd(context);
     }
   }
-
-
 }

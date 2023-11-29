@@ -129,6 +129,18 @@ class _AuthPageState extends State<AuthPage> {
                   signIn();
                 },
                 child: Text(AppLocalizations.of(context)!.signin)),
+            const SizedBox(height: 8,),
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  //context.go('/login/registration', extra: true);
+                });
+              },
+              child: Text(
+                AppLocalizations.of(context)!.recoverPassword,
+                textAlign: TextAlign.center,
+              ),
+            ),
             TextButton(
               onPressed: () {
                 setState(() {
@@ -140,12 +152,13 @@ class _AuthPageState extends State<AuthPage> {
                 textAlign: TextAlign.center,
               ),
             ),
-            SocialButtonWidgets.socialButtonRect(
+
+/*            SocialButtonWidgets.socialButtonRect(
                 AppLocalizations.of(context)!.signInFacebook,
                 facebookColor,
                 FontAwesomeIcons.facebookF, onTap: () {
               signInWithFacebook();
-            }),
+            }),*/
             SocialButtonWidgets.socialButtonRect(
                 AppLocalizations.of(context)!.signInGmail,
                 googleColor,

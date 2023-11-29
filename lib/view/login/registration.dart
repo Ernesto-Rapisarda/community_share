@@ -42,6 +42,9 @@ class _RegistrationState extends State<Registration> {
   bool _showImagePreview = false;
   XFile? imageFile;
 
+  late ThemeData currentTheme;
+  late bool isDarkTheme;
+
   final TextEditingController _fullName = TextEditingController();
   final TextEditingController _location = TextEditingController();
   final TextEditingController _phoneNumber = TextEditingController();
@@ -132,6 +135,9 @@ class _RegistrationState extends State<Registration> {
 
   @override
   Widget build(BuildContext context) {
+    currentTheme = Theme.of(context);
+    isDarkTheme = currentTheme.colorScheme.background == ThemeData.dark(useMaterial3: true).colorScheme.background;
+
     return Scaffold(
         body: SafeArea(
       child: SingleChildScrollView(
@@ -477,32 +483,68 @@ class _RegistrationState extends State<Registration> {
                             height: 8,
                           ),
                           Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              IconButton(
-                                  onPressed: () {
-                                    MyApp.setTheme(context,
-                                        ThemeData.dark(useMaterial3: true));
-                                    _theme = 'dark';
-                                  },
-                                  icon: FaIcon(
-                                    FontAwesomeIcons.moon,
-                                    size: 25,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSecondaryContainer,
-                                  )),
-                              IconButton(
-                                  onPressed: () {
-                                    MyApp.setTheme(context,
-                                        ThemeData.light(useMaterial3: true));
-                                    _theme = 'light';
-                                  },
-                                  icon: FaIcon(FontAwesomeIcons.sun,
-                                      size: 25,
+                              Container(
+                                width: 40,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: isDarkTheme
+                                      ? Border.all(
+                                      width: 3,
                                       color: Theme.of(context)
                                           .colorScheme
-                                          .onSecondaryContainer)),
+                                          .primary)
+                                      : Border.all(color: Colors.transparent),
+                                ),
+                                child: InkWell(
+                                    onTap: () {
+                                      MyApp.setTheme(context,
+                                          ThemeData.dark(useMaterial3: true));
+                                      _theme = 'dark';
+                                    },
+                                    child: Center(
+                                      child: FaIcon(
+                                        FontAwesomeIcons.moon,
+                                        size: 25,
+                                        color: isDarkTheme
+                                            ? Theme.of(context).colorScheme.primary
+                                            : Theme.of(context).colorScheme.onSecondaryContainer,
+                                      ),
+                                    )),
+                              ),
+                              Container(
+                                width: 40,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: !isDarkTheme
+                                      ? Border.all(
+                                      width: 3,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary)
+                                      : Border.all(color: Colors.transparent),
+                                ),
+                                child: InkWell(
+                                    onTap: () {
+                                      MyApp.setTheme(context,
+                                          ThemeData(
+                                              useMaterial3: true,
+                                              colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightBlue)
+                                          ));
+                                      _theme = 'light';
+                                    },
+                                    child: Center(
+                                      child: FaIcon(FontAwesomeIcons.sun,
+                                          size: 25,
+                                          color: !isDarkTheme
+                                              ? Theme.of(context).colorScheme.primary
+                                              : Theme.of(context).colorScheme.onSecondaryContainer,),
+                                    )),
+                              ),
                             ],
                           )
                         ],

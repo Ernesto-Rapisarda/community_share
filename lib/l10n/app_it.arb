@@ -17,7 +17,7 @@
   "profileImage":" Immagine profilo:",
   "languageUsed":"Lingua corrente:",
   "currentTheme":"Tema corrente:",
-  "credential":"Scegli le tue credenziali: ",
+  "credential":"Crea le tue credenziali: ",
   "rightPass":"- Minimo 8 caratteri\n- almeno 1 maiuscola\n- almeno 1 minuscola\n- almeno 1 numero\n- almeno 1 carattere speciale !@#\\$\\&*~",
   "preference":"Preferenze:",
   "infoProfile":"Dettagli profilo: ",
@@ -34,7 +34,9 @@
   "barDonate":"Donazioni",
   "barCommunities":"Comunità",
   "barMessageBox":"Messaggi",
-  "barProfile":"Profilo"
+  "barProfile":"Profilo",
+      "recoverPassword":"Dimenticato la tua password? RECUPERALA"
+
 
 
 

@@ -24,7 +24,7 @@
   "profileImage":" Profile Image:",
   "languageUsed":"Current language:",
   "currentTheme":"Current theme:",
-  "credential":"Choice your credentials: ",
+  "credential":"Create your credentials: ",
   "rightPass":"- Minimum 8 characters\n- at least 1 capital letter\n- at least 1 lowercase letter\n- at least 1 number\n- at least 1 special character !@#\\$\\&*~",
   "preference":"Preference:",
   "infoProfile":"Profile details: ",
@@ -41,6 +41,7 @@
     "barDonate":"DONATIONS",
     "barCommunities":"COMMUNITIES",
     "barMessageBox":"MESSAGES",
-    "barProfile":"PROFILE"
+    "barProfile":"PROFILE",
+    "recoverPassword":"Forgot your password? RECOVER"
 
 }
