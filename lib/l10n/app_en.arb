@@ -55,5 +55,9 @@
     "clothingAndAccessories":"Clothing and Accessories",
     "sportAndHobby":"Sport and Hobby",
     "homeAppliances":"Home Appliances",
-    "other":"Other"
+    "other":"Other",
+    "publicProfile": "PUBLIC PROFILE",
+    "donationsOfUser":"Donations",
+    "communitiesOfUser":"Communities",
+    "nothingToShow":"Nothing to show"
 }

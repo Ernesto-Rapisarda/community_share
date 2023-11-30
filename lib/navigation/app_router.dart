@@ -1,5 +1,6 @@
 import 'package:community_share/model/conversation.dart';
 import 'package:community_share/model/product_order.dart';
+import 'package:community_share/model/user_details.dart';
 import 'package:community_share/providers/UserProvider.dart';
 import 'package:community_share/view/community/components/full_order.dart';
 import 'package:community_share/view/community/screen/add_community.dart';
@@ -12,6 +13,7 @@ import 'package:community_share/view/main_page.dart';
 import 'package:community_share/view/login/login.dart';
 import 'package:community_share/view/profile/screen/orders_list.dart';
 import 'package:community_share/view/profile/screen/paletta_colori.dart';
+import 'package:community_share/view/profile/screen/public_profile.dart';
 import 'package:community_share/view/temp/addresses.dart';
 import 'package:community_share/view/temp/donated_products.dart';
 import 'package:community_share/view/temp/email_change.dart';
@@ -36,7 +38,10 @@ class AppRouter {
 
   static GoRouter _createRouter() {
     return GoRouter(
-      initialLocation: Auth().currentUser != null /*&& Auth().currentUser!.emailVerified */? '/' : '/login',
+      initialLocation:
+          Auth().currentUser != null /*&& Auth().currentUser!.emailVerified */
+              ? '/'
+              : '/login',
       routes: [
         GoRoute(
             path: '/',
@@ -49,16 +54,14 @@ class AppRouter {
               GoRoute(
                   path: 'communities/home/:communityName',
                   pageBuilder: (context, state) {
-                    String? communityName =
-                        state.pathParameters['communityName'];
-                    //Community community = state.extra as Community;
-                    return MaterialPage(child: CommunityMainScreen());
+                    state.pathParameters['communityName'];
+                    return const MaterialPage(child: CommunityMainScreen());
                   },
                   routes: <RouteBase>[
                     GoRoute(
                         path: 'edit',
                         pageBuilder: (context, state) {
-                          return MaterialPage(
+                          return const MaterialPage(
                               child: AddCommunity(
                             isEdit: true,
                           ));
@@ -66,10 +69,7 @@ class AppRouter {
                     GoRoute(
                         path: 'product/details/:productID',
                         pageBuilder: (context, state) {
-                          return MaterialPage(
-                              child: FullProduct(
-
-                              ));
+                          return const MaterialPage(child: FullProduct());
                         }),
                     GoRoute(
                         path: 'order/:orderId',
@@ -85,10 +85,7 @@ class AppRouter {
               GoRoute(
                   path: 'product/details/:productId',
                   pageBuilder: (context, state) {
-                    /*
-                  String? communityName = state.pathParameters['communityName'];
-                  Product product = state.extra as Product;*/
-                    return MaterialPage(child: FullProduct());
+                    return const MaterialPage(child: FullProduct());
                   },
                   routes: <RouteBase>[
                     GoRoute(
@@ -185,6 +182,13 @@ class AppRouter {
                       isEdit: false,
                     ));
                   }),
+              GoRoute(path: 'profile/public/:userId',
+                pageBuilder: (context,state){
+                  UserDetails userDetails =
+                  state.extra as UserDetails;
+                return MaterialPage(child: PublicProfile(userDetails: userDetails,));
+                }
+              ),
 /*              GoRoute(
                   path: 'product/edit/:productId',
                   pageBuilder: (context, state) {
@@ -216,7 +220,7 @@ class AppRouter {
 
   void _listenToAuthChanges() {
     Auth().authStateChanges.listen((User? user) {
-       bool isUserLoggedIn = user != null /*&& user.emailVerified*/;
+      bool isUserLoggedIn = user != null /*&& user.emailVerified*/;
       if (isUserLoggedIn) {
         _router.go('/');
       } else {

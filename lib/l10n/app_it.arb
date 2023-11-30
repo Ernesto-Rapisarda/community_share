@@ -41,14 +41,19 @@
   "search":"  cerca",
   "filter":"Filtra",
   "homeAndGarden":"Casa e giardino",
-      "consoleAndVideogames":"Console e videogiochi",
-      "cinemaAndBookAndMusic":"Cinema, libri e musica",
-      "phoneAndAccessories":"Telefonia e accessori",
-      "itAndElectronics":"Informatica e elettronica",
-      "clothingAndAccessories":"Abbigliamento e accessori",
-      "sportAndHobby":"Sport e Hobby",
-      "homeAppliances":"Elettrodomestici",
-      "other":"Altro"
+  "consoleAndVideogames":"Console e videogiochi",
+  "cinemaAndBookAndMusic":"Cinema, libri e musica",
+  "phoneAndAccessories":"Telefonia e accessori",
+  "itAndElectronics":"Informatica e elettronica",
+  "clothingAndAccessories":"Abbigliamento e accessori",
+  "sportAndHobby":"Sport e Hobby",
+  "homeAppliances":"Elettrodomestici",
+  "other":"Altro",
+  "publicProfile": "PROFILO PUBBLICO",
+  "donationsOfUser":"Donazioni",
+  "communitiesOfUser":"Comunità",
+  "nothingToShow":"Nulla da mostrare"
+
 
 
 

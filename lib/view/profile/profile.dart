@@ -76,27 +76,18 @@ class _ProfileState extends State<Profile> {
                 'ACCOUNT',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               )),
-          RowMenusProfile(
-            label: 'Notifiche',
-            route: '/profile/notifications',
-            icon: FontAwesomeIcons.bell,
-          ),
+
           RowMenusProfile(
             label: 'Impostazioni profilo',
             route: '/profile/settings',
             icon: FontAwesomeIcons.userGear,
           ),
           RowMenusProfile(
-            label: 'Cambia e-mail',
-            route: '/profile/email_change',
-            icon: FontAwesomeIcons.envelope,
-          ),
-          RowMenusProfile(
             label: 'Cambia password',
             route: '/profile/password_change',
             icon: FontAwesomeIcons.key,
           ),
-          RowMenusProfile(
+/*          RowMenusProfile(
             label: 'Indirizzo-hub spedizione',
             route: '/profile/addresses',
             icon: FontAwesomeIcons.locationDot,
@@ -132,7 +123,7 @@ class _ProfileState extends State<Profile> {
             label: 'Informativa sulla privacy',
             route: '',
             icon: FontAwesomeIcons.newspaper,
-          ),
+          ),*/
           Container(
             padding: const EdgeInsets.only(top: 30, bottom: 10),
             //color: Theme.of(context).colorScheme.tertiary,

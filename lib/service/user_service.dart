@@ -28,4 +28,20 @@ class UserService{
     return await _userRepository.getMyOrders(context,outcoming);
   }
 
+  Future<List<Product>> getUserProducts(String id) async{
+    try{
+      return _userRepository.getUserProducts(id);
+    }catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<Community>> getUserCommunities(String id) async{
+    try{
+      return _userRepository.getUserCommunities(id);
+    }catch (e) {
+      rethrow;
+    }
+  }
+
 }

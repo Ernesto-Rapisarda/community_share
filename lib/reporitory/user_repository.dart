@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:community_share/model/basic/product_basic.dart';
 import 'package:community_share/model/product_order.dart';
 import 'package:community_share/model/user_details.dart';
 import 'package:community_share/providers/UserProvider.dart';
@@ -12,12 +13,9 @@ import '../service/auth.dart';
 class UserRepository {
   final _db = FirebaseFirestore.instance;
 
-  Future<void> createUserDetails(String uid,UserDetails userDetails) async {
+  Future<void> createUserDetails(String uid, UserDetails userDetails) async {
     try {
-      await _db
-          .collection("Users")
-          .doc(uid)
-          .set(userDetails.toJson());
+      await _db.collection("Users").doc(uid).set(userDetails.toJson());
       /*
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -28,7 +26,7 @@ class UserRepository {
         ),
       );*/
     } catch (error) {
-      rethrow;/*
+      rethrow; /*
        ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Something went wrong. Try again"),
@@ -170,13 +168,11 @@ class UserRepository {
             .get();
       }
 
-
       querySnapshot.docs
           .forEach((DocumentSnapshot<Map<String, dynamic>> document) {
         ProductOrder productOrder = ProductOrder.fromJson(document.data()!);
         myOrders.add(productOrder);
       });
-
 
       return myOrders;
     } catch (error) {
@@ -190,6 +186,56 @@ class UserRepository {
         ),
       );
       return myOrders;
+    }
+  }
+
+  Future<List<Product>> getUserProducts(String id) async {
+    List<Product> products = [];
+    try {
+      QuerySnapshot<Map<String, dynamic>> snapshot = await _db
+          .collection('Users')
+          .doc(id)
+          .collection('given_products')
+          .get();
+
+      print(snapshot.size);
+
+      for (QueryDocumentSnapshot<Map<String, dynamic>> document
+          in snapshot.docs) {
+        ProductBasic productBasic= ProductBasic.fromJson(document.data());
+        /*String productId = document.['docRefCompleteProduct'];
+        print(productId);*/
+
+        DocumentSnapshot<Map<String, dynamic>> productDoc =
+            await _db.collection('products').doc(productBasic.docRefCompleteProduct).get();
+
+        if (productDoc.exists) {
+          Product product = Product.fromJson(productDoc.data()!);
+          products.add(product);
+        }
+      }
+      return products;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<Community>> getUserCommunities(String id) async {
+    List<Community> communities = [];
+    try {
+      QuerySnapshot<Map<String, dynamic>> snapshot = await _db
+          .collection('Users')
+          .doc(id)
+          .collection('myCommunities')
+          .get();
+
+      snapshot.docs.forEach((DocumentSnapshot<Map<String, dynamic>> document) {
+        Community community = Community.fromJson(document.data()!);
+        communities.add(community);
+      });
+      return [];
+    } catch (e) {
+      rethrow;
     }
   }
 }
