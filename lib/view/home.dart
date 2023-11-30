@@ -174,7 +174,7 @@ class _HomeState extends State<Home> {
                 ? Center(
                     child: CircularLoadingIndicator.circularInd(context),
                   )
-                : ProductGrid(_products),
+                : ProductGrid(_products,route: '/product/details/'),
           ),
           //SizedBox(height: 500,)
         ],

@@ -12,10 +12,11 @@ import '../../service/auth.dart';
 
 class ProductCard extends StatefulWidget {
   final Product product;
+  final String route;
 
   //final double boxSize;
 
-  ProductCard({Key? key, required this.product}) : super(key: key);
+  const ProductCard({super.key, required this.product,required this.route});
 
   @override
   State<ProductCard> createState() => _ProductCardState();
@@ -37,7 +38,8 @@ class _ProductCardState extends State<ProductCard> {
               .read<ProductProvider>()
               .setProductVisualized(context, widget.product);
           context
-              .go('/product/details/${widget.product.id}' /*, extra: product*/);
+              .go(widget.route);
+          //'/product/details/${widget.product.id}'
         },
         child: Card(
           color: Theme.of(context).cardTheme.color,

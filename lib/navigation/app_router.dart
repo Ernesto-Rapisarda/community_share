@@ -64,6 +64,14 @@ class AppRouter {
                           ));
                         }),
                     GoRoute(
+                        path: 'product/details/:productID',
+                        pageBuilder: (context, state) {
+                          return MaterialPage(
+                              child: FullProduct(
+
+                              ));
+                        }),
+                    GoRoute(
                         path: 'order/:orderId',
                         pageBuilder: (context, state) {
                           ProductOrder productOrder =

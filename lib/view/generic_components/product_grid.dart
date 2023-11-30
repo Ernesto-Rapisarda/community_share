@@ -5,8 +5,9 @@ import '../../model/product.dart';
 
 class ProductGrid extends StatefulWidget {
   late final List<Product> products;
+  final String route;
 
-  ProductGrid(this.products, {super.key});
+  ProductGrid(this.products, {super.key, required this.route});
 
   @override
   State<ProductGrid> createState() => _ProductGridState();
@@ -25,7 +26,8 @@ class _ProductGridState extends State<ProductGrid> {
             crossAxisCount: 2, crossAxisSpacing: 8, mainAxisSpacing: 16, mainAxisExtent: 250),
         itemCount: widget.products.length,
         itemBuilder: (_, index) {
-          return ProductCard(product: widget.products[index]);
+          String finalRoute = '${widget.route}${widget.products[index].id}';
+          return ProductCard(product: widget.products[index],route: finalRoute,);
         }
         /*shrinkWrap: true,
 
