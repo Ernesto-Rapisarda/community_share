@@ -99,7 +99,7 @@ class _EventsListState extends State<EventsList> {
                               Text(
                                   'Date ${event.eventDate.day}/${event.eventDate.month}/${event.eventDate.year}'),
                               Text(
-                                  'Time ${event.eventDate.hour}:${event.eventDate.minute}'),
+                                  'Time ${event.eventDate.hour.toString().padLeft(2, '0')}:${event.eventDate.minute.toString().padLeft(2, '0')}'),
                             ],
                           ),
                         ),

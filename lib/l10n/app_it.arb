@@ -39,7 +39,16 @@
   "incomingEvents":"Prossimi eventi",
   "fromYourCommunities": "Dalle tue comunità",
   "search":"  cerca",
-  "filter":"Filtra"
+  "filter":"Filtra",
+  "homeAndGarden":"Casa e giardino",
+      "consoleAndVideogames":"Console e videogiochi",
+      "cinemaAndBookAndMusic":"Cinema, libri e musica",
+      "phoneAndAccessories":"Telefonia e accessori",
+      "itAndElectronics":"Informatica e elettronica",
+      "clothingAndAccessories":"Abbigliamento e accessori",
+      "sportAndHobby":"Sport e Hobby",
+      "homeAppliances":"Elettrodomestici",
+      "other":"Altro"
 
 
 

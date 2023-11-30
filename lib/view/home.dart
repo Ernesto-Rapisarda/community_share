@@ -204,7 +204,7 @@ class _HomeState extends State<Home> {
             visualDensity: VisualDensity(horizontal: 0, vertical: -4),
             //dense: true,
             title: Text(_incomingEvents[index].title),
-            subtitle: Text('${_incomingEvents[index].docRefCommunityName}'),
+            subtitle: Text('${_incomingEvents[index].docRefCommunityName}',maxLines: 1,overflow: TextOverflow.ellipsis,),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -215,7 +215,7 @@ class _HomeState extends State<Home> {
                     Text(
                         'Date ${_incomingEvents[index].eventDate.day}/${_incomingEvents[index].eventDate.month}/${_incomingEvents[index].eventDate.year}'),
                     Text(
-                        'Time ${_incomingEvents[index].eventDate.hour}:${_incomingEvents[index].eventDate.minute}'),
+                        'Time ${_incomingEvents[index].eventDate.hour.toString().padLeft(2, '0')}:${_incomingEvents[index].eventDate.minute.toString().padLeft(2, '0')}'),
                   ],
                 ),
                 SizedBox(
@@ -247,10 +247,10 @@ class _HomeState extends State<Home> {
               children: [
                 for (ProductCategory category in allCategories)
                   FilterChip(
-                    label: Text(category
+                    label: Text(productCategoryToString(category, context)/* category
                         .toString()
                         .split('.')
-                        .last), // Rimuove il prefisso dell'enum
+                        .last*/), // Rimuove il prefisso dell'enum
                     selected: filterCategories.contains(category),
                     selectedColor:
                         Theme.of(context).colorScheme.primaryContainer,

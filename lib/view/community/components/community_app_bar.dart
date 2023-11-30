@@ -16,7 +16,8 @@ class CommunityAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     bool isFounder = Auth().currentUser?.uid == context.read<CommunityProvider>().community.founder.id;
-
+    int length = isFounder ? 4 : 3;
+    print(length);
     List<Tab> tabs = [
       Tab(
         icon: FaIcon(FontAwesomeIcons.calendar),
@@ -24,12 +25,12 @@ class CommunityAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       Tab(
         icon: FaIcon(FontAwesomeIcons.handHoldingHeart),
-        text: 'Offerti',
+        text: 'Doni',
       ),
-      Tab(
+/*      Tab(
         icon: FaIcon(FontAwesomeIcons.comments),
         text: 'Chat',
-      ),
+      ),*/
       Tab(
         icon: FaIcon(FontAwesomeIcons.users),
         text: 'Users',
@@ -44,19 +45,19 @@ class CommunityAppBar extends StatelessWidget implements PreferredSizeWidget {
     }
 
     return DefaultTabController(
-        length: 5,
+        length: length,
 
         child: AppBar(
           toolbarHeight: 80,
-          backgroundColor: Theme.of(context).primaryColor,
+          backgroundColor: Theme.of(context).colorScheme.primary,
           title: Text(
             context.watch<CommunityProvider>().community.name,
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
-            style: TextStyle(color: Theme.of(context).colorScheme.primary),
+            style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
           ),
           automaticallyImplyLeading: true,
-          iconTheme: IconThemeData(color: Theme.of(context).colorScheme.primary),
+          iconTheme: IconThemeData(color: Theme.of(context).colorScheme.onPrimary),
 
           actions: [
             PopupMenuButton<String>(
@@ -84,35 +85,14 @@ class CommunityAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ],
           bottom: TabBar(
-            labelColor: Theme.of(context).colorScheme.primary,
+            labelColor: Theme.of(context).colorScheme.onPrimary,
               unselectedLabelColor: Colors.white,
               //indicatorColor: Theme.of(context).colorScheme.onPrimary,
-              indicatorColor: Theme.of(context).colorScheme.primary,
+              indicatorColor: Theme.of(context).colorScheme.onPrimary,
 
               controller: tabController,
               tabs:tabs
-            /* [
-            Tab(
-              icon: FaIcon(FontAwesomeIcons.calendar),
-              text: 'Home',
-            ),
-            Tab(
-              icon: FaIcon(FontAwesomeIcons.handHoldingHeart),
-              text: 'Offerti',
-            ),
-            Tab(
-              icon: FaIcon(FontAwesomeIcons.gears),
-              text: 'Admin',
-            ),
-            Tab(
-              icon: FaIcon(FontAwesomeIcons.comments),
-              text: 'Chat',
-            ),
-            Tab(
-              icon: FaIcon(FontAwesomeIcons.users),
-              text: 'Users',
-            ),
-          ]*/),
+          ),
         ));
   }
 

@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../model/community.dart';
+import '../../../service/auth.dart';
 
 class CommunityMainScreen extends StatefulWidget{
   const CommunityMainScreen({super.key});
@@ -23,7 +24,10 @@ class _CommunityMainScreenState extends State<CommunityMainScreen> with TickerPr
   @override
   void initState(){
     super.initState();
-    _tabController = TabController(length: 5, vsync: this);
+    int length=3;
+    if(Auth().currentUser?.uid == context.read<CommunityProvider>().community.founder.id) {
+    length=4;};
+    _tabController = TabController(length: length, vsync: this);
   }
 
 
@@ -39,15 +43,18 @@ class _CommunityMainScreenState extends State<CommunityMainScreen> with TickerPr
         appBar: CommunityAppBar(tabController: _tabController),
         body:TabBarView(
           controller: _tabController,
-          children: [
+          children: Auth().currentUser?.uid == context.read<CommunityProvider>().community.founder.id ?[
+
             HomeCommunity(),
             OffersTab(),
-            ChatTab(),
-            CommunityUsersList(),
-            AdminTab(),
+            CommunityUsersList(),AdminTab()
 
 
 
+          ]:[
+            HomeCommunity(),
+            OffersTab(),
+            CommunityUsersList()
           ],
         ),
 

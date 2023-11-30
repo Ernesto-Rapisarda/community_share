@@ -1,3 +1,4 @@
+import 'package:community_share/model/enum/product_category.dart';
 import 'package:community_share/providers/UserProvider.dart';
 import 'package:community_share/providers/product_provider.dart';
 import 'package:community_share/service/product_service.dart';
@@ -39,7 +40,6 @@ class _ProductCardState extends State<ProductCard> {
               .setProductVisualized(context, widget.product);
           context
               .go(widget.route);
-          //'/product/details/${widget.product.id}'
         },
         child: Card(
           color: Theme.of(context).cardTheme.color,
@@ -80,10 +80,24 @@ class _ProductCardState extends State<ProductCard> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  //Text(widget.product.productCategory.name),
-                  Text(
-                    '${widget.product.likesNumber} ',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                  SizedBox(width: 8,),
+                  Expanded(child: Text(productCategoryToString(widget.product.productCategory, context),maxLines: 1,overflow: TextOverflow.ellipsis, )),
+                  InkWell(
+                      onTap: () {
+                        //todo
+/*                        if (Auth().currentUser?.uid !=
+                            widget.product.giver.id) {
+                          _productService.setLike(
+                              context, widget.product, true);
+                        }*/
+                      },
+                      child: FaIcon(
+                        FontAwesomeIcons.shareNodes,
+                        size: 20,
+                        //color: Theme.of(context).cardColor.red,
+                      )),
+                  SizedBox(
+                    width: 8,
                   ),
                   InkWell(
                       onTap: () {

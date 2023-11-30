@@ -46,6 +46,14 @@
     "incomingEvents":"Incoming Events",
     "fromYourCommunities": "From your communities",
     "search":"  search",
-    "filter":"Filter"
-
+    "filter":"Filter",
+    "homeAndGarden":"Home and Garden",
+    "consoleAndVideogames":"Console and Video Games",
+    "cinemaAndBookAndMusic":"Cinema, Book, and Music",
+    "phoneAndAccessories":"Phone and Accessories",
+    "itAndElectronics":"IT and Electronics",
+    "clothingAndAccessories":"Clothing and Accessories",
+    "sportAndHobby":"Sport and Hobby",
+    "homeAppliances":"Home Appliances",
+    "other":"Other"
 }
