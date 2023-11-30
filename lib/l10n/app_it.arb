@@ -35,7 +35,12 @@
   "barCommunities":"Comunità",
   "barMessageBox":"Messaggi",
   "barProfile":"Profilo",
-      "recoverPassword":"Dimenticato la tua password? RECUPERALA"
+  "recoverPassword":"Dimenticato la tua password? RECUPERALA",
+  "incomingEvents":"Prossimi eventi",
+  "fromYourCommunities": "Dalle tue comunità",
+  "search":"  cerca",
+  "filter":"Filtra"
+
 
 
 

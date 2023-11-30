@@ -81,7 +81,7 @@ class _RegistrationState extends State<Registration> {
       if (checkAllComplete()) {
         if (widget.isEmailAndPassword) {
           await Auth().createUserInWithEmailAndPassword(
-              email: _email.text, password: _password.text, context: context);
+              email: _email.text, password: _password.text);
           await Auth().signInWithEmailAndPassword(
               email: _email.text, password: _password.text);
         } else {}

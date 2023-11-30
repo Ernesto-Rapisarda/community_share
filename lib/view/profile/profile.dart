@@ -36,7 +36,7 @@ class _ProfileState extends State<Profile> {
 
   void completeLogout(){
     context.read<UserProvider>().clearAll();
-    context.go('/login');
+    //context.go('/login');
   }
 
   @override

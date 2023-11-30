@@ -1,4 +1,3 @@
-
 import 'package:community_share/model/enum/product_category.dart';
 import 'package:community_share/service/community_service.dart';
 import 'package:community_share/service/product_service.dart';
@@ -6,6 +5,7 @@ import 'package:community_share/utils/circular_load_indicator.dart';
 import 'package:community_share/view/generic_components/product_grid.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../model/enum/product_condition.dart';
 import '../model/event.dart';
@@ -24,7 +24,7 @@ class _HomeState extends State<Home> {
   final ProductService _productService = ProductService();
 
   bool loaded = false;
-  late List<Product> _products =[];
+  late List<Product> _products = [];
   late List<Event> _incomingEvents = [];
   List<ProductCategory> filterCategories = [];
   List<ProductCategory> allCategories = ProductCategory.values;
@@ -40,31 +40,32 @@ class _HomeState extends State<Home> {
       }
 
       List<Product> newProducts =
-      await _productService.getProducts(context, categories);
+          await _productService.getProducts(context, categories);
 
       setState(() {
         _products.addAll(newProducts);
         loaded = true;
       });
     } catch (error) {
-      // Handle error
+      callError(error.toString());
     }
   }
 
   Future<void> fetchEvents() async {
     try {
-
-
-      List<Event> events = await _communityService.getIncomingEventsFromMyCommunities(context);
-
+      List<Event> events =
+          await _communityService.getIncomingEventsFromMyCommunities(context);
 
       setState(() {
         _incomingEvents = events;
       });
     } catch (error) {
-      //todo
-      // Handle error
+      callError(error.toString());
     }
+  }
+
+  void callError(String error){
+    showSnackBar(context, error, isError: true);
   }
 
   @override
@@ -80,47 +81,100 @@ class _HomeState extends State<Home> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(height: 8,),
+          SizedBox(
+            height: 8,
+          ),
           Padding(
-            padding: const EdgeInsets.only(left: 12.0,right: 12),
+            padding: const EdgeInsets.only(left: 12.0, right: 12),
             child: Row(
 
                 children: [
-                  FaIcon(FontAwesomeIcons.calendarDays, size: 20 ,color: Theme.of(context).colorScheme.primary),
-                  SizedBox(width: 8,),
-                  Text('Incoming Events',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Theme.of(context).colorScheme.primary),),
-
-                ]
-
-            ),
+              FaIcon(FontAwesomeIcons.calendarDays,
+                  size: 20, color: Theme.of(context).colorScheme.primary),
+              SizedBox(
+                width: 8,
+              ),
+              Text(
+                AppLocalizations.of(context)!.incomingEvents,
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    color: Theme.of(context).colorScheme.primary),
+              ),
+            ]),
           ),
+          SizedBox(height: 8,),
           Padding(
-            padding: const EdgeInsets.only(left: 12,right: 12, bottom: 12),
-            child: !loaded ? Center(child: CircularLoadingIndicator.circularInd(context),) : _buildEventListView(),
+            padding: const EdgeInsets.only(left: 12, right: 12, bottom: 12),
+            child: !loaded
+                ? Center(
+                    child: CircularLoadingIndicator.circularInd(context),
+                  )
+                : _buildEventListView(),
           ),
           //SizedBox(height: 500,)
-          SizedBox(height: 20,),
-          Padding(
-            padding: const EdgeInsets.only(left: 12.0,right: 12),
-            child: Row(
-              children: [
-                FaIcon(FontAwesomeIcons.handHoldingHeart, size: 20, color: Theme.of(context).colorScheme.primary,),
-                SizedBox(width: 8,),
-                Text('from your community',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20,color: Theme.of(context).colorScheme.primary),),
-                Expanded(child: SizedBox(width: double.infinity,)),
-                ElevatedButton(
-                  onPressed: () {
-                    _showFilterDialog(context);
-                  },
-                  child: Text('Filter'),
-                ),
-              ]
-
-            ),
+          SizedBox(
+            height: 20,
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 12,right: 12, bottom: 12),
-            child: !loaded ? Center(child: CircularLoadingIndicator.circularInd(context),) : ProductGrid(_products),
+            padding: const EdgeInsets.only(left: 12.0, right: 12, bottom: 12),
+            child: Column(
+              children: [
+                Row(children: [
+                  FaIcon(
+                    FontAwesomeIcons.handHoldingHeart,
+                    size: 20,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Text(
+                    AppLocalizations.of(context)!.fromYourCommunities,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        color: Theme.of(context).colorScheme.primary),
+                  ),
+                ],
+                ),
+                SizedBox(height: 12,),
+                Row(
+                  children: [
+                  Expanded(
+                    child: TextField(
+                      style: TextStyle(fontSize: 16),
+                      decoration: InputDecoration(
+                        hintText: AppLocalizations.of(context)!.search,
+                        contentPadding: EdgeInsets.symmetric(vertical: 10.0), // Imposta la dimensione della casella di testo desiderata
+
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(12))
+                        ),
+                      ),
+                      //todo controlli per la ricerca
+                    ),
+                  ),
+                  SizedBox(width: 12,),
+                  ElevatedButton(
+                    onPressed: () {
+                      _showFilterDialog(context);
+                    },
+                    child: Text(AppLocalizations.of(context)!.filter),
+                  ),
+                ],)
+
+              ],
+            ),
+
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 12, right: 12, bottom: 12),
+            child: !loaded
+                ? Center(
+                    child: CircularLoadingIndicator.circularInd(context),
+                  )
+                : ProductGrid(_products),
           ),
           //SizedBox(height: 500,)
         ],
@@ -141,9 +195,8 @@ class _HomeState extends State<Home> {
       itemCount: _incomingEvents.length,
       itemBuilder: (context, index) {
         bool isEven = index % 2 == 0;
-        Color backgroundColor = isEven
-            ? Colors.grey.withOpacity(0.1)
-            : Colors.transparent;
+        Color backgroundColor =
+            isEven ? Colors.grey.withOpacity(0.1) : Colors.transparent;
         return Container(
           height: 60,
           child: ListTile(
@@ -155,7 +208,6 @@ class _HomeState extends State<Home> {
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -165,15 +217,16 @@ class _HomeState extends State<Home> {
                     Text(
                         'Time ${_incomingEvents[index].eventDate.hour}:${_incomingEvents[index].eventDate.minute}'),
                   ],
-
                 ),
-                SizedBox(width: 8,),
+                SizedBox(
+                  width: 8,
+                ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                  FaIcon(FontAwesomeIcons.chevronRight)
-                ],)
-              ],),
+                  children: [FaIcon(FontAwesomeIcons.chevronRight)],
+                )
+              ],
+            ),
           ),
         );
       },
@@ -194,15 +247,18 @@ class _HomeState extends State<Home> {
               children: [
                 for (ProductCategory category in allCategories)
                   FilterChip(
-                    label: Text(category.toString().split('.').last), // Rimuove il prefisso dell'enum
+                    label: Text(category
+                        .toString()
+                        .split('.')
+                        .last), // Rimuove il prefisso dell'enum
                     selected: filterCategories.contains(category),
-                    selectedColor: Theme.of(context).colorScheme.primaryContainer,
+                    selectedColor:
+                        Theme.of(context).colorScheme.primaryContainer,
 
                     onSelected: (bool selected) {
                       setState(() {
                         if (selected) {
                           filterCategories.add(category);
-
                         } else {
                           filterCategories.remove(category);
                         }
@@ -217,7 +273,6 @@ class _HomeState extends State<Home> {
           ),
           actions: [
             OutlinedButton(
-
               onPressed: () {
                 Navigator.of(context).pop();
                 fetchProducts(filterCategories);
@@ -225,8 +280,13 @@ class _HomeState extends State<Home> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  FaIcon(FontAwesomeIcons.check,size: 14,),
-                  SizedBox(width: 4,),
+                  FaIcon(
+                    FontAwesomeIcons.check,
+                    size: 14,
+                  ),
+                  SizedBox(
+                    width: 4,
+                  ),
                   Text('Apply'),
                 ],
               ),

@@ -42,6 +42,10 @@
     "barCommunities":"COMMUNITIES",
     "barMessageBox":"MESSAGES",
     "barProfile":"PROFILE",
-    "recoverPassword":"Forgot your password? RECOVER"
+    "recoverPassword":"Forgot your password? RECOVER",
+    "incomingEvents":"Incoming Events",
+    "fromYourCommunities": "From your communities",
+    "search":"  search",
+    "filter":"Filter"
 
 }

@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:community_share/utils/show_snack_bar.dart';
 import 'package:community_share/model/user_details.dart';
 import 'package:community_share/reporitory/user_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -27,22 +26,21 @@ class Auth {
   }
 
   Future<String> createUserInWithEmailAndPassword(
-      {required String email,
-      required String password,
-      required BuildContext context}) async {
+      {required String email, required String password}) async {
     try {
       UserCredential userCredential = await _firebaseAuth
           .createUserWithEmailAndPassword(email: email, password: password);
+
       await sendEmailVerification();
-      String uid = userCredential.user?.uid ?? '';
-      return uid;
+
+      return userCredential.user?.uid ?? '';
     } on FirebaseAuthException {
       rethrow;
     }
   }
 
   Future<void> signOut() async {
-    try{
+    try {
       await _firebaseAuth.signOut();
     } on FirebaseAuthException {
       rethrow;

@@ -99,7 +99,8 @@ class _MainPageState extends State<MainPage> {
       return SafeArea(
           child: Scaffold(
         appBar: AppBar(
-          title: Text(appBarTitle),
+          title: Text(appBarTitle, style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onPrimaryContainer),),
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
         ),
         body: _children.elementAt(_selectedIndex),
         bottomNavigationBar: Container(

@@ -56,7 +56,7 @@ class _ProductCardState extends State<ProductCard> {
                     height: 170,
                     width: double.infinity,
                     fit: BoxFit
-                        .cover, // Adatta l'immagine alla dimensione specificata senza distorsioni
+                        .cover,
                   ),
                 ),
               ),
@@ -78,6 +78,7 @@ class _ProductCardState extends State<ProductCard> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                  //Text(widget.product.productCategory.name),
                   Text(
                     '${widget.product.likesNumber} ',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
@@ -99,7 +100,7 @@ class _ProductCardState extends State<ProductCard> {
                           : FaIcon(
                               FontAwesomeIcons.heart,
                               size: 20,
-                              color: Colors.white,
+                              //color: Theme.of(context).cardColor.red,
                             )),
                   SizedBox(
                     width: 8,

@@ -1,10 +1,6 @@
-
-
-
 import 'package:community_share/model/conversation.dart';
 import 'package:community_share/model/product_order.dart';
 import 'package:community_share/providers/UserProvider.dart';
-import 'package:community_share/providers/product_provider.dart';
 import 'package:community_share/view/community/components/full_order.dart';
 import 'package:community_share/view/community/screen/add_community.dart';
 import 'package:community_share/view/community/screen/community_main_screen.dart';
@@ -18,36 +14,29 @@ import 'package:community_share/view/profile/screen/orders_list.dart';
 import 'package:community_share/view/profile/screen/paletta_colori.dart';
 import 'package:community_share/view/temp/addresses.dart';
 import 'package:community_share/view/temp/donated_products.dart';
-import 'package:community_share/view/temp/donations_done.dart';
 import 'package:community_share/view/temp/email_change.dart';
 import 'package:community_share/view/temp/needed_products.dart';
 import 'package:community_share/view/temp/notifications.dart';
 import 'package:community_share/view/temp/password_change.dart';
 import 'package:community_share/view/temp/profile_settings.dart';
 import 'package:community_share/view/temp/received_products.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
 import '../service/auth.dart';
-import '../model/community.dart';
-import '../model/product.dart';
 import '../view/product/checkout_product.dart';
-import '../view/profile/profile.dart';
 
 class AppRouter {
   late GoRouter _router;
 
   AppRouter() {
     _router = _createRouter();
+    _listenToAuthChanges();
   }
 
   static GoRouter _createRouter() {
     return GoRouter(
-      initialLocation:
-          Auth().currentUser != null /*&& Auth().currentUser!.emailVerified*/ &&
-                  !UserProvider().firstSignIn
-              ? '/'
-              : '/login',
+      initialLocation: Auth().currentUser != null /*&& Auth().currentUser!.emailVerified */? '/' : '/login',
       routes: [
         GoRoute(
             path: '/',
@@ -69,18 +58,22 @@ class AppRouter {
                     GoRoute(
                         path: 'edit',
                         pageBuilder: (context, state) {
-                          return MaterialPage(child: AddCommunity(isEdit: true,));
+                          return MaterialPage(
+                              child: AddCommunity(
+                            isEdit: true,
+                          ));
                         }),
                     GoRoute(
-                      path: 'order/:orderId',
-                      pageBuilder: (context, state){
-                        ProductOrder productOrder = state.extra as ProductOrder;
-                        return MaterialPage(child: FullOrder(productOrder: productOrder,));
-                      }
-                    )
-                  ]
-
-                  ),
+                        path: 'order/:orderId',
+                        pageBuilder: (context, state) {
+                          ProductOrder productOrder =
+                              state.extra as ProductOrder;
+                          return MaterialPage(
+                              child: FullOrder(
+                            productOrder: productOrder,
+                          ));
+                        })
+                  ]),
               GoRoute(
                   path: 'product/details/:productId',
                   pageBuilder: (context, state) {
@@ -89,26 +82,31 @@ class AppRouter {
                   Product product = state.extra as Product;*/
                     return MaterialPage(child: FullProduct());
                   },
-                routes: <RouteBase>[
-                  GoRoute(path: 'edit',
-                    pageBuilder: (context, state){
-                    return MaterialPage(child: AddProduct(isEdit: true,));
-                    },),
-                  GoRoute(
-                      path: 'checkout',
-                      pageBuilder: (context, state){
-                        return MaterialPage(child: CheckoutProduct());
-                      } )
-                ]
-                  ),
-              GoRoute(path: 'message_box/:conversationId',
-                pageBuilder: (context,state){
-                Conversation conversation = state.extra as Conversation;
-                return MaterialPage(child: ChatScreen(conversation: conversation,));
-                }
-
-              ),
-
+                  routes: <RouteBase>[
+                    GoRoute(
+                      path: 'edit',
+                      pageBuilder: (context, state) {
+                        return MaterialPage(
+                            child: AddProduct(
+                          isEdit: true,
+                        ));
+                      },
+                    ),
+                    GoRoute(
+                        path: 'checkout',
+                        pageBuilder: (context, state) {
+                          return MaterialPage(child: CheckoutProduct());
+                        })
+                  ]),
+              GoRoute(
+                  path: 'message_box/:conversationId',
+                  pageBuilder: (context, state) {
+                    Conversation conversation = state.extra as Conversation;
+                    return MaterialPage(
+                        child: ChatScreen(
+                      conversation: conversation,
+                    ));
+                  }),
               GoRoute(
                   path: 'profile/paletta_colori',
                   pageBuilder: (context, state) {
@@ -137,13 +135,15 @@ class AppRouter {
                   routes: <RouteBase>[
                     GoRoute(
                         path: ':orderId',
-                        pageBuilder: (context, state){
-                          ProductOrder productOrder = state.extra as ProductOrder;
-                          return MaterialPage(child: FullOrder(productOrder: productOrder,));
-                        }
-                    )
-                  ]
-                  ),
+                        pageBuilder: (context, state) {
+                          ProductOrder productOrder =
+                              state.extra as ProductOrder;
+                          return MaterialPage(
+                              child: FullOrder(
+                            productOrder: productOrder,
+                          ));
+                        })
+                  ]),
               GoRoute(
                   path: 'profile/notifications',
                   pageBuilder: (context, state) {
@@ -172,7 +172,10 @@ class AppRouter {
               GoRoute(
                   path: 'communities/add',
                   pageBuilder: (context, state) {
-                    return MaterialPage(child: AddCommunity(isEdit: false,));
+                    return MaterialPage(
+                        child: AddCommunity(
+                      isEdit: false,
+                    ));
                   }),
 /*              GoRoute(
                   path: 'product/edit/:productId',
@@ -181,12 +184,12 @@ class AppRouter {
                   })*/
             ]),
         GoRoute(
-          path: '/login',
-          pageBuilder: (context, state) {
-            return const MaterialPage(
-              child: AuthPage(),
-            );
-          },
+            path: '/login',
+            pageBuilder: (context, state) {
+              return const MaterialPage(
+                child: AuthPage(),
+              );
+            },
             routes: <RouteBase>[
               GoRoute(
                 path: 'registration',
@@ -194,15 +197,24 @@ class AppRouter {
                   bool isEmailAndPassword = state.extra as bool;
 
                   return MaterialPage(
-                    child: Registration(isEmailAndPassword: isEmailAndPassword ),
+                    child: Registration(isEmailAndPassword: isEmailAndPassword),
                   );
                 },
               ),
-            ]
-        ),
-
+            ]),
       ],
     );
+  }
+
+  void _listenToAuthChanges() {
+    Auth().authStateChanges.listen((User? user) {
+       bool isUserLoggedIn = user != null /*&& user.emailVerified*/;
+      if (isUserLoggedIn) {
+        _router.go('/');
+      } else {
+        _router.go('/login');
+      }
+    });
   }
 
   GoRouter get router => _router;
