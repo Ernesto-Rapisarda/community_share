@@ -233,9 +233,26 @@ class UserRepository {
         Community community = Community.fromJson(document.data()!);
         communities.add(community);
       });
-      return [];
+      return communities;
     } catch (e) {
       rethrow;
     }
+  }
+
+  Future<UserDetails> getUserByIdDoc(String id) async{
+    try{
+      DocumentSnapshot<Map<String, dynamic>> snapshot = await _db
+          .collection('Users')
+          .doc(id)
+          .get();
+
+      if(snapshot.exists){
+        UserDetails userDetails = UserDetails.fromJson(snapshot.data()!);
+        return userDetails;
+      }
+      else{
+        throw Exception('User not found');
+      }
+    }catch (error){rethrow;}
   }
 }

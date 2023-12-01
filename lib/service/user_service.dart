@@ -44,4 +44,12 @@ class UserService{
     }
   }
 
+  Future<UserDetails> getUserByIdDoc(String id) async{
+    try{
+      return await _userRepository.getUserByIdDoc(id);
+    }catch (error){
+      rethrow;
+    }
+  }
+
 }

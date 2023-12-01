@@ -3,11 +3,14 @@ import 'dart:ui';
 import 'package:community_share/model/basic/product_basic.dart';
 import 'package:community_share/model/basic/user_details_basic.dart';
 import 'package:community_share/model/message.dart';
+import 'package:community_share/model/user_details.dart';
+import 'package:community_share/navigation/app_router.dart';
 import 'package:community_share/providers/UserProvider.dart';
 import 'package:community_share/providers/product_provider.dart';
 import 'package:community_share/service/auth.dart';
 import 'package:community_share/service/conversation_service.dart';
 import 'package:community_share/service/product_service.dart';
+import 'package:community_share/service/user_service.dart';
 import 'package:community_share/utils/id_generator.dart';
 import 'package:community_share/utils/show_snack_bar.dart';
 import 'package:community_share/view/generic_components/message_composer.dart';
@@ -28,6 +31,7 @@ class FullProduct extends StatefulWidget {
 }
 
 class _FullProductState extends State<FullProduct> {
+  final UserService userService = UserService();
   ConversationService _conversationService = ConversationService();
   ProductService _productService = ProductService();
   TextEditingController _messageController = TextEditingController();
@@ -62,10 +66,31 @@ class _FullProductState extends State<FullProduct> {
     }
   }
 
+  void viewGiverPublicProfile() async{
+    try{
+      UserDetails userDetails = await userService.getUserByIdDoc(context.read<ProductProvider>().productVisualized.giver.id);
+
+      String currentRoute = AppRouter().router.routerDelegate.currentConfiguration.uri.toString();
+      String destinationRoute = '$currentRoute/profile/public/${userDetails.id}';
+      goToTheGiverPage(userDetails, destinationRoute);
+    }catch (error){
+      callError(error.toString());
+    }
+
+  }
+  void goToTheGiverPage(UserDetails userDetails, String route){
+    context.go(route, extra: userDetails);
+
+  }
+
   void closeMessageComposer() {
     setState(() {
       _isAsking = false;
     });
+  }
+
+  void callError(String error){
+    showSnackBar(context, error,isError: true);
   }
 
   @override
@@ -470,61 +495,76 @@ class _FullProductState extends State<FullProduct> {
               children: [
                 Row(
                   children: [
-                    Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          // Adatta l'immagine al cerchio
-                          image: NetworkImage(context
-                              .read<ProductProvider>()
-                              .productVisualized
-                              .giver
-                              .urlPhotoProfile),
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 10),
                     Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          context
-                              .read<ProductProvider>()
-                              .productVisualized
-                              .giver
-                              .fullName,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            FaIcon(
-                              FontAwesomeIcons.locationDot,
-                              size: 16,
-                            ),
-                            SizedBox(
-                              width: 8,
-                            ),
-                            Text(
-                              context
-                                  .read<ProductProvider>()
-                                  .productVisualized
-                                  .giver
-                                  .location,
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey,
+                        InkWell(
+                          onTap:(){
+                            viewGiverPublicProfile();
+                          },
+
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 50,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    // Adatta l'immagine al cerchio
+                                    image: NetworkImage(context
+                                        .read<ProductProvider>()
+                                        .productVisualized
+                                        .giver
+                                        .urlPhotoProfile),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
+                              SizedBox(width: 10),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    context
+                                        .read<ProductProvider>()
+                                        .productVisualized
+                                        .giver
+                                        .fullName,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      FaIcon(
+                                        FontAwesomeIcons.locationDot,
+                                        size: 16,
+                                      ),
+                                      SizedBox(
+                                        width: 8,
+                                      ),
+                                      Text(
+                                        context
+                                            .read<ProductProvider>()
+                                            .productVisualized
+                                            .giver
+                                            .location,
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        )
                       ],
                     ),
+
                     Expanded(
                         child: SizedBox(
                       width: double.infinity,

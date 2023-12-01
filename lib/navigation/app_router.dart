@@ -30,9 +30,18 @@ import '../view/product/checkout_product.dart';
 
 class AppRouter {
   late GoRouter _router;
+  static final AppRouter _singleton = AppRouter._internal();
 
-  AppRouter() {
+  factory AppRouter() {
+    return _singleton;
+  }
+
+/*  AppRouter() {
     _router = _createRouter();
+    _listenToAuthChanges();
+  }*/
+
+  AppRouter._internal() : _router = _createRouter() {
     _listenToAuthChanges();
   }
 
@@ -70,7 +79,17 @@ class AppRouter {
                         path: 'product/details/:productID',
                         pageBuilder: (context, state) {
                           return const MaterialPage(child: FullProduct());
-                        }),
+                        },
+                        routes: <RouteBase>[
+                          GoRoute(path: 'profile/public/:userId',
+                              pageBuilder: (context,state){
+                                UserDetails userDetails =
+                                state.extra as UserDetails;
+                                return MaterialPage(child: PublicProfile(userDetails: userDetails,));
+                              }
+                          ),
+                        ]
+                        ),
                     GoRoute(
                         path: 'order/:orderId',
                         pageBuilder: (context, state) {
@@ -88,6 +107,13 @@ class AppRouter {
                     return const MaterialPage(child: FullProduct());
                   },
                   routes: <RouteBase>[
+                    GoRoute(path: 'profile/public/:userId',
+                        pageBuilder: (context,state){
+                          UserDetails userDetails =
+                          state.extra as UserDetails;
+                          return MaterialPage(child: PublicProfile(userDetails: userDetails,));
+                        }
+                    ),
                     GoRoute(
                       path: 'edit',
                       pageBuilder: (context, state) {
@@ -230,4 +256,5 @@ class AppRouter {
   }
 
   GoRouter get router => _router;
+  String get currentRoute => _router.toString();
 }

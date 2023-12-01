@@ -51,8 +51,7 @@ class _CommunityCardState extends State<CommunityCard> {
       child: Card(
         elevation: 3,
         margin: EdgeInsets.all(10),
-        child: Stack(children: [
-            Padding(
+        child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -104,20 +103,22 @@ class _CommunityCardState extends State<CommunityCard> {
                       Text('${widget.community.members} members'),
                     ],
                   ),
+                  Positioned(
+                      bottom: 8,
+                      right: 8,
+                      child: !widget.myCommunities
+                          ? OutlinedButton(
+                          onPressed: () {
+                            joinCommunity();
+                          },
+                          child: Text('Join'))
+                          : Center())
+
                 ],
               ),
             ),
-            Positioned(
-                bottom: 8,
-                right: 8,
-                child: !widget.myCommunities
-                    ? OutlinedButton(
-                        onPressed: () {
-                          joinCommunity();
-                        },
-                        child: Text('Join'))
-                    : Center())
-          ]),
+
+
         ),
 
     );

@@ -49,6 +49,7 @@ class _PublicProfileState extends State<PublicProfile> with TickerProviderStateM
      setState(() {
        products = temp;
        communities = tempComm;
+       print(communities.length);
      });
   }
 
@@ -125,7 +126,10 @@ class _PublicProfileState extends State<PublicProfile> with TickerProviderStateM
               child: TabBarView(
                 controller: _tabController,
                 children: [
-                  products.length>0 ? ProductGrid(products, route: '')
+                  products.length>0 ? Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: ProductGrid(products, route: ''),
+                  )
                   :
                   Center(
                     child: Text(AppLocalizations.of(context)!.nothingToShow,style: TextStyle(fontSize: 20)),
