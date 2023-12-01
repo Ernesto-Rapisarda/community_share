@@ -15,7 +15,7 @@ import 'package:community_share/view/profile/screen/orders_list.dart';
 import 'package:community_share/view/profile/screen/paletta_colori.dart';
 import 'package:community_share/view/profile/screen/public_profile.dart';
 import 'package:community_share/view/temp/addresses.dart';
-import 'package:community_share/view/temp/donated_products.dart';
+import 'package:community_share/view/profile/screen/user_interactions_with_objects.dart';
 import 'package:community_share/view/temp/email_change.dart';
 import 'package:community_share/view/temp/needed_products.dart';
 import 'package:community_share/view/temp/notifications.dart';
@@ -144,19 +144,9 @@ class AppRouter {
                     return MaterialPage(child: PalettaColori());
                   }),
               GoRoute(
-                  path: 'profile/donated_products',
+                  path: 'profile/object_interactions',
                   pageBuilder: (context, state) {
-                    return MaterialPage(child: DonatedProducts());
-                  }),
-              GoRoute(
-                  path: 'profile/received_products',
-                  pageBuilder: (context, state) {
-                    return MaterialPage(child: ReceivedProducts());
-                  }),
-              GoRoute(
-                  path: 'profile/needed_products',
-                  pageBuilder: (context, state) {
-                    return MaterialPage(child: NeededProducts());
+                    return MaterialPage(child: ProfileProducts());
                   }),
               GoRoute(
                   path: 'profile/orders',

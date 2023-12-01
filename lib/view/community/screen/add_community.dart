@@ -4,6 +4,7 @@ import 'package:community_share/utils/id_generator.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../model/address.dart';
 import '../../../model/community.dart';
@@ -14,7 +15,7 @@ import '../../../service/image_service.dart';
 class AddCommunity extends StatefulWidget {
   final bool isEdit;
 
-  const AddCommunity({Key? key, required this.isEdit}) : super(key: key);
+  const AddCommunity({super.key, required this.isEdit});
 
   @override
   State<AddCommunity> createState() => _AddCommunityState();
@@ -36,7 +37,6 @@ class _AddCommunityState extends State<AddCommunity> {
   void initState() {
     super.initState();
     if (widget.isEdit) {
-      // Se si sta modificando, popola i campi con i dati della community esistente
       Community community = context.read<CommunityProvider>().community;
       _nameController.text = community.name;
       _descriptionController.text = community.description;
@@ -96,7 +96,8 @@ class _AddCommunityState extends State<AddCommunity> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Community'),
+        title: Text(AppLocalizations.of(context)!.addCommunity, style: TextStyle(fontWeight: FontWeight.bold,color: Theme.of(context)!.colorScheme.onPrimaryContainer),),
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       ),
       body: SingleChildScrollView(
         child: Padding(

@@ -83,7 +83,7 @@ class _CommunitiesListState extends State<CommunitiesList> {
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color: Theme.of(context).colorScheme.primary),
           ),
           Container(
-            height: 370,
+            height: 390,
             //color: Theme.of(context).colorScheme.secondary,
             child: ListView(
               scrollDirection: Axis.horizontal,

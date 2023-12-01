@@ -248,6 +248,7 @@ class UserRepository {
 
       if(snapshot.exists){
         UserDetails userDetails = UserDetails.fromJson(snapshot.data()!);
+        userDetails.id = snapshot.id;
         return userDetails;
       }
       else{

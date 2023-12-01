@@ -59,5 +59,9 @@
     "publicProfile": "PUBLIC PROFILE",
     "donationsOfUser":"Donations",
     "communitiesOfUser":"Communities",
-    "nothingToShow":"Nothing to show"
+    "nothingToShow":"Nothing to show",
+    "profileMenuObject":"Objects ",
+    "profileMenuObjectPartTwo":"(Donated, received and liked)",
+    "orders": "Orders",
+    "addCommunity":"Create a Community"
 }

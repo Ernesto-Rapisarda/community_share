@@ -88,8 +88,7 @@ class _PublicProfileState extends State<PublicProfile> with TickerProviderStateM
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        context.read<UserProvider>().userDetails.fullName ??
-                            'Nome non presente',
+                        widget.userDetails.fullName,
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),

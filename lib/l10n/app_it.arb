@@ -52,7 +52,12 @@
   "publicProfile": "PROFILO PUBBLICO",
   "donationsOfUser":"Donazioni",
   "communitiesOfUser":"Comunità",
-  "nothingToShow":"Nulla da mostrare"
+  "nothingToShow":"Nulla da mostrare",
+  "profileMenuObject":"Oggetti ",
+  "profileMenuObjectPartTwo":"(Donati, ricevuti e piaciuti)",
+  "orders": "Ordini",
+  "addCommunity":"Crea una comunità"
+
 
 
 

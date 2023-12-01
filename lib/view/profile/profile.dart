@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../service/auth.dart';
 import '../../utils/show_snack_bar.dart';
@@ -16,25 +17,20 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-
-
-
   Future<void> signOut() async {
-    try{
+    try {
       await Auth().signOut();
       completeLogout();
-    }catch (e){
+    } catch (e) {
       callError(e.toString());
     }
-
-
   }
 
   void callError(String error) {
     showSnackBar(context, error, isError: true);
   }
 
-  void completeLogout(){
+  void completeLogout() {
     context.read<UserProvider>().clearAll();
     //context.go('/login');
   }
@@ -47,26 +43,16 @@ class _ProfileState extends State<Profile> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-              child: IntroProfile()),
+          Container(child: IntroProfile()),
           //Text('CONTRIBUTO SOCIALE', style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
           RowMenusProfile(
-            label: 'Oggetti donati',
-            route: '/profile/donated_products',
+            label: AppLocalizations.of(context)!.profileMenuObject,
+            label2: AppLocalizations.of(context)!.profileMenuObjectPartTwo,
+            route: '/profile/object_interactions',
             icon: FontAwesomeIcons.handHoldingHeart,
           ),
           RowMenusProfile(
-            label: 'Oggetti ricevuti',
-            route: '/profile/received_products',
-            icon: FontAwesomeIcons.heartPulse,
-          ),
-          RowMenusProfile(
-            label: 'Lista Necessità',
-            route: '/profile/needed_products',
-            icon: FontAwesomeIcons.magnifyingGlass,
-          ),
-          RowMenusProfile(
-            label: 'Orders',
+            label: AppLocalizations.of(context)!.orders,
             route: '/profile/orders',
             icon: FontAwesomeIcons.list,
           ),
@@ -74,7 +60,10 @@ class _ProfileState extends State<Profile> {
               padding: EdgeInsets.only(top: 10),
               child: Text(
                 'ACCOUNT',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context)!.colorScheme.primary),
               )),
 
           RowMenusProfile(
@@ -87,16 +76,14 @@ class _ProfileState extends State<Profile> {
             route: '/profile/password_change',
             icon: FontAwesomeIcons.key,
           ),
-/*          RowMenusProfile(
-            label: 'Indirizzo-hub spedizione',
-            route: '/profile/addresses',
-            icon: FontAwesomeIcons.locationDot,
-          ),
           Container(
               padding: EdgeInsets.only(top: 10),
               child: Text(
-                'AIUTO',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                'AIUTO, TERMINI E CONDIZIONI',
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context)!.colorScheme.primary),
               )),
           RowMenusProfile(
             label: 'Segnala un bug',
@@ -108,12 +95,6 @@ class _ProfileState extends State<Profile> {
             route: '',
             icon: FontAwesomeIcons.question,
           ),
-          Container(
-              padding: EdgeInsets.only(top: 10),
-              child: Text(
-                'TERMINI E CONDIZIONI',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              )),
           RowMenusProfile(
             label: 'Termini di utilizzo',
             route: '',
@@ -123,48 +104,31 @@ class _ProfileState extends State<Profile> {
             label: 'Informativa sulla privacy',
             route: '',
             icon: FontAwesomeIcons.newspaper,
-          ),*/
+          ),
           Container(
-            padding: const EdgeInsets.only(top: 30, bottom: 10),
+            padding: const EdgeInsets.only(top: 25, bottom: 10),
             //color: Theme.of(context).colorScheme.tertiary,
             child: InkWell(
               onTap: () {
                 signOut();
               },
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  const SizedBox(
+/*                  const SizedBox(
                     width: 24,
-                  ),
-                  Expanded(
-                      child: Text(
+                  ),*/
+                  Text(
                     'Disconnetti',
                     style: const TextStyle(fontSize: 20),
-                  )),
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
                   FaIcon(
                     FontAwesomeIcons.arrowRightFromBracket,
                     size: 16,
                   ),
-                ],
-              ),
-            ),
-          ),
-
-          Container(color: Colors.yellow, child: Row()),
-          Container(
-            color: Theme.of(context).colorScheme.tertiary,
-            child: InkWell(
-              onTap: () {
-                context.go('/profile/paletta_colori');
-              },
-              child: Row(
-                children: [
-                  Text(
-                    'PALETTA COLORI TEMA',
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.onTertiary),
-                  )
                 ],
               ),
             ),
@@ -177,6 +141,7 @@ class _ProfileState extends State<Profile> {
 
 class RowMenusProfile extends StatelessWidget {
   final String label;
+  final String? label2;
   final String route;
   final IconData icon;
 
@@ -184,36 +149,34 @@ class RowMenusProfile extends StatelessWidget {
       {super.key,
       required this.label,
       required this.route,
-      required this.icon});
+      required this.icon,
+      this.label2});
 
   @override
   Widget build(BuildContext context) {
+    TextStyle textStyle =
+        const TextStyle(fontSize: 20, fontWeight: FontWeight.w500);
     return Container(
       padding: const EdgeInsets.only(top: 10, bottom: 10),
-      //color: Theme.of(context).colorScheme.tertiary,
       child: InkWell(
-        onTap: () {
-          context.go(route);
-        },
+        onTap: () {context.go(route);},
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Icon(
-              icon,
-              size: 16,
-            ),
-            const SizedBox(
-              width: 8,
-            ),
-            Expanded(
-                child: Text(
-              label,
-              style: const TextStyle(fontSize: 20),
-            )),
-            const FaIcon(
-              FontAwesomeIcons.chevronRight,
-              size: 16,
-            ),
+            Icon(icon, size: 16, color: Theme.of(context).colorScheme.primary,),
+            const SizedBox(width: 8,),
+            label2 == null
+                ? Expanded(
+                    child: Text(label,style: textStyle)
+                  )
+                : Expanded(
+                    child: Row(
+                      children: [
+                        Text(label, style: textStyle),
+                        Text(label2!, style: TextStyle(fontSize: 16))
+                      ],),
+                  ),
+            const FaIcon(FontAwesomeIcons.chevronRight, size: 16),
           ],
         ),
       ),
