@@ -56,7 +56,25 @@
   "profileMenuObject":"Oggetti ",
   "profileMenuObjectPartTwo":"(Donati, ricevuti e piaciuti)",
   "orders": "Ordini",
-  "addCommunity":"Crea una comunità"
+  "addCommunity":"Crea una comunità",
+  "select":"Seleziona",
+  "communityName":"Inserisci il nome",
+  "description":"Descrizione",
+  "info":"INFORMAZIONI",
+  "addressProductChange":"Indirizzo per gli scambi",
+  "streetName":"Nome via/viale/corso",
+  "streetNumber":"Numero civico",
+  "postalCode":"CAP",
+  "city":"Città",
+  "uploadForVerified":"In ordine per acquisire il badge di comunità verificata, seleziona e carica i documenti per certificare l'entità del creatore e il possesso dei requisiti giuridici per creare la comunità. Se nessun documento verrà inserito, la comunità risulterà non verificata, ma comunque operativa.",
+  "type":"Tipo: ",
+  "create": "CREA"
+
+
+
+
+
+
 
 
 

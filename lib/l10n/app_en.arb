@@ -63,5 +63,18 @@
     "profileMenuObject":"Objects ",
     "profileMenuObjectPartTwo":"(Donated, received and liked)",
     "orders": "Orders",
-    "addCommunity":"Create a Community"
+    "addCommunity":"Create a Community",
+    "select":"Select",
+    "communityName":"Enter the name",
+    "description":"Description",
+    "info":"INFORMATION",
+    "addressProductChange":"Address for exchanges",
+    "streetName":"Street Name",
+    "streetNumber":"Street Number",
+    "postalCode":"Postal Code",
+    "city":"City",
+    "uploadForVerified":"In order to acquire the verified community badge, select and upload the documents to certify the creator entity and the legal requirements to create the community. If no document is inserted, the community will be unverified, but still operational.",
+    "type":"Type: ",
+    "create": "CREATE"
+
 }

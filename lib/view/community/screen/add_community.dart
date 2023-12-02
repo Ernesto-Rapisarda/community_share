@@ -2,6 +2,7 @@ import 'package:community_share/providers/UserProvider.dart';
 import 'package:community_share/service/community_service.dart';
 import 'package:community_share/utils/id_generator.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -22,6 +23,7 @@ class AddCommunity extends StatefulWidget {
 }
 
 class _AddCommunityState extends State<AddCommunity> {
+  late double _screenSize;
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _streetNameController = TextEditingController();
@@ -31,7 +33,7 @@ class _AddCommunityState extends State<AddCommunity> {
 
   CommunityType _communityType = CommunityType.undefined;
   String _imageUrl =
-      'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/digital_camera_photo-1080x675.jpg';
+      "https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/digital_camera_photo-1080x675.jpg";
 
   @override
   void initState() {
@@ -70,23 +72,24 @@ class _AddCommunityState extends State<AddCommunity> {
     );
 
     Community community = Community(
-      id: widget.isEdit ?context.read<CommunityProvider>().community.id :IdGenerator.generateUniqueCommunityId(),
+      id: widget.isEdit
+          ? context.read<CommunityProvider>().community.id
+          : IdGenerator.generateUniqueCommunityId(),
       name: _nameController.text,
       description: _descriptionController.text,
       urlLogo: _imageUrl,
-      members: widget.isEdit ?context.read<CommunityProvider>().community.members : 1,
+      members: widget.isEdit
+          ? context.read<CommunityProvider>().community.members
+          : 1,
       type: _communityType,
       founder: context.read<UserProvider>().getUserBasic(),
       hotSpotAddress: address,
-
     );
-    if(widget.isEdit){
+    if (widget.isEdit) {
       community.docRef = context.read<CommunityProvider>().community.docRef;
       CommunityService().updateCommunity(context, community);
-    }
-    else{
+    } else {
       CommunityService().createCommunity(context, community);
-
     }
 
     Navigator.of(context).pop();
@@ -94,156 +97,375 @@ class _AddCommunityState extends State<AddCommunity> {
 
   @override
   Widget build(BuildContext context) {
+    _screenSize = MediaQuery.of(context).size.width - 36;
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.addCommunity, style: TextStyle(fontWeight: FontWeight.bold,color: Theme.of(context)!.colorScheme.onPrimaryContainer),),
+        title: Text(
+          AppLocalizations.of(context)!.addCommunity,
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context)!.colorScheme.onPrimaryContainer),
+        ),
         backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.only(left: 12.0, right: 12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Align(
-                alignment: Alignment.center,
-                child: Stack(
-                  children: [
-                    GestureDetector(
-                      onTap: _selectImage,
-                      child: Container(
-                        width: 150,
-                        height: 150,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: NetworkImage(_imageUrl),
-                          ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(left: 12.0, right: 12, top: 20),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Column(
+                      children: [
+                        Container(
+                            width: double.infinity,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .secondaryContainer,
+                            child: Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: Text(
+                                'LOGO',
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSecondaryContainer),
+                              ),
+                            )),
+                        SizedBox(
+                          height: 12,
                         ),
-                      ),
-                    ),
-                    Positioned(
-                        bottom: 0,
-                        left: 100,
-                        child: Container(
-                          width: 40,
-                          height: 40,
+                        Container(
+                          width: _screenSize / 3,
+                          height: _screenSize / 9 * 4,
                           decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Theme.of(context).colorScheme.background
-                          ),
-                          child: IconButton(
+                              border: Border.all(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  width: 2),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(8)),
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: NetworkImage(_imageUrl),
+                              )),
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        OutlinedButton(
                             onPressed: () {
                               _selectImage;
                             },
-                            icon: Icon(
-                              Icons.add_a_photo,
-                              size: 24,
-                              color: Theme.of(context).colorScheme.surfaceTint,
-                            ),
+                            child: Text(AppLocalizations.of(context)!.select)),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: 12,
+                  ),
+                  Expanded(
+                      flex: 2,
+                      child: Column(
+                        children: [
+                          Container(
+                              width: double.infinity,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .secondaryContainer,
+                              child: Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: Text(
+                                  AppLocalizations.of(context)!.info,
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSecondaryContainer),
+                                ),
+                              )),
+                          SizedBox(
+                            height: 12,
                           ),
-                        ))
-                  ],
-                ),
-              ),
-
-              SizedBox(height: 10),
-
-/*              ElevatedButton(
-                onPressed: _selectImage,
-                child: Text('Select Image'),
-              ),*/
-              TextField(
-                controller: _nameController,
-                decoration: InputDecoration(labelText: 'Community Name'),
-              ),
-              TextField(
-                controller: _descriptionController,
-                decoration: InputDecoration(labelText: 'Description'),
-              ),
-              Row(
-                children: <Widget>[
-                  Text('Community Type: '),
-                  DropdownButton<CommunityType>(
-                    value: _communityType,
-                    onChanged: (newValue) {
-                      setState(() {
-                        _communityType = newValue!;
-                      });
-                    },
-                    items: CommunityType.values.map((type) {
-                      return DropdownMenuItem<CommunityType>(
-                        value: type,
-                        child: Text(type.toString().split('.')[1]),
-                      );
-                    }).toList(),
-                  ),
+                          TextField(
+                            controller: _nameController,
+                            decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 5, horizontal: 8),
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(width: 1),
+                                    borderRadius: BorderRadius.circular(10)),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      width: 3,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                labelText:
+                                    AppLocalizations.of(context)!.communityName,
+                                labelStyle: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    color:
+                                        Theme.of(context).colorScheme.primary)),
+                          ),
+                          SizedBox(
+                            height: 16,
+                          ),
+                          TextField(
+                            controller: _descriptionController,
+                            maxLength: 200,
+                            maxLines: null,
+                            decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 5, horizontal: 8),
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(width: 1),
+                                    borderRadius: BorderRadius.circular(10)),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      width: 3,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                labelStyle: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
+                                labelText:
+                                    AppLocalizations.of(context)!.description),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                  //color: Theme.of(context).colorScheme.primary,
+                                  width: 1),
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(8)),
+                            ),
+                            child: Row(children: <Widget>[
+                              SizedBox(width: 4, ),
+                              Text(
+                                AppLocalizations.of(context)!.type,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    color: Theme.of(context).colorScheme.primary),
+                              ),
+                              DropdownButton<CommunityType>(
+                                value: _communityType,
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    _communityType = newValue!;
+                                  });
+                                },
+                                items: CommunityType.values.map((type) {
+                                  return DropdownMenuItem<CommunityType>(
+                                    value: type,
+                                    child: Text(type.toString().split('.')[1]),
+                                  );
+                                }).toList(),
+                              ),
+                            ]),
+                          )
+                        ],
+                      ))
                 ],
               ),
-              SizedBox(
-                height: 22,
-              ),
-              Text(
-                'Address: ',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-              ),
-              //Text('Used for the transactions between members',style: TextStyle(fontSize: 14),),
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0),
-                child: Column(
-                  children: [
-                    TextField(
-                      controller: _streetNameController,
-                      decoration: InputDecoration(labelText: 'Street Name'),
+            ),
+            SizedBox(
+              height: 16,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 12.0, right: 12),
+              child: Container(
+                  width: double.infinity,
+                  color: Theme.of(context).colorScheme.secondaryContainer,
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Text(
+                      AppLocalizations.of(context)!.addressProductChange,
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSecondaryContainer),
                     ),
-                    TextField(
-                      controller: _streetNumberController,
-                      decoration: InputDecoration(labelText: 'Street Number'),
-                    ),
-                    TextField(
-                      controller: _postalCodeController,
-                      decoration: InputDecoration(labelText: 'Postal Code'),
-                    ),
-                    TextField(
-                      controller: _cityController,
-                      decoration: InputDecoration(labelText: 'City'),
-                    ),
-                  ],
-                ),
-              ),
-
-              SizedBox(height: 16.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                  )),
+            ),
+            SizedBox(
+              height: 12,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 12.0, right: 12),
+              child: Row(
                 children: [
-                  ElevatedButton(
-                    style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.resolveWith<Color?>(
-                          (Set<MaterialState> states) {
-                            if (states.contains(MaterialState.pressed)) {
-                              return Theme.of(context).colorScheme.primary;
-                            }
-                            return Theme.of(context)
-                                .colorScheme
-                                .primaryContainer;
-                          },
-                        ),
-                        textStyle: MaterialStateProperty.all<TextStyle>(
-                            TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onPrimaryContainer))),
-                    onPressed: _saveCommunity,
-                    child: Text('Save Community'),
+                  Expanded(
+                    flex: 2,
+                    child: TextField(
+                      controller: _streetNameController,
+                      decoration: InputDecoration(
+                          contentPadding:
+                              EdgeInsets.symmetric(vertical: 5, horizontal: 8),
+                          enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(width: 1),
+                              borderRadius: BorderRadius.circular(10)),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                width: 3,
+                                color: Theme.of(context).colorScheme.primary),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          labelStyle: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              color: Theme.of(context).colorScheme.primary),
+                          labelText: AppLocalizations.of(context)!.streetName),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: TextField(
+                      controller: _streetNumberController,
+                      decoration: InputDecoration(
+                          contentPadding:
+                              EdgeInsets.symmetric(vertical: 5, horizontal: 8),
+                          enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(width: 1),
+                              borderRadius: BorderRadius.circular(10)),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                width: 3,
+                                color: Theme.of(context).colorScheme.primary),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          labelStyle: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              color: Theme.of(context).colorScheme.primary),
+                          labelText:
+                              AppLocalizations.of(context)!.streetNumber),
+                    ),
                   ),
                 ],
               ),
-            ],
-          ),
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 12.0, right: 12),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: TextField(
+                      controller: _postalCodeController,
+                      decoration: InputDecoration(
+                          contentPadding:
+                              EdgeInsets.symmetric(vertical: 5, horizontal: 8),
+                          enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(width: 1),
+                              borderRadius: BorderRadius.circular(10)),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                width: 3,
+                                color: Theme.of(context).colorScheme.primary),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          labelStyle: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              color: Theme.of(context).colorScheme.primary),
+                          labelText: AppLocalizations.of(context)!.postalCode),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: TextField(
+                      controller: _cityController,
+                      decoration: InputDecoration(
+                          contentPadding:
+                              EdgeInsets.symmetric(vertical: 5, horizontal: 8),
+                          enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(width: 1),
+                              borderRadius: BorderRadius.circular(10)),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                width: 3,
+                                color: Theme.of(context).colorScheme.primary),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          labelStyle: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              color: Theme.of(context).colorScheme.primary),
+                          labelText: AppLocalizations.of(context)!.city),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 12.0, right: 12),
+              child: Text(AppLocalizations.of(context)!.uploadForVerified),
+            ),
+            //todo
+            SizedBox(
+              height: 8,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 12.0, right: 12),
+              child: Row(
+                children: [
+                  Text(
+                    'Uploaded File: ',
+                    style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Theme.of(context).colorScheme.primary),
+                  ),
+                  Text('Nome_del_file.pdf'),
+                  Expanded(
+                      child: SizedBox(
+                    width: double.infinity,
+                  )),
+                  OutlinedButton(
+                      onPressed: () {},
+                      child: Text(AppLocalizations.of(context)!.select)),
+                ],
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                OutlinedButton(
+                    onPressed: () {
+                      _saveCommunity;
+                    },
+                    child: Text(
+                      AppLocalizations.of(context)!.create,
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.primary),
+                    )),
+              ],
+            )
+          ],
         ),
       ),
     );
