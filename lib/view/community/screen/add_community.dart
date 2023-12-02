@@ -84,6 +84,7 @@ class _AddCommunityState extends State<AddCommunity> {
       type: _communityType,
       founder: context.read<UserProvider>().getUserBasic(),
       hotSpotAddress: address,
+      verified: false
     );
     if (widget.isEdit) {
       community.docRef = context.read<CommunityProvider>().community.docRef;
@@ -159,9 +160,9 @@ class _AddCommunityState extends State<AddCommunity> {
                           height: 8,
                         ),
                         OutlinedButton(
-                            onPressed: () {
-                              _selectImage;
-                            },
+                            onPressed:
+                              _selectImage
+                            ,
                             child: Text(AppLocalizations.of(context)!.select)),
                       ],
                     ),
@@ -244,6 +245,7 @@ class _AddCommunityState extends State<AddCommunity> {
                                 labelText:
                                     AppLocalizations.of(context)!.description),
                           ),
+                          SizedBox(height: 8,),
                           Container(
                             decoration: BoxDecoration(
                               border: Border.all(
@@ -270,7 +272,7 @@ class _AddCommunityState extends State<AddCommunity> {
                                 items: CommunityType.values.map((type) {
                                   return DropdownMenuItem<CommunityType>(
                                     value: type,
-                                    child: Text(type.toString().split('.')[1]),
+                                    child: Text(communityTypeToString(type, context)),
                                   );
                                 }).toList(),
                               ),
@@ -453,9 +455,9 @@ class _AddCommunityState extends State<AddCommunity> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 OutlinedButton(
-                    onPressed: () {
-                      _saveCommunity;
-                    },
+                    onPressed:
+                      _saveCommunity
+                    ,
                     child: Text(
                       AppLocalizations.of(context)!.create,
                       style: TextStyle(

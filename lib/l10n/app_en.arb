@@ -75,6 +75,11 @@
     "city":"City",
     "uploadForVerified":"In order to acquire the verified community badge, select and upload the documents to certify the creator entity and the legal requirements to create the community. If no document is inserted, the community will be unverified, but still operational.",
     "type":"Type: ",
-    "create": "CREATE"
+    "create": "CREATE",
+      "private":"private",
+      "charityInstitution": "Charity Institution",
+      "religiousInstitution": "Religious Institute",
+      "recreationalInstitution":"Ricreative Institute",
+      "undefined":"undefined"
 
 }

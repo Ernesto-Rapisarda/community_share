@@ -20,10 +20,27 @@ class MemberRow extends StatelessWidget{
         Text(userDetailsBasic.fullName,style: TextStyle(fontSize: 16,fontWeight: FontWeight.w500),),
         Expanded(child: SizedBox(width: double.infinity,)),
         //todo action
-        IconButton(onPressed: (){}, icon: FaIcon(FontAwesomeIcons.userPlus, size: 20,)),
-        IconButton(onPressed: (){}, icon: FaIcon(FontAwesomeIcons.eye,size: 20,)),
-        //SizedBox(width: 8,),
-        IconButton(onPressed: (){}, icon: FaIcon(FontAwesomeIcons.envelope,size: 20,))
+        InkWell(
+          onTap: (){},
+          child: FaIcon(FontAwesomeIcons.ban, size: 20,),
+        ),
+        SizedBox(width: 8,),
+        InkWell(
+          onTap: (){},
+          child: FaIcon(FontAwesomeIcons.eye,size: 20,),
+        ),
+        SizedBox(width: 8,),
+        InkWell(
+          onTap: (){},
+          child: FaIcon(FontAwesomeIcons.envelope, size: 20,),
+        ),
+        SizedBox(width: 8,),
+/*        InkWell(
+          onTap: (){},
+          child: FaIcon(FontAwesomeIcons.crown, size: 20,),
+        )*/
+
+
       ],
     );
   }

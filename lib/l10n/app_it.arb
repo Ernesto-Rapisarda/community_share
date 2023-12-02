@@ -68,7 +68,13 @@
   "city":"Città",
   "uploadForVerified":"In ordine per acquisire il badge di comunità verificata, seleziona e carica i documenti per certificare l'entità del creatore e il possesso dei requisiti giuridici per creare la comunità. Se nessun documento verrà inserito, la comunità risulterà non verificata, ma comunque operativa.",
   "type":"Tipo: ",
-  "create": "CREA"
+  "create": "CREA",
+        "private":"privato",
+        "charityInstitution": "Istituto di carità",
+        "religiousInstitution": "Istituto religioso",
+        "recreationalInstitution":"Istituto ricreativo",
+        "undefined":"sconosciuto"
+
 
 
 

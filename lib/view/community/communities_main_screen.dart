@@ -21,13 +21,13 @@ class _CommunitiesMainScreenState extends State<CommunitiesMainScreen> {
 
       body: CommunitiesList(),
 
-      floatingActionButton: FloatingActionButton(
+      /*floatingActionButton: FloatingActionButton(
         onPressed: (){
           context.go('/communities/add');
         },
         tooltip: 'Create new community',
         child: const Icon(Icons.add),
-      ),
+      ),*/
     );
   }
 }

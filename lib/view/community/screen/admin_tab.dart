@@ -4,9 +4,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../../model/basic/user_details_basic.dart';
 import '../../../model/event.dart';
 import '../../../model/product_order.dart';
 import '../../../providers/community_provider.dart';
+import '../components/member_row.dart';
 import '../components/order_card.dart';
 
 class AdminTab extends StatefulWidget {
@@ -29,7 +31,7 @@ class _AdminTabState extends State<AdminTab>
   @override
   void initState() {
     super.initState();
-    _innerTabController = TabController(length: 3, vsync: this);
+    _innerTabController = TabController(length: 4, vsync: this);
 
     fetchData();
   }
@@ -39,6 +41,10 @@ class _AdminTabState extends State<AdminTab>
         context, context.read<CommunityProvider>().community.docRef!);
     /*_isEventExpanded = List.generate(
         context.watch<CommunityProvider>().events.length, (index) => false);*/
+
+    List<UserDetailsBasic> members = await CommunityService().getMembers(context);
+
+    context.read<CommunityProvider>().members = members;
 
     setState(() {
       _productsOrder = tmp;
@@ -51,6 +57,8 @@ class _AdminTabState extends State<AdminTab>
 
   @override
   Widget build(BuildContext context) {
+    var members = context.watch<CommunityProvider>().members;
+
     _events = context.watch<CommunityProvider>().events;
 
     return Column(
@@ -59,9 +67,10 @@ class _AdminTabState extends State<AdminTab>
         TabBar(
           controller: _innerTabController,
           tabs: [
-            Tab(text: 'Orders'),
-            Tab(text: 'Events'),
-            Tab(text: 'Reports'),
+            Tab(text: 'Ordini'),
+            Tab(text: 'Eventi'),
+            Tab(text: 'Segnalazioni'),
+            Tab(text: 'Utenti')
           ],
         ),
         Expanded(
@@ -292,6 +301,27 @@ class _AdminTabState extends State<AdminTab>
                   child: Text('Reports Tab Content'),
                 ),
               ),
+              //tab
+              Container(
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Founder:', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                        MemberRow(userDetailsBasic: context.read<CommunityProvider>().community.founder),
+                        SizedBox(height: 20,),
+                        Text('Members: ${context.read<CommunityProvider>().community.members - 1}', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                        ...members.map((tmp) => Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),  // Imposta la distanza desiderata
+                          child: MemberRow(userDetailsBasic: tmp),
+                        )).toList(),
+                      ],
+                    ),
+                  ),
+                ),
+              )
             ],
           ),
         ),

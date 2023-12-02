@@ -20,6 +20,7 @@ class Community {
   String description;
   int members;
   String? docRef;
+  bool verified;
 
   UserDetailsBasic founder;
 
@@ -34,7 +35,7 @@ class Community {
       required this.description,
       required this.name,
         required this.members,
-      required this.founder, this.docRef,required this.hotSpotAddress
+      required this.founder, this.docRef,required this.hotSpotAddress,required this.verified
       });
 
   toJson() {
@@ -47,7 +48,8 @@ class Community {
       'founder': founder.toJson(),
       'members_number': members,
       if(docRef != null) 'docRef': docRef,
-      'hotSpotAddress': hotSpotAddress.toJson()
+      'hotSpotAddress': hotSpotAddress.toJson(),
+      'verified': verified
 
 
     };
@@ -65,7 +67,8 @@ class Community {
       founder: UserDetailsBasic.fromJson(json['founder']),
       members: json['members_number'],
       docRef: json['docRef'],
-      hotSpotAddress: Address.fromJson(json['hotSpotAddress'])
+      hotSpotAddress: Address.fromJson(json['hotSpotAddress']),
+      verified: json['verified']
 
     );
   }
