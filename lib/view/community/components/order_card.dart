@@ -5,6 +5,8 @@ import 'package:community_share/model/enum/order_status.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import 'full_order.dart';
+
 class OrderCard extends StatelessWidget {
   final bool isAdministrator;
   final ProductOrder order;
@@ -18,7 +20,17 @@ class OrderCard extends StatelessWidget {
       child: InkWell(
         onTap: (){
           if(isAdministrator){
-            context.go('/communities/home/${context.read<CommunityProvider>().community.id}/order/${order.id}', extra: order);
+            //context.go('/communities/home/${context.read<CommunityProvider>().community.id}/order/${order.id}', extra: order);
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return Dialog(
+                  // Usa FullOrder come child della Dialog
+                  child: FullOrder(productOrder: order),
+                );
+              },
+            );
+
           }
           else{
             context.go('/profile/orders/${order.id}',extra: order);

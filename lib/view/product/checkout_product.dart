@@ -68,7 +68,9 @@ class _CheckoutProductState extends State<CheckoutProduct> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Checkout'),
+        title: Text('CHECKOUT', style: TextStyle(fontWeight: FontWeight.bold,
+            color: Theme.of(context).colorScheme.onPrimaryContainer),),
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -80,8 +82,9 @@ class _CheckoutProductState extends State<CheckoutProduct> {
                 //color: Theme.of(context).colorScheme.secondary,
                 child: Column(
                   children: [
+                    SizedBox(height: 8,),
                     Text(
-                      'Summary product',
+                      'Riepilogo dono',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
@@ -106,20 +109,12 @@ class _CheckoutProductState extends State<CheckoutProduct> {
                             children: [
                               Row(
                                 children: [
-                                  Text(
-                                    'Title: ',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      //color: Theme.of(context).colorScheme.onSecondary,
-                                    ),
-                                  ),
+
                                   Text(
                                     _product.title,
                                     style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      //color: Theme.of(context).colorScheme.onSecondary,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,color: Theme.of(context).colorScheme.primary,
                                     ),
                                   ),
                                 ],
@@ -162,7 +157,7 @@ class _CheckoutProductState extends State<CheckoutProduct> {
                               Row(
                                 children: [
                                   Text(
-                                    'Giver: ',
+                                    'Donatore: ',
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
@@ -203,17 +198,17 @@ class _CheckoutProductState extends State<CheckoutProduct> {
                       Row(
                         children: [
                           Expanded(
-                            flex: 2,
+                            //flex: 2,
                             child: Text(
                               selectedCommunity == null
-                                  ? 'Select the community where you want to receive the gift:'
-                                  : 'You have selected',
+                                  ? 'Seleziona la comunità dove ricevere il dono: '
+                                  : 'Hai selezionato',
                               style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w500),
+                                  fontSize: 16, fontWeight: FontWeight.w500, color: Theme.of(context).colorScheme.onSecondaryContainer),
                             ),
                           ),
                           Expanded(
-                            flex: 1,
+                            //flex: 1,
                             child: FittedBox(
                               fit: BoxFit.scaleDown,
                               alignment: Alignment.centerLeft,
@@ -252,7 +247,7 @@ class _CheckoutProductState extends State<CheckoutProduct> {
                       ),
                       selectedCommunity != null
                           ? Text(
-                              'Hotspot Address: ',
+                              'Indirizzo di consegna - ritiro: ',
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.w500),
                             )

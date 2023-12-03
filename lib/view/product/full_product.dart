@@ -1,7 +1,9 @@
 import 'dart:ui';
 import 'package:community_share/model/basic/product_basic.dart';
 import 'package:community_share/model/basic/user_details_basic.dart';
+import 'package:community_share/model/enum/product_availability.dart';
 import 'package:community_share/model/enum/product_category.dart';
+import 'package:community_share/model/enum/product_condition.dart';
 import 'package:community_share/model/message.dart';
 import 'package:community_share/model/user_details.dart';
 import 'package:community_share/navigation/app_router.dart';
@@ -336,12 +338,12 @@ class _FullProductState extends State<FullProduct> {
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w500),
                       ),
-                      Text(
-                        context
-                            .watch<ProductProvider>()
-                            .productVisualized
-                            .condition
-                            .name,
+                      Text(productConditionToString(context
+                          .watch<ProductProvider>()
+                          .productVisualized
+                          .condition, context)
+
+                            ,
                         style: TextStyle(
                           fontSize: 16,
                         ),
@@ -353,12 +355,12 @@ class _FullProductState extends State<FullProduct> {
                       Text('Disponibilità: ',
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.w500)),
-                      Text(
-                        context
-                            .watch<ProductProvider>()
-                            .productVisualized
-                            .availability
-                            .name,
+                      Text(productAvailabilityToString(context
+                          .watch<ProductProvider>()
+                          .productVisualized
+                          .availability, context)
+
+                            ,
                         style: TextStyle(
                           fontSize: 16,
                         ),

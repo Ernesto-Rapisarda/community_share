@@ -33,7 +33,8 @@ class _FullOrderState extends State<FullOrder> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Order Details'),
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+          title: Text('Order Details',style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onPrimaryContainer),),
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -41,9 +42,15 @@ class _FullOrderState extends State<FullOrder> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Order ID: ${widget._productOrder.id}',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Order ID: ',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,color: Theme.of(context).colorScheme.primary),
+                    ),
+                    Text(widget._productOrder.id,style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))
+                  ],
                 ),
                 SizedBox(height: 10),
                 InkWell(
@@ -78,7 +85,6 @@ class _FullOrderState extends State<FullOrder> {
                           child: ClipRect(
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(8),
-                              // Puoi regolare il raggio del bordo se necessario
                               child: Image.network(
                                 widget._productOrder.product.urlImages,
                                 fit: BoxFit.cover,
@@ -90,10 +96,11 @@ class _FullOrderState extends State<FullOrder> {
                     ),
                   ),
                 ),
+                SizedBox(height: 16,),
                 Row(
                   children: [
                     Text(
-                      'Order Date: ',
+                      'Data ordine: ',
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
@@ -107,7 +114,7 @@ class _FullOrderState extends State<FullOrder> {
                 Row(
                   children: [
                     Text(
-                      'Receiver: ',
+                      'Ricevente: ',
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
@@ -135,7 +142,7 @@ class _FullOrderState extends State<FullOrder> {
                 Row(
                   children: [
                     Text(
-                      'Order Status: ',
+                      'Stato ordine: ',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -143,7 +150,7 @@ class _FullOrderState extends State<FullOrder> {
                       ),
                     ),
                     Text(
-                      widget._productOrder.orderStatus.name,
+                      orderStatusToString(widget._productOrder.orderStatus, context),
                       style: TextStyle(
                         fontSize: 16,
                         color: getStatusColor(widget._productOrder.orderStatus),
@@ -162,7 +169,7 @@ class _FullOrderState extends State<FullOrder> {
                             onPressed: () {
                               updateStatus(OrderStatus.productDeliveredToHotSpot);
                             },
-                            child: Text('Arrived to Community'))
+                            child: Text('Arrivato in comunità'))
                         : Container(),
                     SizedBox(
                       width: 8,
@@ -172,7 +179,7 @@ class _FullOrderState extends State<FullOrder> {
                         ? OutlinedButton(
                             onPressed: () {                              updateStatus(OrderStatus.completed);
                             },
-                            child: Text('Delivered to final user'))
+                            child: Text('Donazione completata'))
                         : Container()
                   ],
                 ),

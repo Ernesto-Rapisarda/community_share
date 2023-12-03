@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 enum ProductCondition {
   newWithTag,
   newWithoutTag,
@@ -21,5 +23,22 @@ ProductCondition productConditionFromString(String value) {
       return ProductCondition.acceptable;
     default:
       return ProductCondition.unknown;
+  }
+}
+
+String productConditionToString (ProductCondition productCondition, BuildContext context){
+  switch (productCondition){
+    case ProductCondition.newWithTag:
+      return 'nuovo con cartellino';
+    case ProductCondition.newWithoutTag:
+      return 'nuovo senza cartellino';
+    case ProductCondition.veryGood:
+      return 'molto buone';
+    case ProductCondition.good:
+      return 'buone';
+    case ProductCondition.acceptable:
+      return 'accettabili';
+    default:
+      return 'sconosciute';
   }
 }

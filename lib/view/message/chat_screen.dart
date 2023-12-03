@@ -2,6 +2,7 @@ import 'package:community_share/service/auth.dart';
 import 'package:community_share/service/conversation_service.dart';
 import 'package:community_share/view/generic_components/message_composer.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
 import '../../model/conversation.dart';
@@ -33,31 +34,23 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
         title: Row(
           children: [
             CircleAvatar(
-              // Mostra l'avatar dell'altro utente
-              backgroundImage: NetworkImage(widget._conversation.members[1].urlPhotoProfile),
+              backgroundImage: NetworkImage(widget._conversation.members[0].urlPhotoProfile),
             ),
             SizedBox(width: 8),
-            Text(widget._conversation.members[1].fullName), // Nome dell'altro utente
+            Text(widget._conversation.members[0].fullName,style: TextStyle(color: Theme.of(context).colorScheme.onPrimaryContainer),), // Nome dell'altro utente
           ],
         ),
         actions: [
-          // Aggiungi eventuali azioni all'appbar (es. chiamata, videochiamata, ecc.)
           IconButton(
-            icon: Icon(Icons.phone),
+            icon: FaIcon(FontAwesomeIcons.ellipsisVertical),
             onPressed: () {
-              // Aggiungi la logica per la chiamata
             },
           ),
-          IconButton(
-            icon: Icon(Icons.videocam),
-            onPressed: () {
-              // Aggiungi la logica per la videochiamata
-            },
-          ),
-          // ... altre azioni
+
         ],
       ),
       body: Column(
@@ -70,6 +63,9 @@ class _ChatScreenState extends State<ChatScreen> {
                 return _buildMessage(message);
               },
             ),
+          ),
+          Divider(
+            color: Theme.of(context).dividerColor,
           ),
           !widget._conversation.order? MessageComposer(messageController: _messageController, onSendPressed: onSendPressed, onClose: onClose):Center(),
         ],
@@ -88,6 +84,10 @@ class _ChatScreenState extends State<ChatScreen> {
         decoration: BoxDecoration(
           color: isMe ? Colors.green.shade200 : Colors.white,
           borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            width: 1,
+            color: Theme.of(context).dividerColor
+          )
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,

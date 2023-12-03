@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 enum ProductAvailability{
   available,
   pending,
@@ -15,5 +17,18 @@ ProductAvailability productAvailabilityFromString(String value) {
       return ProductAvailability.donated;
     default:
       return ProductAvailability.unknown;
+  }
+}
+
+String productAvailabilityToString (ProductAvailability productAvailability, BuildContext context){
+  switch (productAvailability){
+    case ProductAvailability.available:
+      return 'disponibile';
+    case ProductAvailability.pending:
+      return 'in sospeso';
+    case ProductAvailability.donated:
+      return 'donato';
+    default:
+      return 'sconosciuto';
   }
 }
