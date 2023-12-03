@@ -205,7 +205,7 @@ class _CheckoutProductState extends State<CheckoutProduct> {
                           Expanded(
                             flex: 2,
                             child: Text(
-                              selectedCommunity != null
+                              selectedCommunity == null
                                   ? 'Select the community where you want to receive the gift:'
                                   : 'You have selected',
                               style: TextStyle(
