@@ -26,7 +26,7 @@
   "accountCreated":"Account creato, controlla la tua email per la validazione",
   "signingWithGmail":"Ti stai registrando con ",
   "pageHome":"HOME",
-  "pageDonate":"LE TUE DONAZIONI",
+  "pageDonate":"DONAZIONI",
   "pageCommunities":"COMUNITA'",
   "pageMessageBox":"MESSAGGI",
   "pageProfile":"PROFILO",
@@ -69,11 +69,14 @@
   "uploadForVerified":"In ordine per acquisire il badge di comunità verificata, seleziona e carica i documenti per certificare l'entità del creatore e il possesso dei requisiti giuridici per creare la comunità. Se nessun documento verrà inserito, la comunità risulterà non verificata, ma comunque operativa.",
   "type":"Tipo: ",
   "create": "CREA",
-        "private":"privato",
-        "charityInstitution": "Istituto di carità",
-        "religiousInstitution": "Istituto religioso",
-        "recreationalInstitution":"Istituto ricreativo",
-        "undefined":"sconosciuto"
+  "private":"privato",
+  "charityInstitution": "Istituto di carità",
+  "religiousInstitution": "Istituto religioso",
+  "recreationalInstitution":"Istituto ricreativo",
+  "undefined":"sconosciuto",
+  "yourDonationsForAdd":"Doni pubblicati",
+  "addAGift":"Aggiungi un dono"
+
 
 
 

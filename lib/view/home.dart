@@ -150,7 +150,7 @@ class _HomeState extends State<Home> {
                       style: TextStyle(fontSize: 16),
                       decoration: InputDecoration(
                         hintText: AppLocalizations.of(context)!.search,
-                        contentPadding: EdgeInsets.symmetric(vertical: 10.0), // Imposta la dimensione della casella di testo desiderata
+                        contentPadding: EdgeInsets.symmetric(vertical: 10.0),
 
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(12))

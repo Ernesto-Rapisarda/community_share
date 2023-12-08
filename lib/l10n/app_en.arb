@@ -33,7 +33,7 @@
   "accountCreated":"Account created, check your email for validation",
   "signingWithGmail":"You are registering with ",
   "pageHome":"HOME",
-  "pageDonate":"YOUR DONATIONS",
+  "pageDonate":"DONATIONS",
   "pageCommunities":"COMMUNITIES",
   "pageMessageBox":"MESSAGES BOX",
   "pageProfile":"PROFILE",
@@ -80,6 +80,8 @@
       "charityInstitution": "Charity Institution",
       "religiousInstitution": "Religious Institute",
       "recreationalInstitution":"Ricreative Institute",
-      "undefined":"undefined"
+      "undefined":"undefined",
+      "yourDonationsForAdd":"Gifts published",
+      "addAGift":"Add a gift"
 
 }
