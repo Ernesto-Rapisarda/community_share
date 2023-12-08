@@ -75,21 +75,7 @@ class AppRouter {
                             isEdit: true,
                           ));
                         }),
-                    GoRoute(
-                        path: 'product/details/:productID',
-                        pageBuilder: (context, state) {
-                          return const MaterialPage(child: FullProduct());
-                        },
-                        routes: <RouteBase>[
-                          GoRoute(path: 'profile/public/:userId',
-                              pageBuilder: (context,state){
-                                UserDetails userDetails =
-                                state.extra as UserDetails;
-                                return MaterialPage(child: PublicProfile(userDetails: userDetails,));
-                              }
-                          ),
-                        ]
-                        ),
+                    _productSubRoutes(),
                     GoRoute(
                         path: 'order/:orderId',
                         pageBuilder: (context, state) {
@@ -101,34 +87,7 @@ class AppRouter {
                           ));
                         })
                   ]),
-              GoRoute(
-                  path: 'product/details/:productId',
-                  pageBuilder: (context, state) {
-                    return const MaterialPage(child: FullProduct());
-                  },
-                  routes: <RouteBase>[
-                    GoRoute(path: 'profile/public/:userId',
-                        pageBuilder: (context,state){
-                          UserDetails userDetails =
-                          state.extra as UserDetails;
-                          return MaterialPage(child: PublicProfile(userDetails: userDetails,));
-                        }
-                    ),
-                    GoRoute(
-                      path: 'edit',
-                      pageBuilder: (context, state) {
-                        return MaterialPage(
-                            child: AddProduct(
-                          isEdit: true,
-                        ));
-                      },
-                    ),
-                    GoRoute(
-                        path: 'checkout',
-                        pageBuilder: (context, state) {
-                          return MaterialPage(child: CheckoutProduct());
-                        })
-                  ]),
+              _productSubRoutes() ,
               GoRoute(
                   path: 'message_box/:conversationId',
                   pageBuilder: (context, state) {
@@ -243,6 +202,37 @@ class AppRouter {
         _router.go('/login');
       }
     });
+  }
+
+  static GoRoute  _productSubRoutes(){
+    return GoRoute(
+        path: 'product/details/:productId',
+        pageBuilder: (context, state) {
+      return const MaterialPage(child: FullProduct());
+    },
+    routes: <RouteBase>[
+      GoRoute(path: 'profile/public/:userId',
+          pageBuilder: (context,state){
+            UserDetails userDetails =
+            state.extra as UserDetails;
+            return MaterialPage(child: PublicProfile(userDetails: userDetails,));
+          }
+      ),
+      GoRoute(
+        path: 'edit',
+        pageBuilder: (context, state) {
+          return const MaterialPage(
+              child: AddProduct(
+                isEdit: true,
+              ));
+        },
+      ),
+      GoRoute(
+          path: 'checkout',
+          pageBuilder: (context, state) {
+            return MaterialPage(child: CheckoutProduct());
+          })
+    ]);
   }
 
   GoRouter get router => _router;

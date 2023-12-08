@@ -1,4 +1,5 @@
 import 'package:community_share/model/enum/product_category.dart';
+import 'package:community_share/providers/community_provider.dart';
 import 'package:community_share/service/community_service.dart';
 import 'package:community_share/service/product_service.dart';
 import 'package:community_share/utils/circular_load_indicator.dart';
@@ -6,7 +7,10 @@ import 'package:community_share/view/generic_components/product_grid.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
+import '../model/community.dart';
 import '../model/enum/product_condition.dart';
 import '../model/event.dart';
 import '../model/product.dart';
@@ -191,41 +195,44 @@ class _HomeState extends State<Home> {
 
     return ListView.builder(
       shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       itemCount: _incomingEvents.length,
       itemBuilder: (context, index) {
         bool isEven = index % 2 == 0;
         Color backgroundColor =
             isEven ? Colors.grey.withOpacity(0.1) : Colors.transparent;
-        return Container(
-          height: 60,
-          child: ListTile(
-            tileColor: backgroundColor,
-            visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-            //dense: true,
-            title: Text(_incomingEvents[index].title),
-            subtitle: Text('${_incomingEvents[index].docRefCommunityName}',maxLines: 1,overflow: TextOverflow.ellipsis,),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                        'Date ${_incomingEvents[index].eventDate.day}/${_incomingEvents[index].eventDate.month}/${_incomingEvents[index].eventDate.year}'),
-                    Text(
-                        'Time ${_incomingEvents[index].eventDate.hour.toString().padLeft(2, '0')}:${_incomingEvents[index].eventDate.minute.toString().padLeft(2, '0')}'),
-                  ],
-                ),
-                SizedBox(
-                  width: 8,
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [FaIcon(FontAwesomeIcons.chevronRight)],
-                )
-              ],
+        return InkWell(
+          onTap: ()=> _openCommunity(_incomingEvents[index]),
+          child: Container(
+            height: 60,
+            child: ListTile(
+              tileColor: backgroundColor,
+              visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+              //dense: true,
+              title: Text(_incomingEvents[index].title),
+              subtitle: Text('${_incomingEvents[index].docRefCommunityName}',maxLines: 1,overflow: TextOverflow.ellipsis,),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                          'Date ${_incomingEvents[index].eventDate.day}/${_incomingEvents[index].eventDate.month}/${_incomingEvents[index].eventDate.year}'),
+                      Text(
+                          'Time ${_incomingEvents[index].eventDate.hour.toString().padLeft(2, '0')}:${_incomingEvents[index].eventDate.minute.toString().padLeft(2, '0')}'),
+                    ],
+                  ),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [FaIcon(FontAwesomeIcons.chevronRight)],
+                  )
+                ],
+              ),
             ),
           ),
         );
@@ -295,5 +302,21 @@ class _HomeState extends State<Home> {
         );
       },
     );
+  }
+
+  _openCommunity(Event incomingEvent) async{
+    try{
+      Community community = await _communityService.getCommunity(incomingEvent.docRefCommunity!);
+      _openCommunityHome(community);
+
+    }
+    catch (error){
+      callError(error.toString());
+    }
+  }
+
+  _openCommunityHome(Community community){
+    context.read<CommunityProvider>().community=community;
+    context.go('/communities/home/${community.name}');
   }
 }

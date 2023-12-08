@@ -96,4 +96,12 @@ class CommunityService{
     return await _communityRepository.getIncomingEventsFromMyCommunities(context);
   }
 
+  Future<Community> getCommunity(String docRef) async{
+    try{
+      return await _communityRepository.getCommunityByDoc(docRef);
+    }catch (error){
+      rethrow;
+    }
+  }
+
 }

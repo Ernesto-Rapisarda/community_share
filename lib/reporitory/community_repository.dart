@@ -462,4 +462,21 @@ class CommunityRepository {
       return incomingEvents;
     }
   }
+
+  Future<Community> getCommunityByDoc(String docRef) async{
+    try{
+      DocumentSnapshot<Map<String, dynamic>> communitySnapshot =
+      await _db.collection('communities').doc(docRef).get();
+
+      if(communitySnapshot.exists){
+        Community community = Community.fromJson(communitySnapshot.data()!);
+        print(community);
+        return community;
+      }
+      else{
+        throw Exception('Community not found');
+      }
+
+    }catch (error){rethrow;}
+  }
 }

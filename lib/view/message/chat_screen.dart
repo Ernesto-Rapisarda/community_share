@@ -11,7 +11,7 @@ import '../../model/message.dart';
 class ChatScreen extends StatefulWidget {
   late Conversation _conversation;
 
-  ChatScreen({Key? key, required Conversation conversation}) : super(key: key) {
+  ChatScreen({super.key, required Conversation conversation}) {
     _conversation = conversation;
   }
 

@@ -85,5 +85,8 @@ class Community {
   @override
   int get hashCode => id.hashCode ^ type.hashCode ^ name.hashCode;
 
-
+  @override
+  String toString() {
+    return 'Community{id: $id, type: $type, urlLogo: $urlLogo, name: $name, description: $description, members: $members, docRef: $docRef, verified: $verified, founder: $founder, hotSpotAddress: $hotSpotAddress}';
+  }
 }
