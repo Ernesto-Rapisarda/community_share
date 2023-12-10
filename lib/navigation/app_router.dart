@@ -15,7 +15,7 @@ import 'package:community_share/view/profile/screen/orders_list.dart';
 import 'package:community_share/view/profile/screen/paletta_colori.dart';
 import 'package:community_share/view/profile/screen/public_profile.dart';
 import 'package:community_share/view/temp/addresses.dart';
-import 'package:community_share/view/profile/screen/user_interactions_with_objects.dart';
+import 'package:community_share/view/profile/screen/gifts_tabs.dart';
 import 'package:community_share/view/temp/email_change.dart';
 import 'package:community_share/view/temp/needed_products.dart';
 import 'package:community_share/view/temp/notifications.dart';

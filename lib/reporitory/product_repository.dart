@@ -386,6 +386,26 @@ class ProductRepository {
     }
   }
 
+  Future<List<Product>> search(String text) async{
+    try{
+      QuerySnapshot querySnapshot = await _db
+          .collection('products')
+          .where('title', isGreaterThanOrEqualTo: text)
+          .where('title', isLessThan: text + 'z') // per case-sensitive
+          .get();
+
+      List<Product> products = querySnapshot.docs.map((doc) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        return Product.fromJson(data);
+      }).toList();
+
+      return products;
+
+    }catch (error){
+      rethrow;
+    }
+  }
+
 /*  Future<List<Product>> getProducts(BuildContext context) async {
     List<Product> products = [];
 

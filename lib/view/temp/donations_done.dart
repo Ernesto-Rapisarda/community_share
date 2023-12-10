@@ -9,7 +9,12 @@ class DonationsDone extends StatelessWidget{
       appBar: AppBar(
         automaticallyImplyLeading: true,
       ),
-      body: Text(runtimeType.toString()),
+      body: Row(
+        children: [
+          Text(runtimeType.toString()),
+          Text('ciao')
+        ],
+      ),
     );
   }
 

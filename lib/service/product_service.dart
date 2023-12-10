@@ -107,5 +107,13 @@ class ProductService {
     return productOrder;
   }
 
+  Future<List<Product>> search(String text) async{
+    try{
+      return await _productRepository.search(text);
+    }catch (error){
+      rethrow;
+    }
+  }
+
 }
 

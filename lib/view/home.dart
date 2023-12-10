@@ -26,12 +26,14 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final CommunityService _communityService = CommunityService();
   final ProductService _productService = ProductService();
+  final TextEditingController _searchController = TextEditingController();
 
   bool loaded = false;
   late List<Product> _products = [];
   late List<Event> _incomingEvents = [];
   List<ProductCategory> filterCategories = [];
   List<ProductCategory> allCategories = ProductCategory.values;
+
 
   Future<void> fetchProducts(List<ProductCategory> categories) async {
     try {
@@ -66,6 +68,33 @@ class _HomeState extends State<Home> {
     } catch (error) {
       callError(error.toString());
     }
+  }
+
+  void search(String text) {
+    if (text.isNotEmpty && text.length >= 3) {
+      _performSearch();
+    } else if (text.isEmpty) {
+      fetchEvents();
+      fetchProducts(allCategories);
+    }
+  }
+
+  Future<void> _performSearch() async{
+    if (_searchController.text.isNotEmpty && _searchController.text.length >= 3) {
+      List<Product> foundProducts;
+      try {
+        foundProducts = await _productService.search(_searchController.text);
+        setState(() {
+          _products = foundProducts;
+        });
+      } catch (error) {
+        callError(error.toString());
+      }
+    } else if (_searchController.text.isEmpty) {
+      fetchEvents();
+      fetchProducts(allCategories);
+    }
+
   }
 
   void callError(String error){
@@ -145,20 +174,27 @@ class _HomeState extends State<Home> {
                 SizedBox(height: 12,),
                 Row(
                   children: [
-                  Expanded(
-                    child: TextField(
-                      style: TextStyle(fontSize: 16),
-                      decoration: InputDecoration(
-                        hintText: AppLocalizations.of(context)!.search,
-                        contentPadding: EdgeInsets.symmetric(vertical: 10.0),
+                    Expanded(
+                      child: TextField(
+                        style: TextStyle(fontSize: 16),
+                        onChanged: search,
+                        controller: _searchController,
+                        decoration: InputDecoration(
+                          hintText: AppLocalizations.of(context)!.search,
+                          contentPadding: EdgeInsets.symmetric(vertical: 10.0),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(12)),
+                          ),
+                          suffixIcon: IconButton(
+                            icon: Icon(Icons.search),
+                            onPressed: () {
+                              search;
+                            },
+                          ),
 
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(12))
                         ),
                       ),
-                      //todo controlli per la ricerca
                     ),
-                  ),
                   SizedBox(width: 12,),
                   ElevatedButton(
                     onPressed: () {
