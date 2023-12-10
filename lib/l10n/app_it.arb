@@ -75,7 +75,14 @@
   "recreationalInstitution":"Istituto ricreativo",
   "undefined":"sconosciuto",
   "yourDonationsForAdd":"Doni pubblicati",
-  "addAGift":"Aggiungi un dono"
+  "addAGift":"Aggiungi un dono",
+  "title":"Titolo",
+  "location":"Località",
+  "condition":"Condizioni: ",
+  "category":"Categoria: ",
+  "selectCommunities":"Selezione le comunità: ",
+  "noImageSelected":"Nessuna immagine selezionata",
+  "saveProduct":"Pubblica dono"
 
 
 

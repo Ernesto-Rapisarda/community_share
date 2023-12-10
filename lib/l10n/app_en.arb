@@ -82,6 +82,13 @@
       "recreationalInstitution":"Ricreative Institute",
       "undefined":"undefined",
       "yourDonationsForAdd":"Gifts published",
-      "addAGift":"Add a gift"
+      "addAGift":"Add a gift",
+      "title":"Title",
+      "location":"Location",
+      "condition":"Condition: ",
+      "category":"Category: ",
+      "selectCommunities":"Select the communities: ",
+      "noImageSelected":"No image selected",
+      "saveProduct":"Publish gift"
 
 }

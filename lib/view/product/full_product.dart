@@ -367,7 +367,18 @@ class _FullProductState extends State<FullProduct> {
                       )
                     ],
                   ),
-                  Row(
+                  RichText(
+                    text: TextSpan(children: [
+                    TextSpan(
+                      text: 'Pubblicato su: ',
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    TextSpan(
+                      text: publishedOn,
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],)),
+                  /*Wrap(
                     children: [
                       Text(
                         'Pubblicato su: ',
@@ -379,9 +390,10 @@ class _FullProductState extends State<FullProduct> {
                         style: TextStyle(
                           fontSize: 16,
                         ),
+
                       )
                     ],
-                  ),
+                  ),*/
                 ],
               ),
             ),

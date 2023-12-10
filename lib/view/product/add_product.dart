@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:community_share/model/enum/product_category.dart';
 import 'package:community_share/providers/UserProvider.dart';
 import 'package:community_share/providers/product_provider.dart';
@@ -42,8 +44,11 @@ class _AddProductState extends State<AddProduct> {
   final TextEditingController _locationController = TextEditingController();
   late List<CommunityBasic> myCommunities = [];
   List<CommunityBasic> _selectedCommunities = [];
-  String _urlImage =
-      'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/digital_camera_photo-1080x675.jpg';
+  String _urlImage = '';
+      //'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/digital_camera_photo-1080x675.jpg';
+  XFile? imageFile;
+  bool _showImagePreview = false;
+
 
   DateTime _uploadDate = DateTime.now();
   DateTime _lastUpdateDate = DateTime.now();
@@ -84,49 +89,72 @@ class _AddProductState extends State<AddProduct> {
   }
 
   void _selectImages() async {
-    XFile? imageFile = await ImageService().pickImage(ImageSource.gallery);
+    imageFile = await ImageService().pickImage(ImageSource.gallery);
     if (imageFile != null) {
-      String? imageUrl = await ImageService().uploadImage(imageFile);
+      //String? imageUrl = await ImageService().uploadImage(imageFile);
       /*setState(() {
         _imageUrl = imageUrl;
       });*/
-      if (imageUrl != null) {
+      if (imageFile != null) {
         setState(() {
-          _urlImage = imageUrl;
+          _showImagePreview = true;
         });
       }
     }
   }
 
-  // Metodo per salvare il prodotto nel database
-  void _saveProduct() async {
-    Product product = Product(
-        id: widget.isEdit
-            ? context.read<ProductProvider>().productVisualized.id
-            : IdGenerator.generateUniqueId(),
-        title: _titleController.text,
-        description: _descriptionController.text,
-        urlImages: _urlImage,
-        locationProduct: _locationController.text,
-        uploadDate: _uploadDate,
-        lastUpdateDate: _lastUpdateDate,
-        condition: _condition,
-        availability: ProductAvailability.available,
-        productCategory: _category,
-        giver: context.read<UserProvider>().getUserBasic(),
-        publishedOn: _selectedCommunities);
+  Future<String?> uploadImage() async {
+    return await ImageService().uploadImage(imageFile!);
+  }
 
-
-    if (!widget.isEdit) {
-      await _productService.createProduct(context, product);
-      if (context.read<ProductProvider>().productVisualized.docRef != '') {
-        context.go('/product/details/${product.id}');
-      }
-    } else {
-      product.docRef = context.read<ProductProvider>().productVisualized.docRef;
-      await _productService.updateProduct(context, product);
-      Navigator.of(context).pop();
+  bool checkAllFilled(){
+    if(_titleController.text != '' &&
+    _descriptionController.text != '' &&
+    _locationController.text != '' &&
+    _selectedCommunities.isNotEmpty &&
+    imageFile != null
+    ){
+      return true;
     }
+    return false;
+  }
+
+  void _saveProduct() async {
+    if(checkAllFilled()){
+      String? urlImage = await uploadImage();
+
+      Product product = Product(
+          id: widget.isEdit
+              ? context.read<ProductProvider>().productVisualized.id
+              : IdGenerator.generateUniqueId(),
+          title: _titleController.text,
+          description: _descriptionController.text,
+          urlImages: urlImage ?? '',
+          locationProduct: _locationController.text,
+          uploadDate: _uploadDate,
+          lastUpdateDate: _lastUpdateDate,
+          condition: _condition,
+          availability: ProductAvailability.available,
+          productCategory: _category,
+          giver: context.read<UserProvider>().getUserBasic(),
+          publishedOn: _selectedCommunities);
+
+
+      if (!widget.isEdit) {
+        await _productService.createProduct(context, product);
+        if (context.read<ProductProvider>().productVisualized.docRef != '') {
+          context.go('/product/details/${product.id}');
+        }
+      } else {
+        product.docRef = context.read<ProductProvider>().productVisualized.docRef;
+        await _productService.updateProduct(context, product);
+        Navigator.of(context).pop();
+      }
+    }
+    else{
+      callError(AppLocalizations.of(context)!.fillField);
+    }
+
   }
 
   @override
@@ -176,7 +204,7 @@ class _AddProductState extends State<AddProduct> {
                       child: SizedBox(
                           height: 220,
                           width: 220,
-                          child: ProductCard(product: _products[index], route: '/product/details/',))
+                          child: ProductCard(product: _products[index], route: '/product/details/${_products[index].id}',))
 
                       );
                   },
@@ -217,14 +245,22 @@ class _AddProductState extends State<AddProduct> {
                     Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(15)),
-                        border: Border.all(width: 1,color: Theme.of(context).colorScheme.onSecondaryContainer)
+                        border: Border.all(width: 1,color: Theme.of(context).colorScheme.onSecondaryContainer),
+                        color: Theme.of(context).colorScheme.background
                       ),
-                      child: ClipRRect(
+                      child: _showImagePreview
+                          ?ClipRRect(
                         borderRadius: BorderRadius.all(Radius.circular(15)),
-                        child: Image.network(
-                          _urlImage,
+                        child: Image(
+                          image: Image.file(File(imageFile?.path ?? "")).image,
                           fit: BoxFit.cover,
                         ),
+                        )
+                      : SizedBox(
+                        width: double.infinity,
+                        height: 170,
+
+                        child: Center(child: Text(AppLocalizations.of(context)!.noImageSelected, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),)),
                       ),
                     ),
                     SizedBox(height: 8,),
@@ -232,29 +268,57 @@ class _AddProductState extends State<AddProduct> {
                       onPressed: _selectImages,
                       child: Text('Select Images'),
                     ),
+
                     TextField(
                       controller: _titleController,
-                      decoration: InputDecoration(labelText: 'Title',
-                        contentPadding:
-                        const EdgeInsets.only(left: 10.0),
-                        enabledBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(width: 1),
-                            borderRadius:
-                            BorderRadius.circular(10.0)),
-
+                      maxLength: 30,
+                      onChanged: (text) {
+                        setState(() {});
+                      },
+                      decoration: InputDecoration(labelText: AppLocalizations.of(context)!.title,
+                            labelStyle: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
+                                color: Theme.of(context).colorScheme.primary),
+                        counterText: '${_titleController.text.length}/30'
                       ),
                     ),
                     TextField(
                       controller: _descriptionController,
-                      decoration: InputDecoration(labelText: 'Description'),
+                      maxLength: 200,
+                      onChanged: (text) {
+                        setState(() {});
+                      },
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context)!.description,
+                        labelStyle: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+
+                        counterText: '${_descriptionController.text.length}/200',
+                      ),
                     ),
                     TextField(
                       controller: _locationController,
-                      decoration: InputDecoration(labelText: 'Location'),
+                      decoration: InputDecoration(labelText: AppLocalizations.of(context)!.location,
+                          labelStyle: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                              color: Theme.of(context).colorScheme.primary)),
                     ),
+                    SizedBox(height: 8,),
                     Row(
                       children: <Widget>[
-                        Text('Condition: '),
+                        Text(
+                          AppLocalizations.of(context)!.condition,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
                         DropdownButton<ProductCondition>(
                           value: _condition,
                           onChanged: (newValue) {
@@ -265,7 +329,7 @@ class _AddProductState extends State<AddProduct> {
                           items: ProductCondition.values.map((condition) {
                             return DropdownMenuItem<ProductCondition>(
                               value: condition,
-                              child: Text(condition.toString().split('.')[1]),
+                              child: Text(productConditionToString(condition, context)),
                             );
                           }).toList(),
                         ),
@@ -273,7 +337,14 @@ class _AddProductState extends State<AddProduct> {
                     ),
                     Row(
                       children: <Widget>[
-                        Text('Category: '),
+                        Text(
+                          AppLocalizations.of(context)!.category,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
                         DropdownButton<ProductCategory>(
                           value: _category,
                           onChanged: (newValue) {
@@ -284,13 +355,21 @@ class _AddProductState extends State<AddProduct> {
                           items: ProductCategory.values.map((category) {
                             return DropdownMenuItem<ProductCategory>(
                               value: category,
-                              child: Text(category.toString().split('.')[1]),
+                              child: Text(productCategoryToString(category, context)),
                             );
                           }).toList(),
                         ),
                       ],
                     ),
-                    Text('Select the communities:'),
+                    SizedBox(height: 8,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(AppLocalizations.of(context)!.selectCommunities, style: TextStyle(                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                            color: Theme.of(context).colorScheme.primary),),
+                      ],
+                    ),
                     ListView(
                       shrinkWrap: true,
                       children: myCommunities.map((community) {
@@ -316,11 +395,29 @@ class _AddProductState extends State<AddProduct> {
               ),
             ),
 
-            /*SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: _saveProduct,
-              child: Text('Save Product'),
-            ),*/
+            Padding(
+              padding: const EdgeInsets.only(left: 12.0, right: 12),
+              child: Row(
+                children: [
+                  Expanded(child: SizedBox(width: double.infinity,)),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                    ),
+                    onPressed: _saveProduct,
+                    child: Row(
+                      children: [
+                        FaIcon(FontAwesomeIcons.floppyDisk, color: Theme.of(context).colorScheme.onPrimary,),
+                        SizedBox(width: 8,),
+                        Text(AppLocalizations.of(context)!.saveProduct,style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,color: Theme.of(context).colorScheme.onPrimary),),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 12.0),
+
           ],
         ),
       ),
