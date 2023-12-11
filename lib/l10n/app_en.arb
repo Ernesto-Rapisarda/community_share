@@ -89,6 +89,11 @@
       "category":"Category: ",
       "selectCommunities":"Select the communities: ",
       "noImageSelected":"No image selected",
-      "saveProduct":"Publish gift"
+      "saveProduct":"Publish gift",
+      "gifts":"GIFTS",
+      "donated":"Donated",
+      "received":"Received",
+      "liked":"Liked"
+
 
 }

@@ -82,7 +82,12 @@
   "category":"Categoria: ",
   "selectCommunities":"Selezione le comunità: ",
   "noImageSelected":"Nessuna immagine selezionata",
-  "saveProduct":"Pubblica dono"
+  "saveProduct":"Pubblica dono",
+  "gifts":"DONI",
+  "donated":"Donati",
+  "received":"Ricevuti",
+  "liked":"Piaciuti"
+
 
 
 

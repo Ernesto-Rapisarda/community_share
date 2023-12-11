@@ -1,3 +1,4 @@
+import 'package:community_share/model/basic/product_basic.dart';
 import 'package:community_share/model/community.dart';
 import 'package:community_share/model/product_order.dart';
 import 'package:community_share/model/user_details.dart';
@@ -48,6 +49,18 @@ class UserService{
     try{
       return await _userRepository.getUserByIdDoc(id);
     }catch (error){
+      rethrow;
+    }
+  }
+
+  Future<List<Product>> getUserProductsFromCollection(String collection) async{
+    try
+    {
+      return await _userRepository.getUserProductsFromCollection(collection);
+
+    }
+    catch (error)
+    {
       rethrow;
     }
   }

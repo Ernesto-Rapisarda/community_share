@@ -256,4 +256,39 @@ class UserRepository {
       }
     }catch (error){rethrow;}
   }
+
+  Future<List<Product>> getUserProductsFromCollection(String collection) async{
+    List<Product> tmp = [];
+    try
+    {
+      QuerySnapshot<Map<String, dynamic>> snapshot = await _db
+          .collection('Users')
+          .doc(Auth().currentUser?.uid)
+          .collection(collection)
+          .get();
+
+      print(snapshot.size);
+
+      for (QueryDocumentSnapshot<Map<String, dynamic>> document in snapshot.docs) {
+        ProductBasic productBasic = ProductBasic.fromJson(document.data());
+        print(productBasic.docRefCompleteProduct);
+
+        DocumentSnapshot<Map<String, dynamic>> productDocument = await _db
+            .collection('products')
+            .doc(productBasic.docRefCompleteProduct)
+            .get();
+
+        if (productDocument.exists) {
+          Product product = Product.fromJson(productDocument.data()!);
+          tmp.add(product);
+        }
+      }
+
+      return tmp;
+    }
+    catch (error)
+    {
+      rethrow;
+    }
+  }
 }

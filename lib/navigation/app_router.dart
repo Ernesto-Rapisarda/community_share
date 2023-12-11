@@ -106,7 +106,11 @@ class AppRouter {
                   path: 'profile/object_interactions',
                   pageBuilder: (context, state) {
                     return MaterialPage(child: ProfileProducts());
-                  }),
+                  }, routes: <RouteBase>[
+                    _productSubRoutes()
+              ]
+
+                  ),
               GoRoute(
                   path: 'profile/orders',
                   pageBuilder: (context, state) {
