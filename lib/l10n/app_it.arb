@@ -86,8 +86,10 @@
   "gifts":"DONI",
   "donated":"Donati",
   "received":"Ricevuti",
-  "liked":"Piaciuti"
-
+  "liked":"Piaciuti",
+  "ordersList":"LISTA ORDINI",
+  "outgoingOrders":"Ordini di oggetti donati",
+  "receivingOrders":"Ordini di oggetti ricevuti"
 
 
 

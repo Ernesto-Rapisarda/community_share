@@ -93,7 +93,10 @@
       "gifts":"GIFTS",
       "donated":"Donated",
       "received":"Received",
-      "liked":"Liked"
+      "liked":"Liked",
+      "ordersList":"ORDERS LIST",
+      "outgoingOrders":"Orders of donating objects",
+      "receivingOrders":"Orders of receiving objects"
 
 
 }

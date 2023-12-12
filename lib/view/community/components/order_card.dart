@@ -61,8 +61,11 @@ class OrderCard extends StatelessWidget {
                   ),
                 ),
               ),
-              Text(
-                  'Order id: ${order.id}'
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                    'Order id: ${order.id}'
+                ),
               )
             ],
           ),
