@@ -103,7 +103,10 @@
       "repeatNewPassword":"Repeat new password",
       "change":"CHANGE",
       "abort":"CANCEL",
-      "passwordChanged": "Password successfully modified."
+      "passwordChanged": "Password successfully modified.",
+      "editProfile":"EDIT PROFILE",
+      "name":"Name: ",
+      "save":"Save"
 
 
 

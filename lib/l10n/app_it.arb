@@ -96,7 +96,13 @@
   "repeatNewPassword":"Ripeti nuova password",
   "change":"CAMBIA",
   "abort":"ANNULLA",
-  "passwordChanged": "Password modificata con successo."
+  "passwordChanged": "Password modificata con successo.",
+  "editProfile":"MODIFICA PROFILO",
+  "name":"Nome: ",
+  "save":"Salva"
+
+
+
 
 
 

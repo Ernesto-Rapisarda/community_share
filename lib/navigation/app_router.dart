@@ -136,7 +136,7 @@ class AppRouter {
               GoRoute(
                   path: 'profile/settings',
                   pageBuilder: (context, state) {
-                    return MaterialPage(child: ProfileSettings());
+                    return MaterialPage(child: ProfileSettings(isEmailAndPassword: true,));
                   }),
               GoRoute(
                   path: 'profile/email_change',
