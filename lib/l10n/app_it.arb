@@ -89,7 +89,16 @@
   "liked":"Piaciuti",
   "ordersList":"LISTA ORDINI",
   "outgoingOrders":"Ordini di oggetti donati",
-  "receivingOrders":"Ordini di oggetti ricevuti"
+  "receivingOrders":"Ordini di oggetti ricevuti",
+  "changePassword":"CAMBIA PASSWORD",
+  "oldPassword":"Vecchia password",
+  "newPassword":"Nuova password",
+  "repeatNewPassword":"Ripeti nuova password",
+  "change":"CAMBIA",
+  "abort":"ANNULLA",
+  "passwordChanged": "Password modificata con successo."
+
+
 
 
 

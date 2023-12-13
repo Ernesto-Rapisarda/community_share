@@ -1,5 +1,6 @@
 import 'package:community_share/providers/UserProvider.dart';
 import 'package:community_share/view/profile/components/intro_profile_with_photo.dart';
+import 'package:community_share/view/profile/screen/password_change.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
@@ -35,6 +36,20 @@ class _ProfileState extends State<Profile> {
     //context.go('/login');
   }
 
+  Future<void> showPasswordChangeDialog() async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: PasswordChange(),
+        );
+      },
+    );
+  }
+  void changeScreen(String route) {
+    context.go(route);
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -48,12 +63,12 @@ class _ProfileState extends State<Profile> {
           RowMenusProfile(
             label: AppLocalizations.of(context)!.profileMenuObject,
             label2: AppLocalizations.of(context)!.profileMenuObjectPartTwo,
-            route: '/profile/object_interactions',
+            onTap: () {changeScreen('/profile/object_interactions');},
             icon: FontAwesomeIcons.handHoldingHeart,
           ),
           RowMenusProfile(
             label: AppLocalizations.of(context)!.orders,
-            route: '/profile/orders',
+            onTap:() {changeScreen('/profile/orders');},
             icon: FontAwesomeIcons.list,
           ),
           Container(
@@ -68,12 +83,14 @@ class _ProfileState extends State<Profile> {
 
           RowMenusProfile(
             label: 'Impostazioni profilo',
-            route: '/profile/settings',
+            onTap:(){changeScreen('/profile/settings');} ,
             icon: FontAwesomeIcons.userGear,
           ),
           RowMenusProfile(
             label: 'Cambia password',
-            route: '/profile/password_change',
+            onTap: ()async {
+              await showPasswordChangeDialog();
+            },
             icon: FontAwesomeIcons.key,
           ),
           Container(
@@ -87,22 +104,22 @@ class _ProfileState extends State<Profile> {
               )),
           RowMenusProfile(
             label: 'Segnala un bug',
-            route: '',
+            onTap: (){},
             icon: FontAwesomeIcons.bug,
           ),
           RowMenusProfile(
             label: 'FAQ - Domande frequenti',
-            route: '',
+            onTap: (){},
             icon: FontAwesomeIcons.question,
           ),
           RowMenusProfile(
             label: 'Termini di utilizzo',
-            route: '',
+            onTap: (){},
             icon: FontAwesomeIcons.newspaper,
           ),
           RowMenusProfile(
             label: 'Informativa sulla privacy',
-            route: '',
+            onTap: (){},
             icon: FontAwesomeIcons.newspaper,
           ),
           Container(
@@ -142,15 +159,20 @@ class _ProfileState extends State<Profile> {
 class RowMenusProfile extends StatelessWidget {
   final String label;
   final String? label2;
-  final String route;
   final IconData icon;
+  final VoidCallback onTap;
+
 
   const RowMenusProfile(
       {super.key,
       required this.label,
-      required this.route,
+      //required this.route,
       required this.icon,
-      this.label2});
+      this.label2,
+      required this.onTap,
+      });
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -159,7 +181,8 @@ class RowMenusProfile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.only(top: 10, bottom: 10),
       child: InkWell(
-        onTap: () {context.go(route);},
+        onTap: onTap,
+
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

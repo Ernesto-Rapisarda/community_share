@@ -96,7 +96,15 @@
       "liked":"Liked",
       "ordersList":"ORDERS LIST",
       "outgoingOrders":"Orders of donating objects",
-      "receivingOrders":"Orders of receiving objects"
+      "receivingOrders":"Orders of receiving objects",
+      "changePassword":"CHANGE PASSWORD",
+      "oldPassword":"Old password",
+      "newPassword":"New password",
+      "repeatNewPassword":"Repeat new password",
+      "change":"CHANGE",
+      "abort":"CANCEL",
+      "passwordChanged": "Password successfully modified."
+
 
 
 }

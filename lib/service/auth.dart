@@ -106,4 +106,29 @@ class Auth {
       rethrow;
     }
   }
+
+  Future<bool> changePassword (String oldPassword, String newPassword, String email) async {
+    try {
+      User? user = _firebaseAuth.currentUser;
+
+      if(user != null){
+        AuthCredential credential = EmailAuthProvider.credential(
+          email: email,
+          password: oldPassword,
+        );
+
+        await user.reauthenticateWithCredential(credential);
+
+        await user.updatePassword(newPassword);
+
+        return true;
+
+      }
+      else{
+        return false;
+      }
+    } on FirebaseAuthException{
+      rethrow;
+    }
+  }
 }
