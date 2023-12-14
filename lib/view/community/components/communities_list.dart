@@ -127,9 +127,9 @@ class _CommunitiesListState extends State<CommunitiesList> {
                   },
                   child: Row(
                     children: [
-                      FaIcon(FontAwesomeIcons.circlePlus, size: 18,color: Colors.white,),
+                      FaIcon(FontAwesomeIcons.circlePlus, size: 18,color: Theme.of(context).colorScheme.onPrimary,),
                       SizedBox(width: 6,),
-                      Text(AppLocalizations.of(context)!.create, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.white),),
+                      Text(AppLocalizations.of(context)!.create, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Theme.of(context).colorScheme.onPrimary),),
                     ],
                   ),
                 ),

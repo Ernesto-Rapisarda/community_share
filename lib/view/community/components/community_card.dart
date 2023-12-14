@@ -102,7 +102,7 @@ class _CommunityCardState extends State<CommunityCard> {
                       ),
                       Text('${widget.community.members} members'),
                     ],
-                  ),
+                  ),/*
                   Positioned(
                       bottom: 8,
                       right: 8,
@@ -113,7 +113,7 @@ class _CommunityCardState extends State<CommunityCard> {
                           },
                           child: Text('Join'))
                           : Center())
-
+*/
                 ],
               ),
             ),

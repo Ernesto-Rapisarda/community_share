@@ -1,4 +1,5 @@
 import 'package:community_share/model/product_order.dart';
+import 'package:community_share/service/conversation_service.dart';
 import 'package:community_share/service/product_service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -18,13 +19,22 @@ class FullOrder extends StatefulWidget {
 
 class _FullOrderState extends State<FullOrder> {
   final ProductService _productService = ProductService();
+  final ConversationService _conversationService = ConversationService();
 
-  void updateStatus(OrderStatus orderStatus)async{
-    ProductOrder productOrder = await _productService.updateOrderStatus (context,widget._productOrder, orderStatus);
+
+  void updateStatus(OrderStatus orderStatus) async {
+    ProductOrder productOrder = await _productService.updateOrderStatus(
+        context, widget._productOrder, orderStatus);
+    if(orderStatus == OrderStatus.productDeliveredToHotSpot){
+
+    }
+    else if(orderStatus == OrderStatus.completed){
+
+    }
+
     setState(() {
       widget._productOrder = productOrder;
     });
-
   }
 
   @override
@@ -34,7 +44,12 @@ class _FullOrderState extends State<FullOrder> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-          title: Text('Order Details',style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onPrimaryContainer),),
+          title: Text(
+            'Order Details',
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.onPrimaryContainer),
+          ),
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -47,9 +62,14 @@ class _FullOrderState extends State<FullOrder> {
                   children: [
                     Text(
                       'Order ID: ',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,color: Theme.of(context).colorScheme.primary),
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.primary),
                     ),
-                    Text(widget._productOrder.id,style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))
+                    Text(widget._productOrder.id,
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold))
                   ],
                 ),
                 SizedBox(height: 10),
@@ -96,7 +116,9 @@ class _FullOrderState extends State<FullOrder> {
                     ),
                   ),
                 ),
-                SizedBox(height: 16,),
+                SizedBox(
+                  height: 16,
+                ),
                 Row(
                   children: [
                     Text(
@@ -150,7 +172,8 @@ class _FullOrderState extends State<FullOrder> {
                       ),
                     ),
                     Text(
-                      orderStatusToString(widget._productOrder.orderStatus, context),
+                      orderStatusToString(
+                          widget._productOrder.orderStatus, context),
                       style: TextStyle(
                         fontSize: 16,
                         color: getStatusColor(widget._productOrder.orderStatus),
@@ -167,7 +190,8 @@ class _FullOrderState extends State<FullOrder> {
                     widget._productOrder.orderStatus == OrderStatus.pending
                         ? OutlinedButton(
                             onPressed: () {
-                              updateStatus(OrderStatus.productDeliveredToHotSpot);
+                              updateStatus(
+                                  OrderStatus.productDeliveredToHotSpot);
                             },
                             child: Text('Arrivato in comunità'))
                         : Container(),
@@ -177,7 +201,8 @@ class _FullOrderState extends State<FullOrder> {
                     widget._productOrder.orderStatus ==
                             OrderStatus.productDeliveredToHotSpot
                         ? OutlinedButton(
-                            onPressed: () {                              updateStatus(OrderStatus.completed);
+                            onPressed: () {
+                              updateStatus(OrderStatus.completed);
                             },
                             child: Text('Donazione completata'))
                         : Container()

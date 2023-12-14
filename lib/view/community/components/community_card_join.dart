@@ -80,7 +80,7 @@ class _CommunityCardJoinState extends State<CommunityCardJoin> {
                       children: [
                         FaIcon(FontAwesomeIcons.medal,size: 25,color: Colors.yellowAccent,),
                         SizedBox(width: 6,),
-                        Text('Verified', style: TextStyle(fontSize: 20,fontWeight: FontWeight.w600,color: Colors.red),),
+                        Text('Verified', style: TextStyle(fontSize: 20,fontWeight: FontWeight.w600,color: Colors.white),),
                       ],
                     ),
                   )
