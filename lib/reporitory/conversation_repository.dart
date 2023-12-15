@@ -9,7 +9,7 @@ import 'package:flutter/src/widgets/framework.dart';
 class ConversationRepository{
   final _db = FirebaseFirestore.instance;
 
-  Future<bool> createNewConversation(BuildContext context, Conversation conversation) async{
+  Future<bool> createNewConversation(Conversation conversation) async{
     try
     {
       if(!conversation.order){
@@ -21,17 +21,7 @@ class ConversationRepository{
     }
     catch (error)
     {
-      print(error.toString());
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(error.toString()),
-          backgroundColor:
-          Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
-          duration: Duration(seconds: 2),
-        ),
-      );
-
-      return false;
+      rethrow;
     }
   }
 

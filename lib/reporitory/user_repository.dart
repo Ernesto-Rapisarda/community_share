@@ -291,4 +291,27 @@ class UserRepository {
       rethrow;
     }
   }
+
+  Future<UserDetails> getSystemProfile() async{
+    try
+    {
+      QuerySnapshot<Map<String, dynamic>> snapshot = await _db
+          .collection('Users')
+          .where('FullName', isEqualTo: 'Community Share')
+          .limit(1)
+          .get();
+      
+      if(snapshot.size==1){
+        UserDetails userDetails = UserDetails.fromJson(snapshot.docs.first.data());
+        userDetails.id = snapshot.docs.first.id;
+        return userDetails;
+      }
+      throw Exception('Systems fault...impossible to send notifications');
+      
+    }
+    catch (error)
+    {
+      rethrow;
+    }
+  }
 }

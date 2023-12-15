@@ -74,7 +74,7 @@ class ProductService {
       String textMessage = 'L\'utente ${productOrder.receiver.fullName} is asking to receive your product ${productBasic.title}.\n Please, check your order\'s page for the details.\nThanks to be so great! ';
       Message message = Message(id: IdGenerator.generateUniqueMessageId(productOrder.receiver.id, productOrder.product.giver.id), sender: productOrder.receiver, receiver: productOrder.product.giver, text: textMessage, date: DateTime.now());
       //todo gestire il doppio bool
-      messageSended = await _conversationService.createNewConversation(context, productBasic, message, 'Order for your product.',true);
+      messageSended = await _conversationService.createOrderConversation(productOrder);
 
     }
 
