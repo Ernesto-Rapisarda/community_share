@@ -106,7 +106,9 @@
       "passwordChanged": "Password successfully modified.",
       "editProfile":"EDIT PROFILE",
       "name":"Name: ",
-      "save":"Save"
+      "save":"Save",
+      "nothingToShow":"Nothing to show.\nJoin or create a community for start to donate.",
+      "noUpcomingEvents":"No upcoming events."
 
 
 

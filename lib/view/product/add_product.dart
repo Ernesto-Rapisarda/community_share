@@ -45,10 +45,10 @@ class _AddProductState extends State<AddProduct> {
   late List<CommunityBasic> myCommunities = [];
   List<CommunityBasic> _selectedCommunities = [];
   String _urlImage = '';
-      //'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/digital_camera_photo-1080x675.jpg';
+
+  //'https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/digital_camera_photo-1080x675.jpg';
   XFile? imageFile;
   bool _showImagePreview = false;
-
 
   DateTime _uploadDate = DateTime.now();
   DateTime _lastUpdateDate = DateTime.now();
@@ -73,18 +73,20 @@ class _AddProductState extends State<AddProduct> {
     }
   }
 
-  void fetchData()async{
-    try{
-      List<Product> tmp = await _userService.getUserProducts(Auth().currentUser!.uid);
+  void fetchData() async {
+    try {
+      List<Product> tmp =
+          await _userService.getUserProducts(Auth().currentUser!.uid);
       setState(() {
         loaded = true;
         _products = tmp;
       });
-    }catch (error){
+    } catch (error) {
       callError(error.toString());
     }
   }
-  void callError(String error){
+
+  void callError(String error) {
     showSnackBar(context, error, isError: true);
   }
 
@@ -107,20 +109,19 @@ class _AddProductState extends State<AddProduct> {
     return await ImageService().uploadImage(imageFile!);
   }
 
-  bool checkAllFilled(){
-    if(_titleController.text != '' &&
-    _descriptionController.text != '' &&
-    _locationController.text != '' &&
-    _selectedCommunities.isNotEmpty &&
-    imageFile != null
-    ){
+  bool checkAllFilled() {
+    if (_titleController.text != '' &&
+        _descriptionController.text != '' &&
+        _locationController.text != '' &&
+        _selectedCommunities.isNotEmpty &&
+        imageFile != null) {
       return true;
     }
     return false;
   }
 
   void _saveProduct() async {
-    if(checkAllFilled()){
+    if (checkAllFilled()) {
       String? urlImage = await uploadImage();
 
       Product product = Product(
@@ -139,22 +140,20 @@ class _AddProductState extends State<AddProduct> {
           giver: context.read<UserProvider>().getUserBasic(),
           publishedOn: _selectedCommunities);
 
-
       if (!widget.isEdit) {
         await _productService.createProduct(context, product);
         if (context.read<ProductProvider>().productVisualized.docRef != '') {
           context.go('/product/details/${product.id}');
         }
       } else {
-        product.docRef = context.read<ProductProvider>().productVisualized.docRef;
+        product.docRef =
+            context.read<ProductProvider>().productVisualized.docRef;
         await _productService.updateProduct(context, product);
         Navigator.of(context).pop();
       }
-    }
-    else{
+    } else {
       callError(AppLocalizations.of(context)!.fillField);
     }
-
   }
 
   @override
@@ -168,10 +167,9 @@ class _AddProductState extends State<AddProduct> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(left: 12.0,right: 12, top: 12),
+              padding: const EdgeInsets.only(left: 12.0, right: 12, top: 12),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
-
                 children: [
                   FaIcon(FontAwesomeIcons.handHoldingHeart,
                       size: 20, color: Theme.of(context).colorScheme.primary),
@@ -179,42 +177,56 @@ class _AddProductState extends State<AddProduct> {
                     width: 8,
                   ),
                   Text(AppLocalizations.of(context)!.yourDonationsForAdd,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                        color: Theme.of(context).colorScheme.primary)),
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: Theme.of(context).colorScheme.primary)),
                 ],
               ),
             ),
-            Row(
-              children: [
+            Row(children: [
               !loaded
                   ? Center(
-                child: CircularLoadingIndicator.circularInd(context),
-              )
-              :SizedBox(
-               width: MediaQuery.of(context).size.width,
-                height: 270,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: _products.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SizedBox(
-                          height: 220,
-                          width: 220,
-                          child: ProductCard(product: _products[index], route: '/product/details/${_products[index].id}',))
-
-                      );
-                  },
-                ),
-              ),
-              ]
-
-            ),
+                      child: CircularLoadingIndicator.circularInd(context),
+                    )
+                  : _products.length > 0
+                      ? SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          height: 270,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: _products.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: SizedBox(
+                                      height: 220,
+                                      width: 220,
+                                      child: ProductCard(
+                                        product: _products[index],
+                                        route:
+                                            '/product/details/${_products[index].id}',
+                                      )));
+                            },
+                          ),
+                        )
+                      : Expanded(
+                        child: SizedBox(
+                width: double.infinity,
+                          child: Center(
+                            child: Text(
+                                AppLocalizations.of(context)!.nothingToShow,
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.w500),
+                                textAlign: TextAlign.center,
+                              ),
+                          ),
+                        ),
+                      ),
+            ]),
             Padding(
-              padding: const EdgeInsets.only(left: 12.0,right: 12, top: 20, bottom: 8),
+              padding: const EdgeInsets.only(
+                  left: 12.0, right: 12, top: 20, bottom: 8),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -232,174 +244,200 @@ class _AddProductState extends State<AddProduct> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(bottom: 12.0,left: 12,right: 12),
+              padding: const EdgeInsets.only(bottom: 12.0, left: 12, right: 12),
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(15)),
                   color: Theme.of(context)!.colorScheme.secondaryContainer,
-
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(12.0),
-                  child: Column(children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                        border: Border.all(width: 1,color: Theme.of(context).colorScheme.onSecondaryContainer),
-                        color: Theme.of(context).colorScheme.background
+                  child: Column(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(15)),
+                            border: Border.all(
+                                width: 1,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSecondaryContainer),
+                            color: Theme.of(context).colorScheme.background),
+                        child: _showImagePreview
+                            ? ClipRRect(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(15)),
+                                child: Image(
+                                  image: Image.file(File(imageFile?.path ?? ""))
+                                      .image,
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                            : SizedBox(
+                                width: double.infinity,
+                                height: 170,
+                                child: Center(
+                                    child: Text(
+                                  AppLocalizations.of(context)!.noImageSelected,
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500),
+                                )),
+                              ),
                       ),
-                      child: _showImagePreview
-                          ?ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
-                        child: Image(
-                          image: Image.file(File(imageFile?.path ?? "")).image,
-                          fit: BoxFit.cover,
-                        ),
-                        )
-                      : SizedBox(
-                        width: double.infinity,
-                        height: 170,
-
-                        child: Center(child: Text(AppLocalizations.of(context)!.noImageSelected, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),)),
+                      SizedBox(
+                        height: 8,
                       ),
-                    ),
-                    SizedBox(height: 8,),
-                    ElevatedButton(
-                      onPressed: _selectImages,
-                      child: Text('Select Images'),
-                    ),
-
-                    TextField(
-                      controller: _titleController,
-                      maxLength: 30,
-                      onChanged: (text) {
-                        setState(() {});
-                      },
-                      decoration: InputDecoration(labelText: AppLocalizations.of(context)!.title,
+                      ElevatedButton(
+                        onPressed: _selectImages,
+                        child: Text('Select Images'),
+                      ),
+                      TextField(
+                        controller: _titleController,
+                        maxLength: 30,
+                        onChanged: (text) {
+                          setState(() {});
+                        },
+                        decoration: InputDecoration(
+                            labelText: AppLocalizations.of(context)!.title,
                             labelStyle: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w500,
                                 color: Theme.of(context).colorScheme.primary),
-                        counterText: '${_titleController.text.length}/30'
+                            counterText: '${_titleController.text.length}/30'),
                       ),
-                    ),
-                    TextField(
-                      controller: _descriptionController,
-                      maxLength: 200,
-                      onChanged: (text) {
-                        setState(() {});
-                      },
-                      decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context)!.description,
-                        labelStyle: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-
-                        counterText: '${_descriptionController.text.length}/200',
-                      ),
-                    ),
-                    TextField(
-                      controller: _locationController,
-                      decoration: InputDecoration(labelText: AppLocalizations.of(context)!.location,
+                      TextField(
+                        controller: _descriptionController,
+                        maxLength: 200,
+                        onChanged: (text) {
+                          setState(() {});
+                        },
+                        decoration: InputDecoration(
+                          labelText: AppLocalizations.of(context)!.description,
                           labelStyle: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          counterText:
+                              '${_descriptionController.text.length}/200',
+                        ),
+                      ),
+                      TextField(
+                        controller: _locationController,
+                        decoration: InputDecoration(
+                            labelText: AppLocalizations.of(context)!.location,
+                            labelStyle: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
+                                color: Theme.of(context).colorScheme.primary)),
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Text(
+                            AppLocalizations.of(context)!.condition,
+                            style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w500,
-                              color: Theme.of(context).colorScheme.primary)),
-                    ),
-                    SizedBox(height: 8,),
-                    Row(
-                      children: <Widget>[
-                        Text(
-                          AppLocalizations.of(context)!.condition,
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                            color: Theme.of(context).colorScheme.primary,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
                           ),
-                        ),
-                        DropdownButton<ProductCondition>(
-                          value: _condition,
-                          onChanged: (newValue) {
-                            setState(() {
-                              _condition = newValue!;
-                            });
-                          },
-                          items: ProductCondition.values.map((condition) {
-                            return DropdownMenuItem<ProductCondition>(
-                              value: condition,
-                              child: Text(productConditionToString(condition, context)),
-                            );
-                          }).toList(),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Text(
-                          AppLocalizations.of(context)!.category,
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                            color: Theme.of(context).colorScheme.primary,
+                          DropdownButton<ProductCondition>(
+                            value: _condition,
+                            onChanged: (newValue) {
+                              setState(() {
+                                _condition = newValue!;
+                              });
+                            },
+                            items: ProductCondition.values.map((condition) {
+                              return DropdownMenuItem<ProductCondition>(
+                                value: condition,
+                                child: Text(productConditionToString(
+                                    condition, context)),
+                              );
+                            }).toList(),
                           ),
-                        ),
-                        DropdownButton<ProductCategory>(
-                          value: _category,
-                          onChanged: (newValue) {
-                            setState(() {
-                              _category = newValue!;
-                            });
-                          },
-                          items: ProductCategory.values.map((category) {
-                            return DropdownMenuItem<ProductCategory>(
-                              value: category,
-                              child: Text(productCategoryToString(category, context)),
-                            );
-                          }).toList(),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 8,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(AppLocalizations.of(context)!.selectCommunities, style: TextStyle(                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                            color: Theme.of(context).colorScheme.primary),),
-                      ],
-                    ),
-                    ListView(
-                      shrinkWrap: true,
-                      children: myCommunities.map((community) {
-                        bool isSelected = _selectedCommunities.contains(community);
-                        return CheckboxListTile(
-                          controlAffinity: ListTileControlAffinity.leading,
-                          title: Text(community.name),
-                          value: isSelected,
-                          onChanged: (value) {
-                            setState(() {
-                              if (value!) {
-                                _selectedCommunities.add(community);
-                              } else {
-                                _selectedCommunities.remove(community);
-                              }
-                            });
-                          },
-                        );
-                      }).toList(),
-                    ),
-                  ],),
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Text(
+                            AppLocalizations.of(context)!.category,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                          DropdownButton<ProductCategory>(
+                            value: _category,
+                            onChanged: (newValue) {
+                              setState(() {
+                                _category = newValue!;
+                              });
+                            },
+                            items: ProductCategory.values.map((category) {
+                              return DropdownMenuItem<ProductCategory>(
+                                value: category,
+                                child: Text(
+                                    productCategoryToString(category, context)),
+                              );
+                            }).toList(),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            AppLocalizations.of(context)!.selectCommunities,
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
+                                color: Theme.of(context).colorScheme.primary),
+                          ),
+                        ],
+                      ),
+                      ListView(
+                        shrinkWrap: true,
+                        children: myCommunities.map((community) {
+                          bool isSelected =
+                              _selectedCommunities.contains(community);
+                          return CheckboxListTile(
+                            controlAffinity: ListTileControlAffinity.leading,
+                            title: Text(community.name),
+                            value: isSelected,
+                            onChanged: (value) {
+                              setState(() {
+                                if (value!) {
+                                  _selectedCommunities.add(community);
+                                } else {
+                                  _selectedCommunities.remove(community);
+                                }
+                              });
+                            },
+                          );
+                        }).toList(),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-
             Padding(
               padding: const EdgeInsets.only(left: 12.0, right: 12),
               child: Row(
                 children: [
-                  Expanded(child: SizedBox(width: double.infinity,)),
+                  Expanded(
+                      child: SizedBox(
+                    width: double.infinity,
+                  )),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.primary,
@@ -407,9 +445,20 @@ class _AddProductState extends State<AddProduct> {
                     onPressed: _saveProduct,
                     child: Row(
                       children: [
-                        FaIcon(FontAwesomeIcons.floppyDisk, color: Theme.of(context).colorScheme.onPrimary,),
-                        SizedBox(width: 8,),
-                        Text(AppLocalizations.of(context)!.saveProduct,style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold,color: Theme.of(context).colorScheme.onPrimary),),
+                        FaIcon(
+                          FontAwesomeIcons.floppyDisk,
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        Text(
+                          AppLocalizations.of(context)!.saveProduct,
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.onPrimary),
+                        ),
                       ],
                     ),
                   ),
@@ -417,11 +466,9 @@ class _AddProductState extends State<AddProduct> {
               ),
             ),
             SizedBox(height: 12.0),
-
           ],
         ),
       ),
-
     );
   }
 }

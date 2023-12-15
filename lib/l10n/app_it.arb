@@ -99,7 +99,11 @@
   "passwordChanged": "Password modificata con successo.",
   "editProfile":"MODIFICA PROFILO",
   "name":"Nome: ",
-  "save":"Salva"
+  "save":"Salva",
+  "nothingToShow":"Nulla da mostrare.\nUnisciti o crea una comunità per iniziare a donare.",
+  "noUpcomingEvents":"Nessun evento in programma."
+
+
 
 
 

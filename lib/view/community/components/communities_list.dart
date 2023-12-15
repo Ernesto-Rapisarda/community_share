@@ -81,8 +81,8 @@ class _CommunitiesListState extends State<CommunitiesList> {
               height: 80,
                   child: Center(
                     child: Text(
-                        'Nothing to show ... please join a community',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                        AppLocalizations.of(context)!.nothingToShow,
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),textAlign: TextAlign.center,
                       ),
                   ),
                 ),

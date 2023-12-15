@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:community_share/providers/UserProvider.dart';
 import 'package:community_share/service/community_service.dart';
 import 'package:community_share/utils/id_generator.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -35,6 +38,33 @@ class _AddCommunityState extends State<AddCommunity> {
   String _imageUrl =
       "https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/digital_camera_photo-1080x675.jpg";
 
+  File? _selectedPdf;
+  bool verified = false;
+
+  void _selectPdf() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf'],
+    );
+
+    if (result != null && result.files.isNotEmpty) {
+      setState(() {
+        _selectedPdf = File(result.files.single.path!);
+      });
+    }
+
+  }
+
+  Future<bool> _uploadPdf() async {
+    if (_selectedPdf != null) {
+      String? pdfUrl = await ImageService().uploadPdf(_selectedPdf!);
+      if (pdfUrl != null) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -63,13 +93,15 @@ class _AddCommunityState extends State<AddCommunity> {
     }
   }
 
-  void _saveCommunity() {
+  void _saveCommunity() async{
     Address address = Address(
       streetName: _streetNameController.text,
       streetNumber: _streetNumberController.text,
       postalCode: _postalCodeController.text,
       city: _cityController.text,
     );
+
+    verified = await _uploadPdf();
 
     Community community = Community(
       id: widget.isEdit
@@ -84,7 +116,7 @@ class _AddCommunityState extends State<AddCommunity> {
       type: _communityType,
       founder: context.read<UserProvider>().getUserBasic(),
       hotSpotAddress: address,
-      verified: false
+      verified: verified
     );
     if (widget.isEdit) {
       community.docRef = context.read<CommunityProvider>().community.docRef;
@@ -440,13 +472,13 @@ class _AddCommunityState extends State<AddCommunity> {
                         fontWeight: FontWeight.w500,
                         color: Theme.of(context).colorScheme.primary),
                   ),
-                  Text('Nome_del_file.pdf'),
+                  Text(_selectedPdf!=null ?_selectedPdf!.path.split('/').last  :'Nessun file selezionato', overflow: TextOverflow.ellipsis, maxLines: 1,),
                   Expanded(
                       child: SizedBox(
                     width: double.infinity,
                   )),
                   OutlinedButton(
-                      onPressed: () {},
+                      onPressed: _selectPdf,
                       child: Text(AppLocalizations.of(context)!.select)),
                 ],
               ),
