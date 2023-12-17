@@ -152,7 +152,38 @@ class AppRouter {
                   path: 'profile/my_communities',
                   pageBuilder: (context, state) {
                     return MaterialPage(child: MyCommunities());
-                  }),
+                  },
+                  routes: <RouteBase>[
+                    GoRoute(
+                        path: 'communities/home/:communityName',
+                        pageBuilder: (context, state) {
+                          state.pathParameters['communityName'];
+                          return const MaterialPage(child: CommunityMainScreen());
+                        },
+                        routes: <RouteBase>[
+                          GoRoute(
+                              path: 'edit',
+                              pageBuilder: (context, state) {
+                                return const MaterialPage(
+                                    child: AddCommunity(
+                                      isEdit: true,
+                                    ));
+                              }),
+                          _productSubRoutes(),
+                          GoRoute(
+                              path: 'order/:orderId',
+                              pageBuilder: (context, state) {
+                                ProductOrder productOrder =
+                                state.extra as ProductOrder;
+                                return MaterialPage(
+                                    child: FullOrder(
+                                      productOrder: productOrder,
+                                    ));
+                              })
+                        ]),
+                  ]
+
+                  ),
               GoRoute(
                   path: 'communities/add',
                   pageBuilder: (context, state) {

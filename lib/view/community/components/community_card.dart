@@ -10,6 +10,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../../../navigation/app_router.dart';
 import '../../../providers/UserProvider.dart';
 
 class CommunityCard extends StatefulWidget {
@@ -39,9 +40,12 @@ class _CommunityCardState extends State<CommunityCard> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+        String currentRoute =
+        AppRouter().router.routerDelegate.currentConfiguration.uri.toString();
+        String destination = '${currentRoute}/communities/home/${widget.community.name}';
         if(context.read<UserProvider>().myCommunities.contains(widget.community)){
           context.read<CommunityProvider>().community = widget.community;
-          context.go('/communities/home/${widget.community.name}');
+          context.go(destination);
         }
         else{
           showSnackBar(context, 'You aren\'t member of the community. \nPlease, join the community for visualize his contents');
