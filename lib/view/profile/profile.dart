@@ -71,6 +71,11 @@ class _ProfileState extends State<Profile> {
             onTap:() {changeScreen('/profile/orders');},
             icon: FontAwesomeIcons.list,
           ),
+          RowMenusProfile(
+            label: AppLocalizations.of(context)!.communitiesOfUser,
+            onTap: (){changeScreen('/profile/my_communities');},
+            icon: FontAwesomeIcons.peopleGroup,
+          ),
           Container(
               padding: EdgeInsets.only(top: 10),
               child: Text(

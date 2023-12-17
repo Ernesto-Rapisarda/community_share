@@ -14,7 +14,7 @@ import 'package:community_share/view/login/login.dart';
 import 'package:community_share/view/profile/screen/orders_list.dart';
 import 'package:community_share/view/profile/screen/paletta_colori.dart';
 import 'package:community_share/view/profile/screen/public_profile.dart';
-import 'package:community_share/view/temp/addresses.dart';
+import 'package:community_share/view/profile/screen/my_communites.dart';
 import 'package:community_share/view/profile/screen/gifts_tabs.dart';
 import 'package:community_share/view/temp/email_change.dart';
 import 'package:community_share/view/temp/needed_products.dart';
@@ -149,9 +149,9 @@ class AppRouter {
                     return MaterialPage(child: PasswordChange());
                   }),
               GoRoute(
-                  path: 'profile/addresses',
+                  path: 'profile/my_communities',
                   pageBuilder: (context, state) {
-                    return MaterialPage(child: Addresses());
+                    return MaterialPage(child: MyCommunities());
                   }),
               GoRoute(
                   path: 'communities/add',
