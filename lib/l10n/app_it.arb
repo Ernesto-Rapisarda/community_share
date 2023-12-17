@@ -101,7 +101,16 @@
   "name":"Nome: ",
   "save":"Salva",
   "nothingToShow":"Nulla da mostrare.\nUnisciti o crea una comunità per iniziare a donare.",
-  "noUpcomingEvents":"Nessun evento in programma."
+  "noUpcomingEvents":"Nessun evento in programma.",
+  "summary":"RIEPILOGO",
+  "confirm":"Conferma",
+  "cancel":"Cancel",
+  "confirmMessage":"Controlla i dati e se corretti conferma per creare la comunità",
+  "simpleNothingToShow":"Nulla da mostrare",
+  "userUpdated":"Utente aggiornato!"
+
+
+
 
 
 

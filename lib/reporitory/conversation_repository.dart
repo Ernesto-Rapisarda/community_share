@@ -182,6 +182,7 @@ class ConversationRepository{
 
   Future<bool> updateOrderConversation(ProductOrder productOrder, String forGiver, String forReceiver) async{
     try{
+      print('1');
       QuerySnapshot<Map<String, dynamic>> snapshot = await _db
           .collection('Users')
           .doc(productOrder.product.giver.id)
@@ -189,8 +190,11 @@ class ConversationRepository{
           .where('productOrderId',isEqualTo: productOrder.id)
           .limit(1)
           .get();
+      print(snapshot.size);
 
       if(snapshot.size==1){
+        print('2');
+
         String docId = snapshot.docs.first.id;
         Conversation conversation = Conversation.fromJson(snapshot.docs.first.data()!);
         conversation.unreadMessage = conversation.unreadMessage + 1;
@@ -207,8 +211,13 @@ class ConversationRepository{
             .collection('conversations')
             .doc(docId)
             .update(conversation.toJson());
+
+        print('3');
+
       }
       else{
+        print('false');
+
         return false;
       }
 

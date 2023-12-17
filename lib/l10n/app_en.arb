@@ -39,7 +39,7 @@
   "pageProfile":"PROFILE",
     "barHome":"Home",
     "barDonate":"DONATIONS",
-    "barCommunities":"COMMUNITIES",
+    "barCommunities":"COMMUNITY",
     "barMessageBox":"MESSAGES",
     "barProfile":"PROFILE",
     "recoverPassword":"Forgot your password? RECOVER",
@@ -108,7 +108,15 @@
       "name":"Name: ",
       "save":"Save",
       "nothingToShow":"Nothing to show.\nJoin or create a community for start to donate.",
-      "noUpcomingEvents":"No upcoming events."
+      "noUpcomingEvents":"No upcoming events.",
+      "summary":"SUMMARY",
+      "confirm":"Confirm",
+      "cancel":"Cancel",
+      "confirmMessage":"Check the data before press Confirm",
+      "simpleNothingToShow":"Nothing to show",
+      "userUpdated":"User updated!"
+
+
 
 
 

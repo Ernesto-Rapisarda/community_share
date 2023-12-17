@@ -39,30 +39,15 @@ class UserRepository {
     }
   }
 
-  Future<void> updateUserDetails(BuildContext context) async {
+  Future<void> updateUserDetails(UserDetails userDetails) async {
     try {
       await _db
           .collection("Users")
           .doc(Auth().currentUser?.uid)
-          .update(context.read<UserProvider>().userDetails.toJson());
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Your account has been updated"),
-          backgroundColor:
-              Theme.of(context).colorScheme.tertiaryContainer.withOpacity(0.1),
-          duration: Duration(seconds: 2),
-        ),
-      );
+          .update(userDetails.toJson());
+
     } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Something went wrong. Try again"),
-          backgroundColor:
-              Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
-          duration: Duration(seconds: 2),
-        ),
-      );
-      print(error.toString());
+      rethrow;
     }
   }
 

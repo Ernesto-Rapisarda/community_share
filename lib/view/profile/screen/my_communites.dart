@@ -54,7 +54,7 @@ class _MyCommunitiesState extends State<MyCommunities> {
                   ? CircularLoadingIndicator.circularInd(context)
                   : myCommunities.length > 0
                   ? Container(
-                height: 450,
+               height: 800,
                 //width: 300,
                 //color: Theme.of(context).colorScheme.secondary,
                 child: GridView.builder(

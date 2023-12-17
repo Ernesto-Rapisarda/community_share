@@ -138,12 +138,20 @@ class _AddProductState extends State<AddProduct> {
           availability: ProductAvailability.available,
           productCategory: _category,
           giver: context.read<UserProvider>().getUserBasic(),
-          publishedOn: _selectedCommunities);
+          publishedOn: _selectedCommunities,
+        search: _titleController.text.toLowerCase()
+      );
+
 
       if (!widget.isEdit) {
         await _productService.createProduct(context, product);
         if (context.read<ProductProvider>().productVisualized.docRef != '') {
-          context.go('/product/details/${product.id}');
+          setState(() {
+            _products.add(product);
+          });
+          //context.go('/product/details/${product.id}');
+
+
         }
       } else {
         product.docRef =

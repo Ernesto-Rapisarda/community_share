@@ -23,21 +23,7 @@ class IntroProfile extends StatefulWidget {
 }
 
 class _IntroProfileState extends State<IntroProfile> {
-  String? _imageUrl;
 
-  void selectImage() async {
-    XFile? imageFile = await ImageService().pickImage(ImageSource.gallery);
-    if (imageFile != null) {
-      String? imageUrl = await ImageService().uploadImage(imageFile);
-      /*setState(() {
-        _imageUrl = imageUrl;
-      });*/
-      if (imageUrl != null) {
-        context.read<UserProvider>().updateUser(urlPhotoProfile: imageUrl);
-        await UserRepository().updateUserDetails(context);
-      }
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +48,7 @@ class _IntroProfileState extends State<IntroProfile> {
                               .urlPhotoProfile !=
                           ''
                       ? NetworkImage(context
-                          .read<UserProvider>()
+                          .watch<UserProvider>()
                           .userDetails
                           .urlPhotoProfile)
                       : AssetImage(

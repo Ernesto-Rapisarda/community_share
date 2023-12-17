@@ -69,4 +69,10 @@ class UserService{
     }
   }
 
+  Future<void> updateUser(UserDetails userDetails) async{
+    try{
+      return await _userRepository.updateUserDetails(userDetails);
+    }catch (error){rethrow;}
+  }
+
 }

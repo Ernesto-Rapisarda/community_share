@@ -22,7 +22,8 @@ class ProductProvider with ChangeNotifier {
       productCategory: ProductCategory.other,
       likesNumber: 0,
       giver: UserDetailsBasic(id: '', fullName: '', location: '', urlPhotoProfile: ''),
-      publishedOn: []
+      publishedOn: [],
+    search: ''
   );
 
   late List<UserDetailsBasic> _productLiked;
@@ -84,7 +85,8 @@ class ProductProvider with ChangeNotifier {
         availability: product.availability,
         giver: product.giver,
         productCategory: product.productCategory,
-        publishedOn: product.publishedOn
+        publishedOn: product.publishedOn,
+        search: product.search
     );
     _productVisualized.docRef = product.docRef;
     _productLiked =

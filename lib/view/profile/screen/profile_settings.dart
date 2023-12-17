@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:community_share/service/user_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -25,6 +27,7 @@ class ProfileSettings extends StatefulWidget{
 }
 
 class _ProfileSettingsState extends State<ProfileSettings> {
+  final UserService _userService = UserService();
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
   final TextEditingController _repeatPassword = TextEditingController();
@@ -62,10 +65,6 @@ class _ProfileSettingsState extends State<ProfileSettings> {
 
   bool checkAllComplete() {
     if (widget.isEmailAndPassword &&
-        validEmail &&
-        validPassword &&
-        correctRepeatPassword &&
-        _fullName.text != '' &&
         _phoneNumber.text != '') {
       return true;
     } else if (_fullName.text != '' && _phoneNumber.text != '') {
@@ -75,60 +74,46 @@ class _ProfileSettingsState extends State<ProfileSettings> {
   }
 
   Future<void> updateUser() async {
-    /*try {
+    try {
       if (checkAllComplete()) {
-        if (widget.isEmailAndPassword) {
-          await Auth().createUserInWithEmailAndPassword(
-              email: _email.text, password: _password.text);
-          await Auth().signInWithEmailAndPassword(
-              email: _email.text, password: _password.text);
-        } else {}
-        String? urlImage = await uploadImage();
-        UserDetails userDetails = UserDetails(
-            id: Auth().currentUser?.uid,
-            fullName: _fullName.text,
-            location: _location.text,
-            phoneNumber: _phoneNumber.text,
-            email: _email.text,
-            provider: widget.isEmailAndPassword
-                ? ProviderName.email
-                : ProviderName.google,
-            urlPhotoProfile: urlImage ?? '',
-            lastTimeOnline: DateTime.now(),
-            lastUpdate: DateTime.now(),
-            language: _language,
-            theme: _theme);
-        await Auth().completeRegistration(Auth().currentUser!.uid, userDetails);
-        accountCreated();
-        await Future.delayed(const Duration(seconds: 3));
-        if (widget.isEmailAndPassword) {
-          await Auth().signOut();
+        String? urlImage;
+        if(imageFile!=null){
+          urlImage = await uploadImage();
         }
+        UserDetails userDetails = context.read<UserProvider>().userDetails;
+        userDetails.location = _location.text;
+        userDetails.phoneNumber = _phoneNumber.text;
+        if(urlImage!=null ){
+          userDetails.urlPhotoProfile = urlImage!;
+        }
+        userDetails.language= _language;
+        userDetails.theme = _theme;
+        userDetails.lastUpdate = DateTime.now();
 
+        await _userService.updateUser(userDetails);
+        userUpdated();
+        await Future.delayed(const Duration(seconds: 2));
         changePage(userDetails);
       } else {
         callError(AppLocalizations.of(context)!.fillField);
       }
     } on FirebaseAuthException catch (error) {
       callError(error.message!);
-    }*/
+    }
   }
 
   void callError(String error) {
     showSnackBar(context, error, isError: true);
   }
 
-  void accountCreated() {
-    showSnackBar(context, AppLocalizations.of(context)!.accountCreated);
+  void userUpdated() {
+    showSnackBar(context, AppLocalizations.of(context)!.userUpdated);
   }
 
   void changePage(UserDetails userDetails) {
-    context.read<UserProvider>().setData(userDetails, [], [],0);
-    if (widget.isEmailAndPassword) {
-      Navigator.of(context).pop();
-    } else {
-      context.go('/');
-    }
+    context.read<UserProvider>().updateUser(userDetails);
+    Navigator.of(context).pop();
+
   }
 
 

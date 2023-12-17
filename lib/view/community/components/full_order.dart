@@ -53,6 +53,7 @@ class _FullOrderState extends State<FullOrder> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
@@ -62,9 +63,11 @@ class _FullOrderState extends State<FullOrder> {
                           fontWeight: FontWeight.bold,
                           color: Theme.of(context).colorScheme.primary),
                     ),
-                    Text(widget._productOrder.id,
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold))
+                    Expanded(
+                      child: Text(widget._productOrder.id,
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold), maxLines: null),
+                    )
                   ],
                 ),
                 SizedBox(height: 10),

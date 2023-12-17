@@ -388,11 +388,15 @@ class ProductRepository {
 
   Future<List<Product>> search(String text) async{
     try{
+      String textToLowerCase = text.toLowerCase();
+
       QuerySnapshot querySnapshot = await _db
           .collection('products')
-          .where('title', isGreaterThanOrEqualTo: text)
-          .where('title', isLessThan: text + 'z') // per case-sensitive
+          .where('search', isGreaterThanOrEqualTo: textToLowerCase)
+          .where('search', isLessThan: textToLowerCase + 'z')
           .get();
+
+      print(querySnapshot.size);
 
       List<Product> products = querySnapshot.docs.map((doc) {
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;

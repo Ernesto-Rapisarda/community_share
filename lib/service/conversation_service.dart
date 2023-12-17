@@ -51,14 +51,16 @@ class ConversationService {
     return await _conversationRepository.getMyConversations(context);
   }
 
-  void setMessagesReaded(BuildContext context,
+  Future<void> setMessagesReaded(BuildContext context,
       Conversation conversation) async {
     if (conversation.members[conversation.indexOfLastSender].id !=
         Auth().currentUser?.uid) {
       conversation.unreadMessage = 0;
       conversation.lastUpdate = DateTime.now();
       await _conversationRepository.setMessagesReaded(context, conversation);
+
     }
+
   }
 
   Future<Conversation> sendReply(BuildContext context,
@@ -126,7 +128,8 @@ class ConversationService {
                     .title} was created. Please, delivery the object to the designed hotspot.',
                 date: DateTime.now())
           ],
-          order: true
+          order: true,
+          productOrderId: productOrder.id
       );
 
       Conversation receiverConversation = Conversation(
@@ -163,7 +166,8 @@ class ConversationService {
                     .title} was created. Please, wait for the communication of the object delivered to the designed hotspot.',
                 date: DateTime.now())
           ],
-          order: true
+          order: true,
+          productOrderId: productOrder.id
       );
 
 

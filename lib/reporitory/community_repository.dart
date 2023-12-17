@@ -28,6 +28,7 @@ class CommunityRepository {
           .doc(Auth().currentUser?.uid)
           .collection('myCommunities')
           .add(community.toJson());
+      context.read<UserProvider>().addCommunity(community);
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

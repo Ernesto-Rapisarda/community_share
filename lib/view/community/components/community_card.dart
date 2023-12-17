@@ -40,9 +40,16 @@ class _CommunityCardState extends State<CommunityCard> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        String currentRoute =
-        AppRouter().router.routerDelegate.currentConfiguration.uri.toString();
-        String destination = '${currentRoute}/communities/home/${widget.community.name}';
+        String currentRoute = AppRouter().router.routerDelegate.currentConfiguration.uri.toString();
+        print(currentRoute);
+        String destination;
+        if(!currentRoute.endsWith('/')){
+          destination = '$currentRoute/communities/home/${widget.community.name}';
+        }
+        else{
+          destination ='${currentRoute}communities/home/${widget.community.name}';
+        }
+
         if(context.read<UserProvider>().myCommunities.contains(widget.community)){
           context.read<CommunityProvider>().community = widget.community;
           context.go(destination);
@@ -72,13 +79,33 @@ class _CommunityCardState extends State<CommunityCard> {
                     ),
                   ),
                   SizedBox(height: 8,),
-                  Container(
-                      width: 200,
-                      height: 200,
-                      child: Image.network(
-                        widget.community.urlLogo,
-                        fit: BoxFit.cover,
-                      )),
+                  Stack(
+                    children: [
+                      Container(
+                          width: 200,
+                          height: 200,
+                          child: Image.network(
+                            widget.community.urlLogo,
+                            fit: BoxFit.cover,
+                          )),
+                      Positioned(
+                        bottom: 8,
+                        right: 0,
+                        left: 0,
+                        child: widget.community.verified ? Container(
+                          color: Colors.black54,
+                          child: Row(
+                            children: [
+                              FaIcon(FontAwesomeIcons.medal,size: 25,color: Colors.yellowAccent,),
+                              SizedBox(width: 6,),
+                              Text('Verified', style: TextStyle(fontSize: 20,fontWeight: FontWeight.w600,color: Colors.white),),
+                            ],
+                          ),
+                        )
+                            :Center(),
+                      ),
+                    ],
+                  ),
                   SizedBox(height: 8,),
 
                   Row(

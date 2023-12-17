@@ -28,7 +28,8 @@ class _HomeState extends State<Home> {
   final ProductService _productService = ProductService();
   final TextEditingController _searchController = TextEditingController();
 
-  bool loaded = false;
+  bool loadedEvents = false;
+  bool loadedProducts = false;
   late List<Product> _products = [];
   late List<Event> _incomingEvents = [];
   List<ProductCategory> filterCategories = [];
@@ -37,7 +38,7 @@ class _HomeState extends State<Home> {
   Future<void> fetchProducts(List<ProductCategory> categories) async {
     try {
       setState(() {
-        loaded = false;
+        loadedProducts = false;
       });
 
       if (categories.isEmpty) {
@@ -49,7 +50,7 @@ class _HomeState extends State<Home> {
 
       setState(() {
         _products.addAll(newProducts);
-        loaded = true;
+        loadedProducts = true;
       });
     } catch (error) {
       callError(error.toString());
@@ -63,6 +64,7 @@ class _HomeState extends State<Home> {
 
       setState(() {
         _incomingEvents = events;
+        loadedEvents = true;
       });
     } catch (error) {
       callError(error.toString());
@@ -138,7 +140,7 @@ class _HomeState extends State<Home> {
           ),
           Padding(
             padding: const EdgeInsets.only(left: 12, right: 12, bottom: 12),
-            child: !loaded
+            child: !loadedEvents
                 ? Center(
                     child: CircularLoadingIndicator.circularInd(context),
                   )
@@ -212,7 +214,7 @@ class _HomeState extends State<Home> {
           ),
           Padding(
             padding: const EdgeInsets.only(left: 12, right: 12, bottom: 12),
-            child: !loaded
+            child: !loadedProducts
                 ? Center(
                     child: CircularLoadingIndicator.circularInd(context),
                   )
@@ -227,11 +229,11 @@ class _HomeState extends State<Home> {
                             children: [
                               ClipOval(
                                 child: Container(
-                                  width: 90,
-                                  height: 150,
+                                  width: 60,
+                                  height: 100,
                                   color: Theme.of(context).colorScheme.primaryContainer,
                                   child: CircleAvatar(
-                                    radius: 90,
+                                    radius: 60,
                                     backgroundImage: AssetImage('assets/images/logoCS.png'),
                                     backgroundColor: Theme.of(context).colorScheme.primaryContainer,
                                   ),

@@ -37,18 +37,11 @@ class _MailBoxState extends State<MailBox> {
     });
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Message Box',
-          style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Theme.of(context).colorScheme.primary),
-        ),
-      ),
       body: ListView.builder(
         itemCount: _myConversations.length,
         itemBuilder: (context, index) {

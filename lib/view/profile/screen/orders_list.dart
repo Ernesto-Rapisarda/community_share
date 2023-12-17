@@ -75,7 +75,7 @@ class _MyOrdersState extends State<MyOrders> {
                   },
                 )
                     : Center(
-                  child: Text(AppLocalizations.of(context)!.nothingToShow,
+                  child: Text(AppLocalizations.of(context)!.simpleNothingToShow,
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 20,
@@ -100,7 +100,7 @@ class _MyOrdersState extends State<MyOrders> {
                   },
                 )
                     : Center(
-                  child: Text(AppLocalizations.of(context)!.nothingToShow,
+                  child: Text(AppLocalizations.of(context)!.simpleNothingToShow,
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 20,

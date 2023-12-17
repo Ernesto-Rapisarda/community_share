@@ -488,7 +488,7 @@ class _AddCommunityState extends State<AddCommunity> {
               children: [
                 OutlinedButton(
                     onPressed:
-                      _saveCommunity
+                    _showSummaryDialog
                     ,
                     child: Text(
                       AppLocalizations.of(context)!.create,
@@ -502,6 +502,62 @@ class _AddCommunityState extends State<AddCommunity> {
           ],
         ),
       ),
+    );
+  }
+
+  void _showSummaryDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(AppLocalizations.of(context)!.summary),
+          content: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: _screenSize / 3,
+                height: _screenSize / 9 * 4,
+                decoration: BoxDecoration(
+                    border: Border.all(
+                        color: Theme.of(context).colorScheme.primary,
+                        width: 2),
+                    borderRadius:
+                    BorderRadius.all(Radius.circular(8)),
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: NetworkImage(_imageUrl),
+                    )),
+              ),
+              Text('${_nameController.text}',style: TextStyle(fontSize: 18,fontWeight: FontWeight.w600),),
+              SizedBox(height: 8,),
+              Text('${_descriptionController.text}'),
+              SizedBox(height: 8,),
+              Text('${AppLocalizations.of(context)!.addressProductChange}:',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600)),
+              Text('${_streetNameController.text}, ${_streetNumberController.text}'),
+              Text('${_postalCodeController.text}, ${_cityController.text}'),
+
+              SizedBox(height: 16),
+              Text(AppLocalizations.of(context)!.confirmMessage,style: TextStyle(fontSize: 18),),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Chiudi il dialog senza salvare
+              },
+              child: Text(AppLocalizations.of(context)!.cancel),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Chiudi il dialog
+                _saveCommunity(); // Salva la community
+              },
+              child: Text(AppLocalizations.of(context)!.confirm),
+            ),
+          ],
+        );
+      },
     );
   }
 }

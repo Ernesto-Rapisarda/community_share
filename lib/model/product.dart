@@ -32,6 +32,8 @@ class Product {
 
   List<CommunityBasic> publishedOn;
 
+  String search;
+
   Product({
     required this.id,
     required this.title,
@@ -46,7 +48,8 @@ class Product {
     required this.productCategory,
     required this.publishedOn,
     this.likesNumber = 0,
-    this.docRef
+    this.docRef,
+    required this.search
   });
 
   toJson() {
@@ -65,6 +68,7 @@ class Product {
       'likesNumber': likesNumber,
       'giver': giver.toJson(),
       'publishedOn': publishedOn.map((community) => community.toJson()).toList(),
+      'search':search
 
     };
   }
@@ -92,6 +96,7 @@ class Product {
             .toList(),
         likesNumber: json['likesNumber'],
         docRef: json['docRef'],
+        search: json['search'],
 
 
 

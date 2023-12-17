@@ -1,9 +1,11 @@
+import 'package:community_share/providers/UserProvider.dart';
 import 'package:community_share/service/auth.dart';
 import 'package:community_share/service/conversation_service.dart';
 import 'package:community_share/view/generic_components/message_composer.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../../model/conversation.dart';
 import '../../model/message.dart';
@@ -11,8 +13,10 @@ import '../../model/message.dart';
 class ChatScreen extends StatefulWidget {
   late Conversation _conversation;
 
+
   ChatScreen({super.key, required Conversation conversation}) {
     _conversation = conversation;
+
   }
 
   @override
@@ -118,7 +122,14 @@ class _ChatScreenState extends State<ChatScreen> {
   onClose() {
   }
 
-  void setMessagesReaded() {
-    _conversationService.setMessagesReaded(context, widget._conversation);
+  void setMessagesReaded() async{
+    await _conversationService.setMessagesReaded(context, widget._conversation);
+    int number = await _conversationService.unreadedMessageNumber();
+    updateUnreadMessage(number);
+  }
+
+  void updateUnreadMessage(int value){
+    context.read<UserProvider>().updateUnreadMessage(value);
+
   }
 }
