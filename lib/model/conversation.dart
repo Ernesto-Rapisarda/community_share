@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:community_share/model/basic/product_basic.dart';
 import 'package:community_share/model/basic/user_details_basic.dart';
+import 'package:community_share/model/product_order.dart';
 import 'package:community_share/model/user_details.dart';
 
 import 'message.dart';
@@ -16,6 +17,7 @@ class Conversation {
   int unreadMessage;
   List<Message> messages;
   bool order;
+  String? productOrderId;
 
   Conversation(
       {required this.id,
@@ -26,7 +28,7 @@ class Conversation {
       required this.startDate,
       required this.lastUpdate,
       required this.unreadMessage,
-      required this.messages,required this.order});
+      required this.messages,required this.order, this.productOrderId});
 
   toJson() {
     return {
@@ -39,7 +41,9 @@ class Conversation {
       'lastUpdate': lastUpdate,
       'unreadMessage': unreadMessage,
       'messages': messages.map((e) => e.toJson()).toList(),
-      'order':order
+      'order':order,
+      'productOrderId': productOrderId??''
+
     };
   }
 
@@ -58,7 +62,8 @@ class Conversation {
       messages: (json['messages'] as List<dynamic>)
           .map((e) => Message.fromJson(e))
           .toList(),
-      order: json['order']
+      order: json['order'],
+      productOrderId: json['productOrderId']
     );
 
   }

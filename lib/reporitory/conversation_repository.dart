@@ -2,7 +2,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:community_share/model/basic/user_details_basic.dart';
 import 'package:community_share/model/conversation.dart';
+import 'package:community_share/model/message.dart';
+import 'package:community_share/model/product_order.dart';
 import 'package:community_share/service/auth.dart';
+import 'package:community_share/utils/id_generator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
@@ -99,6 +102,7 @@ class ConversationRepository{
         for(UserDetailsBasic userDetailsBasic in conversation.members){
           QuerySnapshot<Map<String, dynamic>> snapshot = await _db.collection('Users').doc(userDetailsBasic.id).collection('conversations').where('id', isEqualTo: conversation.id).limit(1).get();
           if(snapshot.docs.isNotEmpty){
+            print('set messages readed');
             String documentId = snapshot.docs[0].id;
             await _db.collection('Users').doc(userDetailsBasic.id).collection('conversations').doc(documentId).update(conversation.toJson());
           }
@@ -174,5 +178,75 @@ class ConversationRepository{
       });
       return unreadedMessageNumber;
     }catch (error){rethrow;}
+  }
+
+  Future<bool> updateOrderConversation(ProductOrder productOrder, String forGiver, String forReceiver) async{
+    try{
+      QuerySnapshot<Map<String, dynamic>> snapshot = await _db
+          .collection('Users')
+          .doc(productOrder.product.giver.id)
+          .collection('conversations')
+          .where('productOrderId',isEqualTo: productOrder.id)
+          .limit(1)
+          .get();
+
+      if(snapshot.size==1){
+        String docId = snapshot.docs.first.id;
+        Conversation conversation = Conversation.fromJson(snapshot.docs.first.data()!);
+        conversation.unreadMessage = conversation.unreadMessage + 1;
+        Message message = conversation.messages[0];
+        message.id = IdGenerator.generateUniqueMessageId(message.sender.id, message.receiver.id);
+        message.date = DateTime.now();
+        message.text = forGiver;
+        conversation.messages.add(message);
+        conversation.lastUpdate = DateTime.now();
+
+        await _db
+            .collection('Users')
+            .doc(productOrder.product.giver.id)
+            .collection('conversations')
+            .doc(docId)
+            .update(conversation.toJson());
+      }
+      else{
+        return false;
+      }
+
+      snapshot = await _db
+          .collection('Users')
+          .doc(productOrder.receiver.id)
+          .collection('conversations')
+          .where('productOrderId',isEqualTo: productOrder.id)
+          .limit(1)
+          .get();
+
+      if(snapshot.size==1){
+        String docId = snapshot.docs.first.id;
+        Conversation conversation = Conversation.fromJson(snapshot.docs.first.data()!);
+        conversation.unreadMessage = conversation.unreadMessage + 1;
+        Message message = conversation.messages[0];
+        message.id = IdGenerator.generateUniqueMessageId(message.sender.id, message.receiver.id);
+        message.date = DateTime.now();
+        message.text = forReceiver;
+        conversation.messages.add(message);
+        conversation.lastUpdate = DateTime.now();
+
+        await _db
+            .collection('Users')
+            .doc(productOrder.receiver.id)
+            .collection('conversations')
+            .doc(docId)
+            .update(conversation.toJson());
+      }
+      else{
+        return false;
+      }
+
+      return true;
+
+    }catch (error){
+      rethrow;
+    }
+
   }
 }

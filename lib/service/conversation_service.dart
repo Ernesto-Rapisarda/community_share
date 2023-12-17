@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:community_share/model/basic/product_basic.dart';
 import 'package:community_share/model/basic/user_details_basic.dart';
 import 'package:community_share/model/conversation.dart';
+import 'package:community_share/model/enum/order_status.dart';
 import 'package:community_share/model/message.dart';
 import 'package:community_share/model/product_order.dart';
 import 'package:community_share/model/user_details.dart';
@@ -175,13 +176,22 @@ class ConversationService {
     }
   }
 
-/*  Future<Conversation> updateOrderConversation(Order order) async{
+  Future<bool> updateOrderConversation(ProductOrder productOrder) async{
     try{
-      _conversationRepository.updateOrderConversation()
+      String forGiver;
+      String forReceiver;
+      if(productOrder.orderStatus == OrderStatus.productDeliveredToHotSpot){
+        forGiver = 'Thank you for delivery the gift to the hotspot. We will update this chat, when the receiver will pickup the gift.';
+        forReceiver = 'Your gift was delivered to ${productOrder.hotSpot.name}. Please, go to pick-up as soon as possible';
+      }else{
+        forGiver = 'Your donations is completed. Thank to be so generous.';
+        forReceiver = 'Donations completed. We hope you can feel better with the help of the communities.';
+      }
+      return await _conversationRepository.updateOrderConversation(productOrder,forGiver,forReceiver);
     }catch (error){
       rethrow;
     }
-  }*/
+  }
 
   Future<int> unreadedMessageNumber() async{
     try{

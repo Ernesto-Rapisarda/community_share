@@ -1,9 +1,11 @@
+import 'package:community_share/providers/UserProvider.dart';
 import 'package:community_share/reporitory/conversation_repository.dart';
 import 'package:community_share/service/auth.dart';
 import 'package:community_share/service/conversation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../../model/conversation.dart';
 
@@ -27,8 +29,11 @@ class _MailBoxState extends State<MailBox> {
   void fetchConversations() async {
     List<Conversation> myConversations =
         await _conversationService.getMyConversations(context);
+    int unreadMessage = await _conversationService.unreadedMessageNumber();
     setState(() {
+      context.read<UserProvider>().unreadMessage = unreadMessage;
       _myConversations = myConversations;
+
     });
   }
 

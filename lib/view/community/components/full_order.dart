@@ -25,12 +25,7 @@ class _FullOrderState extends State<FullOrder> {
   void updateStatus(OrderStatus orderStatus) async {
     ProductOrder productOrder = await _productService.updateOrderStatus(
         context, widget._productOrder, orderStatus);
-    if(orderStatus == OrderStatus.productDeliveredToHotSpot){
-
-    }
-    else if(orderStatus == OrderStatus.completed){
-
-    }
+    await _conversationService.updateOrderConversation(productOrder);
 
     setState(() {
       widget._productOrder = productOrder;
