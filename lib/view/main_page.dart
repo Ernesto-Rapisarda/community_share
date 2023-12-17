@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:community_share/main.dart';
 import 'package:community_share/providers/UserProvider.dart';
+import 'package:community_share/service/conversation_service.dart';
 import 'package:community_share/service/user_service.dart';
 import 'package:community_share/utils/circular_load_indicator.dart';
 import 'package:community_share/view/product/add_product.dart';
@@ -22,7 +25,9 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   //final UserProvider _userProvider = UserProvider();
+  final ConversationService _conversationService = ConversationService();
   late bool _isLoading;
+  int unreadMessage = 0;
 
   int _selectedIndex = 0;
   final List<Widget> _children = [Home()];
@@ -32,7 +37,17 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
     fetchUserData();
+    startBackgroungUnreadedMessage();
   }
+
+  void startBackgroungUnreadedMessage(){
+    const Duration updateInterval = Duration(minutes: 3);
+    Timer.periodic(updateInterval,(Timer timer) async{
+    context.read<UserProvider>().unreadMessage = await _conversationService.unreadedMessageNumber();
+    context.read<UserProvider>().notifyListeners();
+    });
+  }
+
 
   void fetchUserData() async {
     await UserService().initializeUser(context);
@@ -95,11 +110,18 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     _isLoading = context.watch<UserProvider>().isLoading;
+    unreadMessage = context.watch<UserProvider>().unreadMessage;
+
     if (!_isLoading) {
       return SafeArea(
           child: Scaffold(
         appBar: AppBar(
-          title: Text(appBarTitle, style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onPrimaryContainer),),
+          title: Text(
+            appBarTitle,
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.onPrimaryContainer),
+          ),
           backgroundColor: Theme.of(context).colorScheme.primaryContainer,
         ),
         body: _children.elementAt(_selectedIndex),
@@ -133,6 +155,16 @@ class _MainPageState extends State<MainPage> {
                 GButton(
                   text: AppLocalizations.of(context)!.barMessageBox,
                   icon: FontAwesomeIcons.envelope,
+                  leading: unreadMessage==0 ?null :Badge(
+                      label: Text(unreadMessage.toString()),
+                      textColor: Colors.red.shade100,
+                      child: FaIcon(
+                        FontAwesomeIcons.envelope,
+                        size: 24,
+                        color: _selectedIndex == 3
+                            ? Theme.of(context).colorScheme.onPrimaryContainer
+                            : Theme.of(context).colorScheme.onPrimary,
+                      )),
                 ),
                 GButton(
                   text: AppLocalizations.of(context)!.barProfile,

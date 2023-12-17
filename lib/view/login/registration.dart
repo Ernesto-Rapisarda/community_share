@@ -125,7 +125,7 @@ class _RegistrationState extends State<Registration> {
   }
 
   void changePage(UserDetails userDetails) {
-    context.read<UserProvider>().setData(userDetails, [], []);
+    context.read<UserProvider>().setData(userDetails, [], [],0);
     if (widget.isEmailAndPassword) {
       Navigator.of(context).pop();
     } else {

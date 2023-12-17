@@ -26,7 +26,7 @@ class UserProvider with ChangeNotifier{
   );
   List<Community> _myCommunities = [];
   List<Product> _productsLiked = [];
-
+  int _unreadMessage = 0;
    //UserDetails(fullName: '', location: '', phoneNumber: '', email: '', provider: ProviderName.undefined, urlPhotoProfile: '', lastTimeOnline: null,lastUpdate: null);
 
 
@@ -37,6 +37,12 @@ class UserProvider with ChangeNotifier{
   List<Community> get myCommunities => _myCommunities;
   List<Product> get productLiked => _productsLiked;
 
+
+  int get unreadMessage => _unreadMessage;
+
+  set unreadMessage(int value) {
+    _unreadMessage = value;
+  }
 
   bool get isLoading => _isLoading;
 
@@ -84,11 +90,12 @@ class UserProvider with ChangeNotifier{
     _firstSignIn=!_firstSignIn;
   }
 
-  void setData(UserDetails userDetails, List<Community> communities, List<Product> productLiked) {
+  void setData(UserDetails userDetails, List<Community> communities, List<Product> productLiked, int unreadMessage) {
     _productsLiked = productLiked;
     _userDetails=userDetails;
     //print(_userDetails.toString());
     _myCommunities = communities;
+    _unreadMessage = unreadMessage;
     _isLoading = false;
 
     notifyListeners();

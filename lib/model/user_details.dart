@@ -17,6 +17,7 @@ class UserDetails {
 
 
 
+
   UserDetails({
     this.id,
     required this.fullName,

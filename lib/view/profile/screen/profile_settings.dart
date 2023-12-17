@@ -123,7 +123,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
   }
 
   void changePage(UserDetails userDetails) {
-    context.read<UserProvider>().setData(userDetails, [], []);
+    context.read<UserProvider>().setData(userDetails, [], [],0);
     if (widget.isEmailAndPassword) {
       Navigator.of(context).pop();
     } else {

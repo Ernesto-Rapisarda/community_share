@@ -122,6 +122,7 @@ class _ProfileState extends State<Profile> {
             onTap: (){},
             icon: FontAwesomeIcons.newspaper,
           ),
+          RowMenusProfile(label: 'paletta colori', icon: Icons.add, onTap:() {changeScreen('/profile/paletta_colori');}),
           Container(
             padding: const EdgeInsets.only(top: 25, bottom: 10),
             //color: Theme.of(context).colorScheme.tertiary,

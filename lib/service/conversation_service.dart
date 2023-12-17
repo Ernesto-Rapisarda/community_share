@@ -182,4 +182,10 @@ class ConversationService {
       rethrow;
     }
   }*/
+
+  Future<int> unreadedMessageNumber() async{
+    try{
+      return _conversationRepository.unreadedMessageNumber();
+    } catch (error){rethrow;}
+  }
 }

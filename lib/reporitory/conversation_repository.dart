@@ -158,4 +158,21 @@ class ConversationRepository{
       return false;
     }
   }
+
+  Future<int> unreadedMessageNumber() async{
+    int unreadedMessageNumber = 0;
+    try{
+      QuerySnapshot<Map<String, dynamic>> snapshot = await _db
+          .collection('Users')
+          .doc(Auth().currentUser?.uid)
+          .collection('conversations')
+          .get();
+
+      snapshot.docs.forEach((DocumentSnapshot<Map<String, dynamic>> document){
+        Conversation conversation = Conversation.fromJson(document.data()!);
+        unreadedMessageNumber = unreadedMessageNumber + conversation.unreadMessage;
+      });
+      return unreadedMessageNumber;
+    }catch (error){rethrow;}
+  }
 }

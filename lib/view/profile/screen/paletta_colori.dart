@@ -37,7 +37,7 @@ class PalettaColori extends StatelessWidget{
             height: 70,
             color: Theme.of(context).colorScheme.primaryContainer,
             child: Center(
-              child: Text('PrimaryContainer and onPrimCont ',style: TextStyle(color: Theme.of(context).colorScheme.onPrimaryContainer),),
+              child: Text('PrimaryContainer and onPrimCont, ${Theme.of(context).colorScheme.primaryContainer.value.toRadixString(16)} ',style: TextStyle(color: Theme.of(context).colorScheme.onPrimaryContainer),),
             ),
           ),
           Container(
