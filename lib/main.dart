@@ -55,6 +55,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   late Locale _locale;
   late ThemeData _theme;
+  final GoRouter _router = AppRouter().router;
 
   @override
   void initState() {
@@ -75,7 +76,6 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  final GoRouter _router = AppRouter().router;
 
   @override
   Widget build(BuildContext context) {

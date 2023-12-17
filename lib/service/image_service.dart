@@ -1,16 +1,36 @@
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/services.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class ImageService {
   Future<String?> uploadImage(XFile file) async {
-    FirebaseStorage storage = FirebaseStorage.instance;
-    Reference storageReference = storage.ref().child('profile_images/${DateTime.now().toString()}');
-    TaskSnapshot storageTaskSnapshot = await storageReference.putFile(File(file.path));
-    String downloadUrl = await storageTaskSnapshot.ref.getDownloadURL();
-    return downloadUrl;
+    try{
+      FirebaseStorage storage = FirebaseStorage.instance;
+      Reference storageReference = storage.ref().child('profile_images/${DateTime.now().toString()}');
+      TaskSnapshot storageTaskSnapshot = await storageReference.putFile(File(file.path));
+      String downloadUrl = await storageTaskSnapshot.ref.getDownloadURL();
+      return downloadUrl;
+    }
+    catch (error){
+      rethrow;
+    }
+
+  }
+
+  Future<XFile?> loadDefaultImage() async {
+    String assetPath = 'assets/images/user_photos/examples/UserProfileDefault.png';
+    ByteData data = await rootBundle.load(assetPath);
+    List<int> bytes = data.buffer.asUint8List();
+
+    Directory tempDir = await Directory.systemTemp;
+    File tempFile = File('${tempDir.path}/default_image.png');
+    await tempFile.writeAsBytes(bytes);
+
+    return XFile(tempFile.path);
+    //return XFile('assets/images/user_photos/examples/UserProfileDefault.png');
   }
 
   Future<XFile?> pickImage(ImageSource source) async {

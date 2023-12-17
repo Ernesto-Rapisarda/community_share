@@ -40,6 +40,10 @@ class UserProvider with ChangeNotifier{
 
   int get unreadMessage => _unreadMessage;
 
+  set firstSignIn(bool value){
+    _firstSignIn = value;
+  }
+
   set unreadMessage(int value) {
     _unreadMessage = value;
   }

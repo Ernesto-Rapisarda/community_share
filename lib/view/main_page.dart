@@ -71,6 +71,7 @@ class _MainPageState extends State<MainPage> {
     }
     MyApp.setTheme(context, theme);
     MyApp.setLocale(context, locale);
+    
   }
 
   void _onItemTapped(int index) {

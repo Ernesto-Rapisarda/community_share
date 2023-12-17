@@ -31,6 +31,7 @@ import '../view/product/checkout_product.dart';
 class AppRouter {
   late GoRouter _router;
   static final AppRouter _singleton = AppRouter._internal();
+  bool firstSignIn = false;
 
   factory AppRouter() {
     return _singleton;
@@ -231,11 +232,14 @@ class AppRouter {
   void _listenToAuthChanges() {
     Auth().authStateChanges.listen((User? user) {
       bool isUserLoggedIn = user != null /*&& user.emailVerified*/;
-      if (isUserLoggedIn) {
-        _router.go('/');
-      } else {
-        _router.go('/login');
+      if(!firstSignIn){
+        if (isUserLoggedIn) {
+          _router.go('/');
+        } else {
+          _router.go('/login');
+        }
       }
+
     });
   }
 

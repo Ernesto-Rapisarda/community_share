@@ -8,12 +8,14 @@ import 'package:community_share/service/auth.dart';
 import 'package:community_share/view/login/components/welcome.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
+import '../../navigation/app_router.dart';
 import '../../service/image_service.dart';
 import '../../utils/show_snack_bar.dart';
 
@@ -59,7 +61,12 @@ class _RegistrationState extends State<Registration> {
   }
 
   Future<String?> uploadImage() async {
-    return await ImageService().uploadImage(imageFile!);
+    try {
+      imageFile ??= await ImageService().loadDefaultImage();
+      return await ImageService().uploadImage(imageFile!);
+    } catch (error) {
+     rethrow;
+    }
   }
 
   bool checkAllComplete() {
@@ -79,6 +86,7 @@ class _RegistrationState extends State<Registration> {
   Future<void> createUser() async {
     try {
       if (checkAllComplete()) {
+        AppRouter().firstSignIn = true;
         if (widget.isEmailAndPassword) {
           await Auth().createUserInWithEmailAndPassword(
               email: _email.text, password: _password.text);
@@ -103,15 +111,19 @@ class _RegistrationState extends State<Registration> {
         await Auth().completeRegistration(Auth().currentUser!.uid, userDetails);
         accountCreated();
         await Future.delayed(const Duration(seconds: 3));
+        AppRouter().firstSignIn = false;
         if (widget.isEmailAndPassword) {
           await Auth().signOut();
         }
-
-        changePage(userDetails);
+        else {
+          changePage(userDetails);
+        }
       } else {
         callError(AppLocalizations.of(context)!.fillField);
       }
     } on FirebaseAuthException catch (error) {
+      AppRouter().firstSignIn = false;
+      await Auth().signOut();
       callError(error.message!);
     }
   }
@@ -125,10 +137,11 @@ class _RegistrationState extends State<Registration> {
   }
 
   void changePage(UserDetails userDetails) {
-    context.read<UserProvider>().setData(userDetails, [], [],0);
-    if (widget.isEmailAndPassword) {
+    if (!widget.isEmailAndPassword) {
+      /*
       Navigator.of(context).pop();
-    } else {
+    } else {*/
+      context.read<UserProvider>().setData(userDetails, [], [], 0);
       context.go('/');
     }
   }
@@ -136,582 +149,650 @@ class _RegistrationState extends State<Registration> {
   @override
   Widget build(BuildContext context) {
     currentTheme = Theme.of(context);
-    isDarkTheme = currentTheme.colorScheme.background == ThemeData.dark(useMaterial3: true).colorScheme.background;
+    isDarkTheme = currentTheme.colorScheme.background == ThemeData
+        .dark(useMaterial3: true)
+        .colorScheme
+        .background;
 
     return Scaffold(
         body: SafeArea(
-      child: SingleChildScrollView(
-        child: Column(children: [
-          const SizedBox(
-            height: 12,
-          ),
-          const WelcomeWidget(),
-          const SizedBox(
-            height: 20,
-          ),
-          TextButton(
-            onPressed: () {
-              setState(() {
-                if (!widget.isEmailAndPassword) {
-                  Auth().signOut();
-                }
-                Navigator.of(context).pop();
-              });
-            },
-            child: Text(
-              AppLocalizations.of(context)!.haveAnAccount,
-              textAlign: TextAlign.center,
-            ),
-          ),
-          const SizedBox(
-            height: 30.0,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: !widget.isEmailAndPassword
-                      ? Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              AppLocalizations.of(context)!.signingWithGmail,
-                              style: const TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.w600),
-                            ),
-                            Text(
-                              Auth().currentUser!.email!,
-                              style: const TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.w500),
-                            )
-                          ],
-                        )
-                      : Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              AppLocalizations.of(context)!.credential,
-                              style: const TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.w600),
-                            ),
-                            Text(
-                              AppLocalizations.of(context)!.needToBeFilled,
-                              style: const TextStyle(
-                                  fontSize: 16, color: Colors.red),
-                            ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            ConstrainedBox(
-                              constraints: BoxConstraints(
-                                  minWidth: 50.0,
-                                  maxWidth: MediaQuery.of(context).size.width *
-                                          2 /
-                                          3 -
-                                      40,
-                                  minHeight: 50.0,
-                                  maxHeight: 50.0),
-                              child: TextField(
-                                controller: _email,
-                                decoration: InputDecoration(
-                                    contentPadding:
-                                        const EdgeInsets.only(left: 10.0),
-                                    enabledBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(width: 1),
-                                        borderRadius:
-                                            BorderRadius.circular(10.0)),
-                                    focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          width: 3,
-                                          color: validEmail
-                                              ? Colors.green
-                                              : Colors.red,
-                                        ),
-                                        borderRadius:
-                                            BorderRadius.circular(10.0)),
-                                    label: const Text('* email')),
-                                keyboardType: TextInputType.emailAddress,
-                                onChanged: (value) {
-                                  bool isValid = RegExp(
-                                    r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$',
-                                  ).hasMatch(value);
-
-                                  if (isValid) {
-                                    setState(() {
-                                      validEmail = true;
-                                    });
-                                  } else {
-                                    setState(() {
-                                      validEmail = false;
-                                    });
-                                  }
-                                },
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 8.0,
-                            ),
-                            ConstrainedBox(
-                              constraints: BoxConstraints(
-                                  minWidth: 50.0,
-                                  maxWidth: MediaQuery.of(context).size.width *
-                                          2 /
-                                          3 -
-                                      40,
-                                  minHeight: 50.0,
-                                  maxHeight: 50.0),
-                              child: TextField(
-                                controller: _password,
-                                obscureText: hidePassword,
-                                decoration: InputDecoration(
-                                    contentPadding:
-                                        const EdgeInsets.only(left: 10.0),
-                                    enabledBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(width: 1),
-                                        borderRadius:
-                                            BorderRadius.circular(10.0)),
-                                    focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          width: 3,
-                                          color: validPassword
-                                              ? Colors.green
-                                              : Colors.red,
-                                        ),
-                                        borderRadius:
-                                            BorderRadius.circular(10.0)),
-                                    label: const Text('* password'),
-                                    suffixIcon: IconButton(
-                                      icon: const Icon(
-                                        Icons.visibility,
-                                        color: Colors.grey,
-                                      ),
-                                      onPressed: () {
-                                        setState(() {
-                                          hidePassword = !hidePassword;
-                                        });
-                                      },
-                                    )),
-                                keyboardType: TextInputType.visiblePassword,
-                                onChanged: (value) {
-                                  bool isValid = RegExp(
-                                    r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$&*~]).{8,}$',
-                                  ).hasMatch(value);
-
-                                  if (isValid) {
-                                    setState(() {
-                                      validPassword = true;
-                                    });
-                                  } else {
-                                    setState(() {
-                                      validPassword = false;
-                                    });
-                                  }
-                                },
-                              ),
-                            ),
-                            !validPassword
-                                ? Text(
-                                    AppLocalizations.of(context)!.rightPass,
-                                    style: const TextStyle(fontSize: 12),
-                                  )
-                                : const Center(),
-                            const SizedBox(
-                              height: 8.0,
-                            ),
-                            ConstrainedBox(
-                              constraints: BoxConstraints(
-                                  minWidth: 50.0,
-                                  maxWidth: MediaQuery.of(context).size.width *
-                                          2 /
-                                          3 -
-                                      40,
-                                  minHeight: 50.0,
-                                  maxHeight: 50.0),
-                              child: TextField(
-                                controller: _repeatPassword,
-                                obscureText: hideRepeatPassword,
-                                decoration: InputDecoration(
-                                    contentPadding:
-                                        const EdgeInsets.only(left: 10.0),
-                                    enabledBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(width: 1),
-                                        borderRadius:
-                                            BorderRadius.circular(10.0)),
-                                    focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          width: 3,
-                                          color: correctRepeatPassword
-                                              ? Colors.green
-                                              : Colors.red,
-                                        ),
-                                        borderRadius:
-                                            BorderRadius.circular(10.0)),
-                                    label: Text(AppLocalizations.of(context)!
-                                        .repeatPassword),
-                                    suffixIcon: IconButton(
-                                      icon: const Icon(
-                                        Icons.visibility,
-                                        color: Colors.grey,
-                                      ),
-                                      onPressed: () {
-                                        setState(() {
-                                          hideRepeatPassword =
-                                              !hideRepeatPassword;
-                                        });
-                                      },
-                                    )),
-                                keyboardType: TextInputType.visiblePassword,
-                                onChanged: (value) {
-                                  setState(() {
-                                    correctRepeatPassword =
-                                        value == _password.text;
-                                  });
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
+          child: SingleChildScrollView(
+            child: Column(children: [
+              const SizedBox(
+                height: 12,
+              ),
+              const WelcomeWidget(),
+              const SizedBox(
+                height: 20,
+              ),
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    if (!widget.isEmailAndPassword) {
+                      Auth().signOut();
+                    }
+                    Navigator.of(context).pop();
+                  });
+                },
+                child: Text(
+                  AppLocalizations.of(context)!.haveAnAccount,
+                  textAlign: TextAlign.center,
                 ),
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    decoration: BoxDecoration(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(8)),
-                        color:
-                            Theme.of(context).colorScheme.secondaryContainer),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+              ),
+              const SizedBox(
+                height: 30.0,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: !widget.isEmailAndPassword
+                          ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            AppLocalizations.of(context)!.preference,
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSecondaryContainer),
-                          ),
-                          const SizedBox(
-                            height: 8,
+                            AppLocalizations.of(context)!.signingWithGmail,
+                            style: const TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.w600),
                           ),
                           Text(
-                            AppLocalizations.of(context)!.languageUsed,
-                            style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSecondaryContainer),
-                          ),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  MyApp.setLocale(context, const Locale('it'));
-                                  _language = 'it';
-                                },
-                                child: Container(
-                                  width: 50,
-                                  height: 35,
-                                  decoration: BoxDecoration(
-                                    border: AppLocalizations.of(context)
-                                                ?.localeName ==
-                                            'it'
-                                        ? Border.all(
-                                            width: 4,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary)
-                                        : Border.all(color: Colors.transparent),
-                                  ),
-                                  child: Image.asset(
-                                    'assets/images/flags/ita.jpg',
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 8,
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  MyApp.setLocale(context, const Locale('en'));
-                                  _language = 'en';
-                                },
-                                child: Container(
-                                  width: 50,
-                                  height: 35,
-                                  decoration: BoxDecoration(
-                                    border: AppLocalizations.of(context)
-                                                ?.localeName ==
-                                            'en'
-                                        ? Border.all(
-                                            width: 4,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary)
-                                        : Border.all(color: Colors.transparent),
-                                  ),
-                                  child: Image.asset(
-                                    'assets/images/flags/eng.png',
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 12,
-                          ),
-                          Text(AppLocalizations.of(context)!.currentTheme,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSecondaryContainer)),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                width: 40,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: isDarkTheme
-                                      ? Border.all(
-                                      width: 3,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primary)
-                                      : Border.all(color: Colors.transparent),
-                                ),
-                                child: InkWell(
-                                    onTap: () {
-                                      MyApp.setTheme(context,
-                                          ThemeData.dark(useMaterial3: true));
-                                      _theme = 'dark';
-                                    },
-                                    child: Center(
-                                      child: FaIcon(
-                                        FontAwesomeIcons.moon,
-                                        size: 25,
-                                        color: isDarkTheme
-                                            ? Theme.of(context).colorScheme.primary
-                                            : Theme.of(context).colorScheme.onSecondaryContainer,
-                                      ),
-                                    )),
-                              ),
-                              Container(
-                                width: 40,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: !isDarkTheme
-                                      ? Border.all(
-                                      width: 3,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primary)
-                                      : Border.all(color: Colors.transparent),
-                                ),
-                                child: InkWell(
-                                    onTap: () {
-                                      MyApp.setTheme(context,
-                                          ThemeData(
-                                              useMaterial3: true,
-                                              colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightBlue)
-                                          ));
-                                      _theme = 'light';
-                                    },
-                                    child: Center(
-                                      child: FaIcon(FontAwesomeIcons.sun,
-                                          size: 25,
-                                          color: !isDarkTheme
-                                              ? Theme.of(context).colorScheme.primary
-                                              : Theme.of(context).colorScheme.onSecondaryContainer,),
-                                    )),
-                              ),
-                            ],
+                            Auth().currentUser!.email!,
+                            style: const TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.w500),
                           )
+                        ],
+                      )
+                          : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            AppLocalizations.of(context)!.credential,
+                            style: const TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.w600),
+                          ),
+                          Text(
+                            AppLocalizations.of(context)!.needToBeFilled,
+                            style: const TextStyle(
+                                fontSize: 16, color: Colors.red),
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          ConstrainedBox(
+                            constraints: BoxConstraints(
+                                minWidth: 50.0,
+                                maxWidth: MediaQuery
+                                    .of(context)
+                                    .size
+                                    .width *
+                                    2 /
+                                    3 -
+                                    40,
+                                minHeight: 50.0,
+                                maxHeight: 50.0),
+                            child: TextField(
+                              controller: _email,
+                              decoration: InputDecoration(
+                                  contentPadding:
+                                  const EdgeInsets.only(left: 10.0),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(width: 1),
+                                      borderRadius:
+                                      BorderRadius.circular(10.0)),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        width: 3,
+                                        color: validEmail
+                                            ? Colors.green
+                                            : Colors.red,
+                                      ),
+                                      borderRadius:
+                                      BorderRadius.circular(10.0)),
+                                  label: const Text('* email')),
+                              keyboardType: TextInputType.emailAddress,
+                              onChanged: (value) {
+                                bool isValid = RegExp(
+                                  r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$',
+                                ).hasMatch(value);
+
+                                if (isValid) {
+                                  setState(() {
+                                    validEmail = true;
+                                  });
+                                } else {
+                                  setState(() {
+                                    validEmail = false;
+                                  });
+                                }
+                              },
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 8.0,
+                          ),
+                          ConstrainedBox(
+                            constraints: BoxConstraints(
+                                minWidth: 50.0,
+                                maxWidth: MediaQuery
+                                    .of(context)
+                                    .size
+                                    .width *
+                                    2 /
+                                    3 -
+                                    40,
+                                minHeight: 50.0,
+                                maxHeight: 50.0),
+                            child: TextField(
+                              controller: _password,
+                              obscureText: hidePassword,
+                              decoration: InputDecoration(
+                                  contentPadding:
+                                  const EdgeInsets.only(left: 10.0),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(width: 1),
+                                      borderRadius:
+                                      BorderRadius.circular(10.0)),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        width: 3,
+                                        color: validPassword
+                                            ? Colors.green
+                                            : Colors.red,
+                                      ),
+                                      borderRadius:
+                                      BorderRadius.circular(10.0)),
+                                  label: const Text('* password'),
+                                  suffixIcon: IconButton(
+                                    icon: const Icon(
+                                      Icons.visibility,
+                                      color: Colors.grey,
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        hidePassword = !hidePassword;
+                                      });
+                                    },
+                                  )),
+                              keyboardType: TextInputType.visiblePassword,
+                              onChanged: (value) {
+                                bool isValid = RegExp(
+                                  r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$&*~]).{8,}$',
+                                ).hasMatch(value);
+
+                                if (isValid) {
+                                  setState(() {
+                                    validPassword = true;
+                                  });
+                                } else {
+                                  setState(() {
+                                    validPassword = false;
+                                  });
+                                }
+                              },
+                            ),
+                          ),
+                          !validPassword
+                              ? Text(
+                            AppLocalizations.of(context)!.rightPass,
+                            style: const TextStyle(fontSize: 12),
+                          )
+                              : const Center(),
+                          const SizedBox(
+                            height: 8.0,
+                          ),
+                          ConstrainedBox(
+                            constraints: BoxConstraints(
+                                minWidth: 50.0,
+                                maxWidth: MediaQuery
+                                    .of(context)
+                                    .size
+                                    .width *
+                                    2 /
+                                    3 -
+                                    40,
+                                minHeight: 50.0,
+                                maxHeight: 50.0),
+                            child: TextField(
+                              controller: _repeatPassword,
+                              obscureText: hideRepeatPassword,
+                              decoration: InputDecoration(
+                                  contentPadding:
+                                  const EdgeInsets.only(left: 10.0),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(width: 1),
+                                      borderRadius:
+                                      BorderRadius.circular(10.0)),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        width: 3,
+                                        color: correctRepeatPassword
+                                            ? Colors.green
+                                            : Colors.red,
+                                      ),
+                                      borderRadius:
+                                      BorderRadius.circular(10.0)),
+                                  label: Text(AppLocalizations.of(context)!
+                                      .repeatPassword),
+                                  suffixIcon: IconButton(
+                                    icon: const Icon(
+                                      Icons.visibility,
+                                      color: Colors.grey,
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        hideRepeatPassword =
+                                        !hideRepeatPassword;
+                                      });
+                                    },
+                                  )),
+                              keyboardType: TextInputType.visiblePassword,
+                              onChanged: (value) {
+                                setState(() {
+                                  correctRepeatPassword =
+                                      value == _password.text;
+                                });
+                              },
+                            ),
+                          ),
                         ],
                       ),
                     ),
-                  ),
-                )
-              ],
-            ),
-          ),
-          Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        AppLocalizations.of(context)!.infoProfile,
-                        style: const TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.w600),
+                    Expanded(
+                      flex: 1,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius:
+                            const BorderRadius.all(Radius.circular(8)),
+                            color:
+                            Theme
+                                .of(context)
+                                .colorScheme
+                                .secondaryContainer),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                AppLocalizations.of(context)!.preference,
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
+                                    color: Theme
+                                        .of(context)
+                                        .colorScheme
+                                        .onSecondaryContainer),
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              Text(
+                                AppLocalizations.of(context)!.languageUsed,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    color: Theme
+                                        .of(context)
+                                        .colorScheme
+                                        .onSecondaryContainer),
+                              ),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment
+                                    .spaceBetween,
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+                                      MyApp.setLocale(
+                                          context, const Locale('it'));
+                                      _language = 'it';
+                                    },
+                                    child: Container(
+                                      width: 50,
+                                      height: 35,
+                                      decoration: BoxDecoration(
+                                        border: AppLocalizations
+                                            .of(context)
+                                            ?.localeName ==
+                                            'it'
+                                            ? Border.all(
+                                            width: 4,
+                                            color: Theme
+                                                .of(context)
+                                                .colorScheme
+                                                .primary)
+                                            : Border.all(
+                                            color: Colors.transparent),
+                                      ),
+                                      child: Image.asset(
+                                        'assets/images/flags/ita.jpg',
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 8,
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      MyApp.setLocale(
+                                          context, const Locale('en'));
+                                      _language = 'en';
+                                    },
+                                    child: Container(
+                                      width: 50,
+                                      height: 35,
+                                      decoration: BoxDecoration(
+                                        border: AppLocalizations
+                                            .of(context)
+                                            ?.localeName ==
+                                            'en'
+                                            ? Border.all(
+                                            width: 4,
+                                            color: Theme
+                                                .of(context)
+                                                .colorScheme
+                                                .primary)
+                                            : Border.all(
+                                            color: Colors.transparent),
+                                      ),
+                                      child: Image.asset(
+                                        'assets/images/flags/eng.png',
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 12,
+                              ),
+                              Text(AppLocalizations.of(context)!.currentTheme,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      color: Theme
+                                          .of(context)
+                                          .colorScheme
+                                          .onSecondaryContainer)),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    width: 40,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: isDarkTheme
+                                          ? Border.all(
+                                          width: 3,
+                                          color: Theme
+                                              .of(context)
+                                              .colorScheme
+                                              .primary)
+                                          : Border.all(
+                                          color: Colors.transparent),
+                                    ),
+                                    child: InkWell(
+                                        onTap: () {
+                                          MyApp.setTheme(context,
+                                              ThemeData.dark(
+                                                  useMaterial3: true));
+                                          _theme = 'dark';
+                                        },
+                                        child: Center(
+                                          child: FaIcon(
+                                            FontAwesomeIcons.moon,
+                                            size: 25,
+                                            color: isDarkTheme
+                                                ? Theme
+                                                .of(context)
+                                                .colorScheme
+                                                .primary
+                                                : Theme
+                                                .of(context)
+                                                .colorScheme
+                                                .onSecondaryContainer,
+                                          ),
+                                        )),
+                                  ),
+                                  Container(
+                                    width: 40,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: !isDarkTheme
+                                          ? Border.all(
+                                          width: 3,
+                                          color: Theme
+                                              .of(context)
+                                              .colorScheme
+                                              .primary)
+                                          : Border.all(
+                                          color: Colors.transparent),
+                                    ),
+                                    child: InkWell(
+                                        onTap: () {
+                                          MyApp.setTheme(context,
+                                              ThemeData(
+                                                  useMaterial3: true,
+                                                  colorScheme: ColorScheme
+                                                      .fromSeed(
+                                                      seedColor: Colors
+                                                          .lightBlue)
+                                              ));
+                                          _theme = 'light';
+                                        },
+                                        child: Center(
+                                          child: FaIcon(FontAwesomeIcons.sun,
+                                            size: 25,
+                                            color: !isDarkTheme
+                                                ? Theme
+                                                .of(context)
+                                                .colorScheme
+                                                .primary
+                                                : Theme
+                                                .of(context)
+                                                .colorScheme
+                                                .onSecondaryContainer,),
+                                        )),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
                       ),
-                      Text(
-                        AppLocalizations.of(context)!.needToBeFilled,
-                        style: const TextStyle(fontSize: 16, color: Colors.red),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 12,
-                  ),
-                  Row(
+                    )
+                  ],
+                ),
+              ),
+              Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        flex: 1,
-                        child: Column(
-                          children: [
-                            CircleAvatar(
-                              radius: 64,
-                              backgroundColor: Colors.white,
-                              backgroundImage: _showImagePreview
-                                  ? Image.file(File(imageFile?.path ?? ""))
-                                      .image
-                                  : const AssetImage(
-                                          'assets/images/user_photos/examples/UserProfileDefault.png')
-                                      as ImageProvider<Object>,
-                            ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            OutlinedButton(
-                                onPressed: () {
-                                  selectImage();
-                                },
-                                child: const Text('Select')),
-                          ],
-                        ),
+                      Row(
+                        children: [
+                          Text(
+                            AppLocalizations.of(context)!.infoProfile,
+                            style: const TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.w600),
+                          ),
+                          Text(
+                            AppLocalizations.of(context)!.needToBeFilled,
+                            style: const TextStyle(fontSize: 16, color: Colors
+                                .red),
+                          ),
+                        ],
                       ),
-                      Expanded(
-                        flex: 2,
-                        child: Column(
-                          children: [
-                            ConstrainedBox(
-                              constraints: BoxConstraints(
-                                  minWidth: 50.0,
-                                  maxWidth: MediaQuery.of(context).size.width *
+                      const SizedBox(
+                        height: 12,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Column(
+                              children: [
+                                CircleAvatar(
+                                  radius: 64,
+                                  backgroundColor: Colors.white,
+                                  backgroundImage: _showImagePreview
+                                      ? Image
+                                      .file(File(imageFile?.path ?? ""))
+                                      .image
+                                      : const AssetImage(
+                                      'assets/images/user_photos/examples/UserProfileDefault.png')
+                                  as ImageProvider<Object>,
+                                ),
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                                OutlinedButton(
+                                    onPressed: () {
+                                      selectImage();
+                                    },
+                                    child: const Text('Select')),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Column(
+                              children: [
+                                ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                      minWidth: 50.0,
+                                      maxWidth: MediaQuery
+                                          .of(context)
+                                          .size
+                                          .width *
                                           2 /
                                           3 -
-                                      40,
-                                  minHeight: 40.0,
-                                  maxHeight: 40.0),
-                              child: TextField(
-                                controller: _fullName,
-                                decoration: InputDecoration(
-                                    contentPadding:
+                                          40,
+                                      minHeight: 40.0,
+                                      maxHeight: 40.0),
+                                  child: TextField(
+                                    controller: _fullName,
+                                    decoration: InputDecoration(
+                                        contentPadding:
                                         const EdgeInsets.only(left: 10.0),
-                                    enabledBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(width: 1),
-                                        borderRadius:
+                                        enabledBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                                width: 1),
+                                            borderRadius:
                                             BorderRadius.circular(10.0)),
-                                    focusedBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(width: 3),
-                                        borderRadius:
+                                        focusedBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                                width: 3),
+                                            borderRadius:
                                             BorderRadius.circular(10.0)),
-                                    label: Text(AppLocalizations.of(context)!
-                                        .choiceDisplayedName)),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            ConstrainedBox(
-                              constraints: BoxConstraints(
-                                  minWidth: 50.0,
-                                  maxWidth: MediaQuery.of(context).size.width *
+                                        label: Text(
+                                            AppLocalizations.of(context)!
+                                                .choiceDisplayedName)),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                                ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                      minWidth: 50.0,
+                                      maxWidth: MediaQuery
+                                          .of(context)
+                                          .size
+                                          .width *
                                           2 /
                                           3 -
-                                      40,
-                                  minHeight: 40.0,
-                                  maxHeight: 40.0),
-                              child: TextField(
-                                controller: _location,
-                                decoration: InputDecoration(
-                                    contentPadding:
+                                          40,
+                                      minHeight: 40.0,
+                                      maxHeight: 40.0),
+                                  child: TextField(
+                                    controller: _location,
+                                    decoration: InputDecoration(
+                                        contentPadding:
                                         const EdgeInsets.only(left: 10.0),
-                                    enabledBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(width: 1),
-                                        borderRadius:
+                                        enabledBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                                width: 1),
+                                            borderRadius:
                                             BorderRadius.circular(10.0)),
-                                    focusedBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(width: 3),
-                                        borderRadius:
+                                        focusedBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                                width: 3),
+                                            borderRadius:
                                             BorderRadius.circular(10.0)),
-                                    label: Text(AppLocalizations.of(context)!
-                                        .choiceLocation)),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            ConstrainedBox(
-                              constraints: BoxConstraints(
-                                  minWidth: 50.0,
-                                  maxWidth: MediaQuery.of(context).size.width *
+                                        label: Text(
+                                            AppLocalizations.of(context)!
+                                                .choiceLocation)),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 8,
+                                ),
+                                ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                      minWidth: 50.0,
+                                      maxWidth: MediaQuery
+                                          .of(context)
+                                          .size
+                                          .width *
                                           2 /
                                           3 -
-                                      40,
-                                  minHeight: 40.0,
-                                  maxHeight: 40.0),
-                              child: TextField(
-                                controller: _phoneNumber,
-                                decoration: InputDecoration(
-                                    contentPadding:
+                                          40,
+                                      minHeight: 40.0,
+                                      maxHeight: 40.0),
+                                  child: TextField(
+                                    controller: _phoneNumber,
+                                    decoration: InputDecoration(
+                                        contentPadding:
                                         const EdgeInsets.only(left: 10.0),
-                                    enabledBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(width: 1),
-                                        borderRadius:
+                                        enabledBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                                width: 1),
+                                            borderRadius:
                                             BorderRadius.circular(10.0)),
-                                    focusedBorder: OutlineInputBorder(
-                                        borderSide: const BorderSide(width: 3),
-                                        borderRadius:
+                                        focusedBorder: OutlineInputBorder(
+                                            borderSide: const BorderSide(
+                                                width: 3),
+                                            borderRadius:
                                             BorderRadius.circular(10.0)),
-                                    label: Text(AppLocalizations.of(context)!
-                                        .addYourPhoneNumber)),
-                              ),
+                                        label: Text(
+                                            AppLocalizations.of(context)!
+                                                .addYourPhoneNumber)),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      )
+                          )
+                        ],
+                      ),
                     ],
-                  ),
-                ],
-              )),
-          const SizedBox(
-            height: 16,
+                  )),
+              const SizedBox(
+                height: 16,
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              OutlinedButton(
+                  onPressed: () {
+                    createUser();
+                  },
+                  child: Text(
+                      AppLocalizations.of(context)!.completeRegistration)),
+            ]),
           ),
-          const SizedBox(
-            height: 8,
-          ),
-          OutlinedButton(
-              onPressed: () {
-                createUser();
-              },
-              child: Text(AppLocalizations.of(context)!.completeRegistration)),
-        ]),
-      ),
-    ));
+        ));
   }
 }
