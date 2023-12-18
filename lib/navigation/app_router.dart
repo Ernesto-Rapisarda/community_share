@@ -77,6 +77,13 @@ class AppRouter {
                           ));
                         }),
                     _productSubRoutes(),
+                    GoRoute(path: 'profile/public/:userId',
+                        pageBuilder: (context,state){
+                          UserDetails userDetails =
+                          state.extra as UserDetails;
+                          return MaterialPage(child: PublicProfile(userDetails: userDetails,));
+                        }
+                    ),
                     GoRoute(
                         path: 'order/:orderId',
                         pageBuilder: (context, state) {

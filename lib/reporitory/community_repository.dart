@@ -238,6 +238,8 @@ class CommunityRepository {
           products.add(product);
         }
       }
+      products.sort((a, b) => b.uploadDate.compareTo(a.uploadDate));
+
 
       return products;
 
@@ -443,8 +445,8 @@ class CommunityRepository {
 
       incomingEvents.sort((a, b) => a.eventDate.compareTo(b.eventDate));
 
-      if(incomingEvents.length>5){
-        incomingEvents = incomingEvents.sublist(0,5);
+      if(incomingEvents.length>3){
+        incomingEvents = incomingEvents.sublist(0,3);
       }
 
       return incomingEvents;

@@ -139,7 +139,7 @@ class _PublicProfileState extends State<PublicProfile> with TickerProviderStateM
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, crossAxisSpacing: 8, mainAxisSpacing: 16, mainAxisExtent: 250),
+                  crossAxisCount: 2, crossAxisSpacing: 8, mainAxisSpacing: 16, mainAxisExtent: 330),
                   itemCount: communities.length,
                   itemBuilder: (_, index) {
                     bool isMyProfile = context.read<UserProvider>().userDetails.id == Auth().currentUser?.uid;

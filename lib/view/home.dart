@@ -49,6 +49,7 @@ class _HomeState extends State<Home> {
           await _productService.getProducts(context, categories);
 
       setState(() {
+        _products.clear();
         _products.addAll(newProducts);
         loadedProducts = true;
       });
@@ -185,7 +186,7 @@ class _HomeState extends State<Home> {
                         controller: _searchController,
                         decoration: InputDecoration(
                           hintText: AppLocalizations.of(context)!.search,
-                          contentPadding: EdgeInsets.symmetric(vertical: 10.0),
+                          contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 12.0),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(12)),
                           ),

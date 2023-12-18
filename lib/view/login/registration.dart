@@ -38,7 +38,7 @@ class _RegistrationState extends State<Registration> {
   bool hidePassword = true;
 
   bool validEmail = false;
-  bool validPassword = true;
+  bool validPassword = false;
   bool correctRepeatPassword = false;
 
   bool _showImagePreview = false;

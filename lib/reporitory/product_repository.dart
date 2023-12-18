@@ -60,7 +60,7 @@ class ProductRepository {
 
   Future<List<Product>> getProducts(BuildContext context, List<ProductCategory> categories) async {
     List<Product> products = [];
-
+    print(categories);
     try {
       for(Community community in context.read<UserProvider>().myCommunities){
         QuerySnapshot<Map<String, dynamic>> snapshot = await _db.collection('communities').doc(community.docRef).collection('product_published').get();
@@ -69,7 +69,7 @@ class ProductRepository {
           DocumentSnapshot productSnapshot = await _db.collection('products').doc(productBasic.docRefCompleteProduct).get();
           Product product = Product.fromJson(productSnapshot.data() as Map<String, dynamic>);
           product.docRef = productSnapshot.id;
-          if(!products.contains(product) && categories.contains(product.productCategory) ){
+          if(!products.contains(product) && categories.contains(product.productCategory) && product.availability == ProductAvailability.available ){
             products.add(product);
 
           }

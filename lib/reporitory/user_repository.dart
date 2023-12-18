@@ -199,6 +199,8 @@ class UserRepository {
           products.add(product);
         }
       }
+      products.sort((a, b) => b.uploadDate.compareTo(a.uploadDate));
+
       return products;
     } catch (e) {
       rethrow;

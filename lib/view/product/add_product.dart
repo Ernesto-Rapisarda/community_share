@@ -35,6 +35,9 @@ class AddProduct extends StatefulWidget {
 
 class _AddProductState extends State<AddProduct> {
   bool loaded = false;
+  late double _screenSize;
+  ScrollController _scrollController = ScrollController();
+
   final ProductService _productService = ProductService();
   final UserService _userService = UserService();
 
@@ -147,8 +150,21 @@ class _AddProductState extends State<AddProduct> {
         await _productService.createProduct(context, product);
         if (context.read<ProductProvider>().productVisualized.docRef != '') {
           setState(() {
-            _products.add(product);
+            _products.insert(0, product);
+            _titleController.text = '';
+            _descriptionController.text = '';
+            _locationController.text = '';
+            _condition = ProductCondition.newWithTag;
+            _category = ProductCategory.other;
+            _selectedCommunities.clear();
+            _showImagePreview = false;
+            imageFile = null;
           });
+          _scrollController.animateTo(
+            0.0,
+            duration: Duration(milliseconds: 500),
+            curve: Curves.easeInOut,
+          );
           //context.go('/product/details/${product.id}');
 
 
@@ -166,11 +182,15 @@ class _AddProductState extends State<AddProduct> {
 
   @override
   Widget build(BuildContext context) {
+    _screenSize = MediaQuery.of(context).size.width - 36;
+
     return Scaffold(
 /*      appBar: AppBar(
         title: widget.isEdit ? Text('Edit Product') : Text('Add Product'),
       ),*/
       body: SingleChildScrollView(
+        controller: _scrollController,
+
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -450,7 +470,7 @@ class _AddProductState extends State<AddProduct> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.primary,
                     ),
-                    onPressed: _saveProduct,
+                    onPressed: _showSummaryDialog,
                     child: Row(
                       children: [
                         FaIcon(
@@ -477,6 +497,85 @@ class _AddProductState extends State<AddProduct> {
           ],
         ),
       ),
+    );
+  }
+
+  void _showSummaryDialog() {
+    String publishedOn = _selectedCommunities
+        .map((community) => community.name)
+        .join(', ');
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(AppLocalizations.of(context)!.summary),
+          content: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Center(
+                child: Container(
+                  width: _screenSize / 3,
+                  height: _screenSize / 9 * 4,
+                  child: ClipRRect(
+                    borderRadius:
+                    BorderRadius.all(Radius.circular(15)),
+                    child: Image(
+                      image: Image.file(File(imageFile?.path ?? ""))
+                          .image,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ),
+              Center(child: Text('${_titleController.text}',style: TextStyle(fontSize: 18,fontWeight: FontWeight.w600),)),
+              SizedBox(height: 8,),
+              Text('${_descriptionController.text}'),
+              SizedBox(height: 8,),
+              Text('${AppLocalizations.of(context)!.description}:',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600)),
+              RichText(text: TextSpan(children: [
+                TextSpan(text: '${AppLocalizations.of(context)!.category}: ',
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: Colors.black)),
+                TextSpan(text: productCategoryToString(_category, context),style: TextStyle(fontSize: 16,color: Colors.black))
+              ]),),
+              RichText(text: TextSpan(children: [
+                TextSpan(text: '${AppLocalizations.of(context)!.condition}: ',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: Colors.black)),
+                TextSpan(text: productConditionToString(_condition, context),style: TextStyle(fontSize: 16,color: Colors.black))
+              ]),),
+              RichText(
+                  text: TextSpan(children: [
+                    TextSpan(
+                      text: 'Pubblicato su: ',
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold,color: Colors.black),
+                    ),
+                    TextSpan(
+                      text: publishedOn,
+                      style: TextStyle(fontSize: 16,color: Colors.black),
+                    ),
+                  ],)),
+
+              SizedBox(height: 16),
+              Text(AppLocalizations.of(context)!.confirmMessage,style: TextStyle(fontSize: 18),),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Chiudi il dialog senza salvare
+              },
+              child: Text(AppLocalizations.of(context)!.cancel),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Chiudi il dialog
+                _saveProduct(); // Salva la community
+              },
+              child: Text(AppLocalizations.of(context)!.confirm),
+            ),
+          ],
+        );
+      },
     );
   }
 }

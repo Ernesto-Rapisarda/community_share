@@ -69,6 +69,7 @@ class _MessageComposerState extends State<MessageComposer> {
               icon: Icon(Icons.send),
               onPressed: () {
                 widget.onSendPressed();
+                widget.onClose();
               },
             ),
             IconButton(onPressed: (){

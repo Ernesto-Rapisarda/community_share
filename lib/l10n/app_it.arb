@@ -105,9 +105,11 @@
   "summary":"RIEPILOGO",
   "confirm":"Conferma",
   "cancel":"Cancel",
-  "confirmMessage":"Controlla i dati e se corretti conferma per creare la comunità",
+  "confirmMessage":"Controlla i dati e conferma per pubblicare",
   "simpleNothingToShow":"Nulla da mostrare",
-  "userUpdated":"Utente aggiornato!"
+  "userUpdated":"Utente aggiornato!",
+        "messageSended":"Messaggio inviato",
+        "messageNotSended":"Messaggio non inviato, riprova più tardi"
 
 
 

@@ -22,6 +22,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 import '../../model/product.dart';
 
@@ -60,14 +62,14 @@ class _FullProductState extends State<FullProduct> {
         'Info about ${productBasic.title}',
         false);
     if (sended) {
-      //todo
-      print('todo');
-      //showSnackBar(context, 'Message sended!');
+      showMessageSended();
     } else {
-      //todo
-      print('todo');
-      //showSnackBar(context, 'Something goes wrong, message not sended');
+      callError(AppLocalizations.of(context)!.messageNotSended);
     }
+  }
+
+  void showMessageSended(){
+    showSnackBar(context, AppLocalizations.of(context)!.messageSended);
   }
 
   void viewGiverPublicProfile() async {
@@ -441,7 +443,6 @@ class _FullProductState extends State<FullProduct> {
                                           shape: BoxShape.circle,
                                           image: DecorationImage(
                                             fit: BoxFit.cover,
-                                            // Adatta l'immagine al cerchio
                                             image: NetworkImage(context
                                                 .read<ProductProvider>()
                                                 .productVisualized

@@ -174,7 +174,9 @@ class ConversationRepository{
 
       snapshot.docs.forEach((DocumentSnapshot<Map<String, dynamic>> document){
         Conversation conversation = Conversation.fromJson(document.data()!);
-        unreadedMessageNumber = unreadedMessageNumber + conversation.unreadMessage;
+        if(conversation.members[conversation.indexOfLastSender].id != Auth().currentUser?.uid){
+          unreadedMessageNumber = unreadedMessageNumber + conversation.unreadMessage;
+        }
       });
       return unreadedMessageNumber;
     }catch (error){rethrow;}

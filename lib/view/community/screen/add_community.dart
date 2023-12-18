@@ -36,7 +36,7 @@ class _AddCommunityState extends State<AddCommunity> {
 
   CommunityType _communityType = CommunityType.undefined;
   String _imageUrl =
-      "https://dfstudio-d420.kxcdn.com/wordpress/wp-content/uploads/2019/06/digital_camera_photo-1080x675.jpg";
+      "";
 
   File? _selectedPdf;
   bool verified = false;
@@ -183,10 +183,15 @@ class _AddCommunityState extends State<AddCommunity> {
                                   width: 2),
                               borderRadius:
                                   BorderRadius.all(Radius.circular(8)),
-                              image: DecorationImage(
+                              image: _imageUrl.isNotEmpty
+                                  ? DecorationImage(
                                 fit: BoxFit.cover,
                                 image: NetworkImage(_imageUrl),
-                              )),
+                              )
+                                  : DecorationImage(
+                                fit: BoxFit.cover,
+                                image: AssetImage('assets/images/logoCS.png'),
+                              ),),
                         ),
                         SizedBox(
                           height: 8,

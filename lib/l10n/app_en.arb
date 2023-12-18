@@ -114,7 +114,10 @@
       "cancel":"Cancel",
       "confirmMessage":"Check the data before press Confirm",
       "simpleNothingToShow":"Nothing to show",
-      "userUpdated":"User updated!"
+      "userUpdated":"User updated!",
+      "messageSended":"Message sended",
+              "messageNotSended":"Message not sended, try later"
+
 
 
 

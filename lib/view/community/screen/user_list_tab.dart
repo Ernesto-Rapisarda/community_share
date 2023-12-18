@@ -4,7 +4,10 @@ import 'package:community_share/view/community/components/member_row.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../model/user_details.dart';
+import '../../../navigation/app_router.dart';
 import '../../../service/community_service.dart';
+import '../../../service/user_service.dart';
 
 class CommunityUsersList extends StatefulWidget {
   const CommunityUsersList({super.key});
@@ -32,6 +35,8 @@ class _CommunityUsersListState extends State<CommunityUsersList> {
     }
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     var members = context.watch<CommunityProvider>().members;
@@ -47,7 +52,10 @@ class _CommunityUsersListState extends State<CommunityUsersList> {
             MemberRow(userDetailsBasic: context.read<CommunityProvider>().community.founder),
             SizedBox(height: 20,),
             Text('Members: ${context.read<CommunityProvider>().community.members -1}', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-            ...members.map((tmp) => MemberRow(userDetailsBasic: tmp)).toList(),
+            ...members.map((tmp) => Padding(
+              padding: const EdgeInsets.only(bottom: 8.0, top: 4),
+              child: MemberRow(userDetailsBasic: tmp),
+            )).toList(),
           ],
         ),
       ),
